@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ArrowIndicator">
+        <attr name="direction">
+            <enum name="right" value="0" />
+            <enum name="left" value="1" />
+        </attr>
+        <attr name="stroke_color" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="ActionBarNormal">
+
+        <attr name="showBackButton" format="boolean" />
+        <attr name="showTitle" format="boolean" />
+        <attr name="showMoreButton" format="boolean" />
+        <attr name="backButtonStyle">
+            <enum name="styleOne" value="0" />
+            <enum name="styleTwo" value="1" />
+        </attr>
+        <attr name="title" format="string" />
+        <attr name="titleColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="MaxHeightLayout">
+        <attr name="maxHeight" format="dimension" />
+    </declare-styleable>
+</resources>

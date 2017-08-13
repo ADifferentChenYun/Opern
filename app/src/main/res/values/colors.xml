@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="base_red">#ff5247</color>
+    <color name="colorAccent">#FF4081</color>
+
+
+
+    <color name="green">#20B2AA</color>
+
+    <!--应用的背景颜色-->
+    <color name="app_background">#EFEFEF</color>
+
+    <color name="light_blue">#6593cb</color>
+
+    <!--灰阶-->
+    <color name="white">#FFFFFF</color>
+    <color name="gray_light">#dedfe0</color>
+    <color name="gray_gray">#999999</color>
+    <color name="gray">#cbcccd</color>
+    <color name="gray_dark">#858687</color>
+    <color name="black">#333333</color>
+    <color name="sdf">#343434</color>
+    <color name="gray_mid">#666666</color>
+
+    <color name="side_color">#D9D9D9</color>
+</resources>
