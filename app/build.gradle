@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
-        config {
+        signing {
             keyAlias 'opern'
             keyPassword '123456'
             storeFile file('C:/WorkSpace/Opern/opern.jks')
@@ -23,7 +23,14 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.signing
+            proguardFile 'C:/WorkSpace/Opern/app/proguard-rules.pro'
         }
+        debug {
+            signingConfig signingConfigs.signing
+        }
+    }
+    productFlavors {
     }
 }
 
