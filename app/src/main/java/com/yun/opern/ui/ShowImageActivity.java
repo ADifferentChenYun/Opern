@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ShowImageActivity extends AppCompatActivity {
+public class ShowImageActivity extends BaseActivity {
 
     @BindView(R.id.image_vp)
     ViewPager imageVp;
@@ -34,15 +34,13 @@ public class ShowImageActivity extends AppCompatActivity {
     private ViewPagerAdapter adapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_image);
-        opernInfo = (OpernInfo) getIntent().getExtras().get("opernInfo");
-        ButterKnife.bind(this);
-        initView();
+    int contentViewRes() {
+        return R.layout.activity_show_image;
     }
 
-    private void initView() {
+    @Override
+    protected void initView() {
+        opernInfo = (OpernInfo) getIntent().getExtras().get("opernInfo");
         ArrayList<ShowImageFragment> fragments = new ArrayList<>();
         for (OpernImgInfo opernImgInfo : opernInfo.getImgs()) {
             ShowImageFragment showImageFragment = new ShowImageFragment();

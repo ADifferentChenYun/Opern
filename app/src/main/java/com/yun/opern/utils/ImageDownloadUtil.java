@@ -21,17 +21,17 @@ import okhttp3.Response;
  * Created by Yun on 2017/8/12 0012.
  */
 
-public class ImageDownloadUtil extends Thread{
+public class ImageDownloadUtil extends Thread {
     private OpernInfo opernInfo;
     private CountDownLatch countDownLatch;
     private CallBack callBack;
-    private Handler handler = new Handler(Looper.myLooper()){
+    private Handler handler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if(msg.what == 0){
+            if (msg.what == 0) {
                 callBack.success();
-            }else {
+            } else {
                 callBack.fail();
             }
         }
@@ -39,6 +39,7 @@ public class ImageDownloadUtil extends Thread{
 
     public interface CallBack {
         void success();
+
         void fail();
     }
 
@@ -50,9 +51,12 @@ public class ImageDownloadUtil extends Thread{
     @Override
     public void run() {
         super.run();
-        CacheFileUtil.init();
+        File dir = new File(CacheFileUtil.cacheFilePath + "/" + opernInfo.getTitle());
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
         countDownLatch = new CountDownLatch(opernInfo.getImgs().size());
-        for(OpernImgInfo opernImgInfo : opernInfo.getImgs()){
+        for (OpernImgInfo opernImgInfo : opernInfo.getImgs()) {
             new DownloadThread(opernImgInfo).start();
         }
         try {
@@ -64,7 +68,7 @@ public class ImageDownloadUtil extends Thread{
         handler.sendEmptyMessage(0);
     }
 
-    private class DownloadThread extends Thread{
+    private class DownloadThread extends Thread {
         private OpernImgInfo opernImgInfo;
 
         public DownloadThread(OpernImgInfo opernImgInfo) {
@@ -80,9 +84,9 @@ public class ImageDownloadUtil extends Thread{
                     .build();
             try {
                 Response response = HttpCore.getInstance().getOkHttpClient().newCall(request).execute();
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     InputStream inputStream = response.body().byteStream();
-                    File file = new File(CacheFileUtil.cacheFilePath + "/" + opernImgInfo.getId() + ".jpg");
+                    File file = new File(CacheFileUtil.cacheFilePath + "/" + opernInfo.getTitle() + "/" + opernImgInfo.getId() + ".jpg");
                     FileOutputStream fileOutputStream = new FileOutputStream(file);
                     fileOutputStream.write(FileUtil.readInputStream(inputStream));
                     fileOutputStream.flush();

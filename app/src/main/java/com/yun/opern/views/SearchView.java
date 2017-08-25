@@ -15,6 +15,9 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+import static com.yun.opern.views.SearchView.State.STARTING;
+
+
 /**
  * Created by 允儿 on 2016/9/16.
  */
@@ -68,7 +71,6 @@ public class SearchView extends View {
     private boolean isOver = true;
 
 
-
     public SearchView(Context context) {
         super(context);
         init();
@@ -84,7 +86,7 @@ public class SearchView extends View {
         init();
     }
 
-    private void init(){
+    private void init() {
         initPaint();
 
         //initPath();
@@ -97,16 +99,17 @@ public class SearchView extends View {
 
     }
 
-    public void start(){
+    public void start() {
         // 进入开始动画
-       if(mCurrentState == State.NONE){
-           mCurrentState = State.STARTING;
-           mStartingAnimator.start();
-       }
+        if (mCurrentState == State.NONE) {
+            mCurrentState = STARTING;
+            mStartingAnimator.start();
+            isOver = false;
+        }
     }
 
-    public void end(){
-        if(mCurrentState == State.SEARCHING){
+    public void end() {
+        if (mCurrentState == STARTING || mCurrentState == State.SEARCHING) {
             isOver = true;
             init();
         }
@@ -128,7 +131,7 @@ public class SearchView extends View {
 
     private void initPath() {
         int R = (mViewWidth > mViewHeight ? mViewHeight : mViewWidth) / 2 - 5;
-        int r = R/2;
+        int r = R / 2;
         path_srarch = new Path();
         path_circle = new Path();
 
@@ -193,7 +196,7 @@ public class SearchView extends View {
                 switch (mCurrentState) {
                     case STARTING:
                         // 从开始动画转换好搜索动画
-                        isOver = false;
+                        //isOver = false;
                         mCurrentState = State.SEARCHING;
                         mStartingAnimator.removeAllListeners();
                         mSearchingAnimator.start();

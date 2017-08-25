@@ -27,7 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends BaseActivity {
     @BindView(R.id.actionbar)
     ActionBarNormal actionbar;
     @BindView(R.id.search_input_edt)
@@ -37,23 +37,20 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.opern_lv)
     RecyclerView opernLv;
 
-    private int index = 0;
-    private int numPrePage = 100;
     private String searchParameter;
     private ArrayList<OpernInfo> opernInfoArrayList = new ArrayList<>();
     private Adapter adapter;
     private LinearLayoutManager linearLayoutManager;
     private boolean requesting = false;
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
-        ButterKnife.bind(this);
-        initView();
+    int contentViewRes() {
+        return R.layout.activity_search;
     }
 
-    private void initView() {
+    @Override
+    protected void initView() {
         linearLayoutManager = new LinearLayoutManager(this);
         opernLv.setLayoutManager(linearLayoutManager);
         opernLv.setItemAnimator(new DefaultItemAnimator());
@@ -66,43 +63,21 @@ public class SearchActivity extends AppCompatActivity {
                     return;
                 }
                 searchParameter = searchInputEdt.getText().toString().trim();
-                index = 0;
                 net();
             }
         });
-        opernLv.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if(dy > 0){
-                    int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-                    int totalItemCount = opernInfoArrayList.size();
-                    if (lastVisibleItem >= totalItemCount - 10) {
-                        if (!requesting) {
-                            net();
-                        }
-                    }
-                }
-            }
-        });
+
     }
 
     public void net() {
         requesting = true;
         searchBtn.start();
-        HttpCore.getInstance().getApi().searchOpernInfo(searchParameter, index, numPrePage).enqueue(new Callback<BaseResponse<ArrayList<OpernInfo>>>() {
+        HttpCore.getInstance().getApi().searchOpernInfo(searchParameter).enqueue(new Callback<BaseResponse<ArrayList<OpernInfo>>>() {
             @Override
             public void onResponse(Call<BaseResponse<ArrayList<OpernInfo>>> call, Response<BaseResponse<ArrayList<OpernInfo>>> response) {
-                if (index == 0) {
-                    opernInfoArrayList.clear();
-                }
+                opernInfoArrayList.clear();
                 ArrayList<OpernInfo> data = response.body().getData();
-                if (data == null || data.size() == 0) {
-                    T.showShort("没有更多数据了");
-                } else {
-                    opernInfoArrayList.addAll(data);
-                    index++;
-                }
+                opernInfoArrayList.addAll(data);
                 adapter.notifyDataSetChanged();
                 searchBtn.end();
                 requesting = false;

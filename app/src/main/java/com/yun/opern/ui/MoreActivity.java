@@ -1,5 +1,6 @@
 package com.yun.opern.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.RelativeLayout;
@@ -13,8 +14,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MoreActivity extends AppCompatActivity {
-
+public class MoreActivity extends BaseActivity {
 
     @BindView(R.id.my_download_rl)
     RelativeLayout myDownloadRl;
@@ -34,14 +34,13 @@ public class MoreActivity extends AppCompatActivity {
     TextView userInfoTv;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_more);
-        ButterKnife.bind(this);
+    int contentViewRes() {
+        return R.layout.activity_more;
     }
 
     @OnClick(R.id.my_download_rl)
     public void onMyDownloadRlClicked() {
+        startActivity(new Intent(MoreActivity.this, MyDownloadActivity.class));
     }
 
     @OnClick(R.id.my_collection_rl)

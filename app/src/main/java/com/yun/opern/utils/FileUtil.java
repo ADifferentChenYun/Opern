@@ -32,12 +32,7 @@ public class FileUtil {
     }
 
     public static boolean isOpernImgsExist(OpernInfo opernInfo){
-        for(OpernImgInfo opernImgInfo : opernInfo.getImgs()){
-            File file = new File(CacheFileUtil.cacheFilePath + "/" + opernImgInfo.getId() + ".jpg");
-            if(!file.exists()){
-                return false;
-            }
-        }
-        return true;
+        File file = new File(CacheFileUtil.cacheFilePath + "/" + opernInfo.getTitle());
+        return file.exists();
     }
 }

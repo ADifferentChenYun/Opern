@@ -16,6 +16,7 @@ import com.yun.opern.R;
 import com.yun.opern.model.BaseResponse;
 import com.yun.opern.model.OpernInfo;
 import com.yun.opern.net.HttpCore;
+import com.yun.opern.utils.CacheFileUtil;
 import com.yun.opern.utils.T;
 import com.yun.opern.views.ActionBarNormal;
 
@@ -27,7 +28,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @BindView(R.id.opern_lv)
     RecyclerView opernLv;
@@ -45,16 +46,15 @@ public class MainActivity extends AppCompatActivity {
     private int numPrePage = 40;
     private boolean requesting = false;
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-        initView();
-        net();
+    int contentViewRes() {
+        return R.layout.activity_main;
     }
 
-    private void initView() {
+    @Override
+    protected void initView() {
+        CacheFileUtil.init();
         actionbar.showBackButton(false);
         actionbar.showTitle(true);
         actionbar.showMoreButton(true);
@@ -105,6 +105,12 @@ public class MainActivity extends AppCompatActivity {
                 searchFab.animate().translationY(0).setDuration(500).start();
             }
         });
+    }
+
+    @Override
+    protected void initedView() {
+        super.initedView();
+        net();
     }
 
     private void net() {

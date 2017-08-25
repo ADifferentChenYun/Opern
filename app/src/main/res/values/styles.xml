@@ -10,4 +10,9 @@
         <item name="android:windowBackground">@color/app_background</item>
     </style>
 
+
+    <style name="FullscreenTheme" parent="AppTheme">
+        <item name="android:windowFullscreen">?android:windowNoTitle</item>
+    </style>
+
 </resources>

@@ -18,5 +18,5 @@ public interface Api {
     Call<BaseResponse<ArrayList<OpernInfo>>> getPopOpernInfo(@Query("index") int index, @Query("numPerPage") int numPerPage);
 
     @GET(value = "opern/searchOpernInfo")
-    Call<BaseResponse<ArrayList<OpernInfo>>> searchOpernInfo(@Query("searchParameter") String searchParameter, @Query("index") int index, @Query("numPerPage") int numPerPage);
+    Call<BaseResponse<ArrayList<OpernInfo>>> searchOpernInfo(@Query("searchParameter") String searchParameter);
 }
