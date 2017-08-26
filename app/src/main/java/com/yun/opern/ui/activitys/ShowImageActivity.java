@@ -1,4 +1,4 @@
-package com.yun.opern.ui;
+package com.yun.opern.ui.activitys;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -6,12 +6,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.yun.opern.R;
 import com.yun.opern.model.OpernImgInfo;
 import com.yun.opern.model.OpernInfo;
+import com.yun.opern.ui.fragments.ShowImageFragment;
+import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.utils.FileUtil;
 import com.yun.opern.utils.ImageDownloadUtil;
 import com.yun.opern.utils.T;
@@ -19,7 +20,6 @@ import com.yun.opern.utils.T;
 import java.util.ArrayList;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class ShowImageActivity extends BaseActivity {
 
@@ -34,7 +34,7 @@ public class ShowImageActivity extends BaseActivity {
     private ViewPagerAdapter adapter;
 
     @Override
-    int contentViewRes() {
+    protected int contentViewRes() {
         return R.layout.activity_show_image;
     }
 

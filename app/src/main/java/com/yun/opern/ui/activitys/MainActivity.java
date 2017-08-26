@@ -1,23 +1,22 @@
-package com.yun.opern.ui;
+package com.yun.opern.ui.activitys;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.yun.opern.R;
 import com.yun.opern.model.BaseResponse;
 import com.yun.opern.model.OpernInfo;
 import com.yun.opern.net.HttpCore;
+import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.utils.T;
 import com.yun.opern.views.ActionBarNormal;
-import com.yun.opern.views.SearchView;
 
 import java.util.ArrayList;
 
@@ -27,73 +26,122 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SearchActivity extends BaseActivity {
-    @BindView(R.id.actionbar)
-    ActionBarNormal actionbar;
-    @BindView(R.id.search_input_edt)
-    EditText searchInputEdt;
-    @BindView(R.id.search_btn)
-    SearchView searchBtn;
+public class MainActivity extends BaseActivity {
+
     @BindView(R.id.opern_lv)
     RecyclerView opernLv;
+    @BindView(R.id.opern_srl)
+    SwipeRefreshLayout opernSrl;
+    @BindView(R.id.search_fab)
+    FloatingActionButton searchFab;
+    @BindView(R.id.actionbar)
+    ActionBarNormal actionbar;
 
-    private String searchParameter;
     private ArrayList<OpernInfo> opernInfoArrayList = new ArrayList<>();
     private Adapter adapter;
     private LinearLayoutManager linearLayoutManager;
+    private int index = 0;
+    private int numPrePage = 40;
     private boolean requesting = false;
 
 
     @Override
-    int contentViewRes() {
-        return R.layout.activity_search;
+    protected int contentViewRes() {
+        return R.layout.activity_main;
     }
 
     @Override
     protected void initView() {
+        actionbar.showBackButton(false);
+        actionbar.showTitle(true);
+        actionbar.showMoreButton(true);
+        actionbar.getMoreButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, MoreActivity.class));
+            }
+        });
         linearLayoutManager = new LinearLayoutManager(this);
         opernLv.setLayoutManager(linearLayoutManager);
         opernLv.setItemAnimator(new DefaultItemAnimator());
         adapter = new Adapter(opernInfoArrayList);
         opernLv.setAdapter(adapter);
-        searchBtn.setOnClickListener(new View.OnClickListener() {
+        opernLv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onClick(View v) {
-                if(requesting){
-                    return;
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                    int totalItemCount = opernInfoArrayList.size();
+                    if (lastVisibleItem >= totalItemCount - 10) {
+                        if (!requesting) {
+                            net();
+                        }
+                    }
                 }
-                searchParameter = searchInputEdt.getText().toString().trim();
+            }
+        });
+        opernSrl.setColorSchemeColors(getResources().getColor(R.color.light_blue));
+        opernSrl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                index = 0;
                 net();
             }
         });
-
+        searchFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, SearchActivity.class));
+            }
+        });
+        searchFab.setTranslationY(searchFab.getMeasuredHeight() * 1.5f);
+        searchFab.post(new Runnable() {
+            @Override
+            public void run() {
+                searchFab.animate().translationY(0).setDuration(500).start();
+            }
+        });
     }
 
-    public void net() {
+    @Override
+    protected void initedView() {
+        super.initedView();
+        net();
+    }
+
+    private void net() {
         requesting = true;
-        searchBtn.start();
-        HttpCore.getInstance().getApi().searchOpernInfo(searchParameter).enqueue(new Callback<BaseResponse<ArrayList<OpernInfo>>>() {
+        opernSrl.setRefreshing(true);
+        HttpCore.getInstance().getApi().getPopOpernInfo(index, numPrePage).enqueue(new Callback<BaseResponse<ArrayList<OpernInfo>>>() {
             @Override
             public void onResponse(Call<BaseResponse<ArrayList<OpernInfo>>> call, Response<BaseResponse<ArrayList<OpernInfo>>> response) {
-                opernInfoArrayList.clear();
+                if (index == 0) {
+                    opernInfoArrayList.clear();
+                }
                 ArrayList<OpernInfo> data = response.body().getData();
-                opernInfoArrayList.addAll(data);
+                if (data == null || data.size() == 0) {
+                    T.showShort("没有更多数据了");
+                } else {
+                    opernInfoArrayList.addAll(data);
+                    index++;
+                }
                 adapter.notifyDataSetChanged();
-                searchBtn.end();
+                opernSrl.setRefreshing(false);
                 requesting = false;
             }
 
             @Override
             public void onFailure(Call<BaseResponse<ArrayList<OpernInfo>>> call, Throwable t) {
                 t.printStackTrace();
-                searchBtn.end();
-                T.showShort("网络异常");
+                opernSrl.setRefreshing(false);
                 requesting = false;
+                T.showShort("网络异常");
             }
         });
     }
 
-    public class Adapter extends RecyclerView.Adapter<SearchActivity.Adapter.ViewHolder> {
+    public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         private ArrayList<OpernInfo> opernInfoArrayList;
 
 
@@ -102,12 +150,12 @@ public class SearchActivity extends BaseActivity {
         }
 
         @Override
-        public SearchActivity.Adapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             return new ViewHolder(getLayoutInflater().inflate(R.layout.item_opern_list, parent, false));
         }
 
         @Override
-        public void onBindViewHolder(SearchActivity.Adapter.ViewHolder viewHolder, int position) {
+        public void onBindViewHolder(ViewHolder viewHolder, int position) {
             OpernInfo opernInfo = opernInfoArrayList.get(position);
             viewHolder.titleTv.setText(opernInfo.getTitle());
             viewHolder.wordAuthorTv.setText("作词：" + opernInfo.getWordAuthor());
@@ -140,7 +188,7 @@ public class SearchActivity extends BaseActivity {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(SearchActivity.this, ShowImageActivity.class);
+                        Intent intent = new Intent(MainActivity.this, ShowImageActivity.class);
                         intent.putExtra("opernInfo",opernInfoArrayList.get(getAdapterPosition()));
                         startActivity(intent);
                     }

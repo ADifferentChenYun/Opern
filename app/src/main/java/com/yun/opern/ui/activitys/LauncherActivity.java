@@ -1,13 +1,13 @@
-package com.yun.opern.ui;
+package com.yun.opern.ui.activitys;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Handler;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.yun.opern.R;
+import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.utils.CacheFileUtil;
 
 import io.reactivex.functions.Consumer;
@@ -15,12 +15,12 @@ import io.reactivex.functions.Consumer;
 public class LauncherActivity extends BaseActivity {
 
     @Override
-    int contentViewRes() {
+    protected int contentViewRes() {
         return R.layout.activity_launcher;
     }
 
     @Override
-    void initView() {
+    protected void initView() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

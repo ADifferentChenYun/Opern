@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.yun.opern.ui.SearchActivity">
+    tools:context="com.yun.opern.ui.activitys.SearchActivity">
 
     <com.yun.opern.views.ActionBarNormal
         android:id="@+id/actionbar"

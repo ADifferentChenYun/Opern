@@ -1,4 +1,4 @@
-package com.yun.opern.ui;
+package com.yun.opern.ui.bases;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,9 +20,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected ProgressDialog progressDialog;
     protected Unbinder unbinder;
 
-    abstract int contentViewRes();
+    protected abstract int contentViewRes();
 
-    abstract void initView();
+    protected abstract void initView();
 
     protected void initedView(){
 

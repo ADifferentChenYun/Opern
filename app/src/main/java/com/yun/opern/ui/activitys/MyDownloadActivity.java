@@ -1,9 +1,7 @@
-package com.yun.opern.ui;
+package com.yun.opern.ui.activitys;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -16,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.yun.opern.R;
 import com.yun.opern.model.OpernImgInfo;
 import com.yun.opern.model.OpernInfo;
+import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.utils.CacheFileUtil;
 import com.yun.opern.utils.FileUtil;
 import com.yun.opern.utils.T;
@@ -41,12 +40,12 @@ public class MyDownloadActivity extends BaseActivity {
 
 
     @Override
-    int contentViewRes() {
+    protected int contentViewRes() {
         return R.layout.activity_my_download;
     }
 
     @Override
-    void initView() {
+    protected void initView() {
         new ScanImgFileThread(new ScanImgFileThread.CallBack() {
             @Override
             public void onFinish(ArrayList<OpernInfo> opernInfoList) {

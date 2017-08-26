@@ -1,16 +1,14 @@
-package com.yun.opern.ui;
+package com.yun.opern.ui.activitys;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.yun.opern.R;
+import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.views.ActionBarNormal;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -34,12 +32,12 @@ public class MoreActivity extends BaseActivity {
     TextView userInfoTv;
 
     @Override
-    int contentViewRes() {
+    protected int contentViewRes() {
         return R.layout.activity_more;
     }
 
     @Override
-    void initView() {
+    protected void initView() {
 
     }
 
