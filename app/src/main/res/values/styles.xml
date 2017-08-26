@@ -6,7 +6,6 @@
         <item name="colorPrimary">@color/light_blue</item>
         <item name="colorPrimaryDark">@color/light_blue</item>
         <item name="colorAccent">@color/light_blue</item>
-        <!--整个应用的背景颜色-->
         <item name="android:windowBackground">@color/app_background</item>
     </style>
 

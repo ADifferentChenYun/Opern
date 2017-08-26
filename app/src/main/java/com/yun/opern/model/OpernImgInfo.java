@@ -47,6 +47,6 @@ public class OpernImgInfo implements Serializable{
     }
 
     public void setOpernImg(String opernImg) {
-        this.opernImg = imgUrlHost + opernImg;
+        this.opernImg = opernImg;
     }
 }

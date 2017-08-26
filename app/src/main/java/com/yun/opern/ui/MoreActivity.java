@@ -38,6 +38,11 @@ public class MoreActivity extends BaseActivity {
         return R.layout.activity_more;
     }
 
+    @Override
+    void initView() {
+
+    }
+
     @OnClick(R.id.my_download_rl)
     public void onMyDownloadRlClicked() {
         startActivity(new Intent(MoreActivity.this, MyDownloadActivity.class));

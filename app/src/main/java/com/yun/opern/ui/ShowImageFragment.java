@@ -1,6 +1,7 @@
 package com.yun.opern.ui;
 
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,6 +24,8 @@ import com.yun.opern.utils.T;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,9 +54,9 @@ public class ShowImageFragment extends Fragment {
     }
 
     private void initView() {
-        Glide.with(this).load(opernImgInfo.getOpernImg()).listener(new RequestListener<Drawable>() {
+        Glide.with(this).asBitmap().load(opernImgInfo.getOpernImg()).listener(new RequestListener<Bitmap>() {
             @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                 if (retry > 0) {
                     initView();
                     T.showShort("加载图片失败，正在重新加载");
@@ -66,11 +69,11 @@ public class ShowImageFragment extends Fragment {
             }
 
             @Override
-            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                 loadingPb.setVisibility(View.GONE);
                 return false;
             }
-        }).into(photoView);
+        }).transition(withCrossFade()).into(photoView);
     }
 
     @Override

@@ -54,7 +54,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        CacheFileUtil.init();
         actionbar.showBackButton(false);
         actionbar.showTitle(true);
         actionbar.showMoreButton(true);

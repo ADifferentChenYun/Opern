@@ -1,12 +1,15 @@
 package com.yun.opern.ui;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -14,6 +17,8 @@ import com.yun.opern.R;
 import com.yun.opern.model.OpernImgInfo;
 import com.yun.opern.model.OpernInfo;
 import com.yun.opern.utils.CacheFileUtil;
+import com.yun.opern.utils.FileUtil;
+import com.yun.opern.utils.T;
 import com.yun.opern.views.ActionBarNormal;
 import com.yun.opern.views.SquareImageView;
 
@@ -23,7 +28,9 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MyDownloadActivity extends AppCompatActivity {
+import static com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade;
+
+public class MyDownloadActivity extends BaseActivity {
     @BindView(R.id.actionbar)
     ActionBarNormal actionbar;
     @BindView(R.id.img_gv)
@@ -31,15 +38,15 @@ public class MyDownloadActivity extends AppCompatActivity {
     private ArrayList<OpernInfo> opernInfos = new ArrayList<>();
     private GridViewAdapter adapter;
 
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_download);
-        ButterKnife.bind(this);
-        initView();
+    int contentViewRes() {
+        return R.layout.activity_my_download;
     }
 
-    private void initView() {
+    @Override
+    void initView() {
         new ScanImgFileThread(new ScanImgFileThread.CallBack() {
             @Override
             public void onFinish(ArrayList<OpernInfo> opernInfoList) {
@@ -50,7 +57,16 @@ public class MyDownloadActivity extends AppCompatActivity {
         }).execute();
         adapter = new GridViewAdapter(opernInfos);
         imgGv.setAdapter(adapter);
+        imgGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(context, ShowImageActivity.class);
+                intent.putExtra("opernInfo", opernInfos.get(position));
+                startActivity(intent);
+            }
+        });
     }
+
 
     public class GridViewAdapter extends BaseAdapter {
         private ArrayList<OpernInfo> opernInfos;
@@ -76,7 +92,7 @@ public class MyDownloadActivity extends AppCompatActivity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = getLayoutInflater().inflate(R.layout.item_img_gv_layout, parent, false);
                 viewHolder = new ViewHolder(convertView);
@@ -84,9 +100,21 @@ public class MyDownloadActivity extends AppCompatActivity {
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            OpernInfo opernInfo = opernInfos.get(position);
+            final OpernInfo opernInfo = opernInfos.get(position);
             viewHolder.itemImgGvLayoutTv.setText(opernInfo.getTitle());
-            Glide.with(MyDownloadActivity.this).load(opernInfo.getImgs().get(0).getOpernImg()).into(viewHolder.itemImgGvLayoutImg);
+            Glide.with(MyDownloadActivity.this).asBitmap().load(opernInfo.getImgs().get(0).getOpernImg()).transition(withCrossFade()).into(viewHolder.itemImgGvLayoutImg);
+            viewHolder.deleteImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    boolean delete = FileUtil.deleteLocalOpernImgs(opernInfo);
+                    if(delete){
+                        opernInfos.remove(position);
+                        notifyDataSetChanged();
+                    }else {
+                        T.showShort("删除失败");
+                    }
+                }
+            });
             return convertView;
         }
 
@@ -96,6 +124,8 @@ public class MyDownloadActivity extends AppCompatActivity {
             SquareImageView itemImgGvLayoutImg;
             @BindView(R.id.item_img_gv_layout_tv)
             TextView itemImgGvLayoutTv;
+            @BindView(R.id.item_img_gv_delete_img)
+            ImageView deleteImg;
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
@@ -127,9 +157,10 @@ public class MyDownloadActivity extends AppCompatActivity {
                     opernInfos.add(opernInfo);
                     for (File imgFile : childFile.listFiles()) {
                         OpernImgInfo opernImgInfo = new OpernImgInfo();
-                        opernImgInfo.setId(imgFile.getName());
-                        opernImgInfo.setOpernId(Integer.parseInt(imgFile.getName().split("_")[0]));
-                        opernImgInfo.setOpernIndex(Integer.parseInt(imgFile.getName().split("_")[1]));
+                        String id = imgFile.getName().split("\\.")[0];
+                        opernImgInfo.setId(id);
+                        opernImgInfo.setOpernId(Integer.parseInt(id.split("_")[0]));
+                        opernImgInfo.setOpernIndex(Integer.parseInt(id.split("_")[1]));
                         opernImgInfo.setOpernTitle(childFile.getName());
                         opernImgInfo.setOpernImg(imgFile.getPath());
                         opernImgInfos.add(opernImgInfo);

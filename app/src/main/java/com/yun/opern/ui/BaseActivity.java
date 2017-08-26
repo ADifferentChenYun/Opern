@@ -16,15 +16,13 @@ import butterknife.Unbinder;
  */
 
 public abstract class BaseActivity extends AppCompatActivity {
-    private Context context;
-    private ProgressDialog progressDialog;
-    private Unbinder unbinder;
+    protected Context context;
+    protected ProgressDialog progressDialog;
+    protected Unbinder unbinder;
 
     abstract int contentViewRes();
 
-    protected void initView(){
-
-    }
+    abstract void initView();
 
     protected void initedView(){
 

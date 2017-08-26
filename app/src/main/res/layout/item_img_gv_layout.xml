@@ -9,10 +9,20 @@
         android:layout_height="match_parent" />
 
     <TextView
+        android:singleLine="true"
         android:id="@+id/item_img_gv_layout_tv"
         android:layout_gravity="center|bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="this is title"/>
+        android:text="this is title"
+        android:textColor="@color/black"/>
+
+    <ImageView
+        android:id="@+id/item_img_gv_delete_img"
+        android:layout_margin="5dp"
+        android:layout_gravity="right"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@mipmap/ic_delete"/>
 
 </FrameLayout>
