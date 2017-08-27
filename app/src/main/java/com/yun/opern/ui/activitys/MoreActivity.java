@@ -1,14 +1,17 @@
 package com.yun.opern.ui.activitys;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.yun.opern.R;
 import com.yun.opern.ui.bases.BaseActivity;
+import com.yun.opern.utils.CacheFileUtil;
 import com.yun.opern.views.ActionBarNormal;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -30,6 +33,11 @@ public class MoreActivity extends BaseActivity {
     TextView userNameTv;
     @BindView(R.id.user_info_tv)
     TextView userInfoTv;
+    @BindView(R.id.app_cache_size_tv)
+    TextView appCacheSizeTv;
+    @BindView(R.id.clear_app_cache_rl)
+    RelativeLayout clearAppCacheRl;
+
 
     @Override
     protected int contentViewRes() {
@@ -38,7 +46,7 @@ public class MoreActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-
+        appCacheSizeTv.setText(appCacheSizeTv.getText().toString() + CacheFileUtil.size());
     }
 
     @OnClick(R.id.my_download_rl)
@@ -57,4 +65,5 @@ public class MoreActivity extends BaseActivity {
     @OnClick(R.id.about_us_rl)
     public void onAboutUsRlClicked() {
     }
+
 }

@@ -19,7 +19,6 @@ public class T {
     public static void showShort(CharSequence message) {
         if (null == toast) {
             toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
-            // toast.setGravity(Gravity.CENTER, 0, 0);
         } else {
             toast.setText(message);
         }

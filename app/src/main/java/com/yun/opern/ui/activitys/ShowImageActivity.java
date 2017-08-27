@@ -7,19 +7,22 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.yun.opern.R;
 import com.yun.opern.model.OpernImgInfo;
 import com.yun.opern.model.OpernInfo;
-import com.yun.opern.ui.fragments.ShowImageFragment;
 import com.yun.opern.ui.bases.BaseActivity;
+import com.yun.opern.ui.fragments.ShowImageFragment;
 import com.yun.opern.utils.FileUtil;
 import com.yun.opern.utils.ImageDownloadUtil;
 import com.yun.opern.utils.T;
+import com.yun.opern.views.ActionBarNormal;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ShowImageActivity extends BaseActivity {
 
@@ -29,6 +32,10 @@ public class ShowImageActivity extends BaseActivity {
     FloatingActionButton downloadFab;
     @BindView(R.id.collection_fab)
     FloatingActionButton collectionFab;
+    @BindView(R.id.fab_btns)
+    LinearLayout fabBtns;
+    @BindView(R.id.actionbar)
+    ActionBarNormal actionbar;
 
     private OpernInfo opernInfo;
     private ViewPagerAdapter adapter;
@@ -41,9 +48,10 @@ public class ShowImageActivity extends BaseActivity {
     @Override
     protected void initView() {
         opernInfo = (OpernInfo) getIntent().getExtras().get("opernInfo");
+        actionbar.setTitle(opernInfo.getTitle());
         ArrayList<ShowImageFragment> fragments = new ArrayList<>();
         for (OpernImgInfo opernImgInfo : opernInfo.getImgs()) {
-            ShowImageFragment showImageFragment = new ShowImageFragment();
+            ShowImageFragment showImageFragment = new ShowImageFragment(actionbar, fabBtns);
             Bundle bundle = new Bundle();
             bundle.putSerializable("opernImgInfo", opernImgInfo);
             showImageFragment.setArguments(bundle);
@@ -52,6 +60,22 @@ public class ShowImageActivity extends BaseActivity {
         adapter = new ViewPagerAdapter(getSupportFragmentManager(), fragments);
         imageVp.setAdapter(adapter);
         imageVp.setOffscreenPageLimit(fragments.size() - 1);
+        imageVp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         downloadFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +96,7 @@ public class ShowImageActivity extends BaseActivity {
         collectionFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                // TODO: 2017/8/27 0027
             }
         });
         downloadFab.setVisibility(FileUtil.isOpernImgsExist(opernInfo) ? View.GONE : View.VISIBLE);

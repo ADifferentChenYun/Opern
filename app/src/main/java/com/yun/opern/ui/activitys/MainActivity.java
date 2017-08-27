@@ -196,4 +196,22 @@ public class MainActivity extends BaseActivity {
             }
         }
     }
+
+    private long currentTime = 0;
+
+    /**
+     * 双击退出整个应用(间隔3s)，MainActivity launchMode 设置为singleTop
+     */
+    @Override
+    public void onBackPressed() {
+        if (System.currentTimeMillis() / 1000 - currentTime < 3) {
+            finish(); //结束当前activity
+            System.gc();  //系统回收内存
+            System.exit(0); //系统退出
+        } else {
+            T.showShort("再次点击退出应用");
+            currentTime = System.currentTimeMillis() / 1000;
+        }
+    }
+
 }

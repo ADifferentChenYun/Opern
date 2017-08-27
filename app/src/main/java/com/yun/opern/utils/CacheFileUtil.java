@@ -28,6 +28,6 @@ public class CacheFileUtil {
 
     public static long size(){
         File file = new File(cacheFilePath);
-        return file.length();
+        return file.getTotalSpace();
     }
 }

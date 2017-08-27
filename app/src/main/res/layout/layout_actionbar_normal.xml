@@ -24,11 +24,15 @@
 
 
     <TextView
+        android:gravity="center"
         android:id="@+id/layout_actionbar_normal_title_tv"
         android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="this is actionbar"
+        android:singleLine="true"
         android:textSize="17sp"
         android:textColor="@color/white"/>
 

@@ -37,7 +37,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activitys.MainActivity"/>
+        <activity
+            android:name=".ui.activitys.MainActivity"
+            android:launchMode="singleTop" />
         <activity android:name=".ui.activitys.MyDownloadActivity" />
         <activity android:name=".ui.activitys.SearchActivity" />
         <activity

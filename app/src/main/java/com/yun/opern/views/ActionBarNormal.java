@@ -105,4 +105,8 @@ public class ActionBarNormal extends FrameLayout {
     public ImageView getMoreButton(){
         return moreImg;
     }
+
+    public void setTitle(String titleStr){
+        titleTv.setText(titleStr);
+    }
 }
