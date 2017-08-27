@@ -92,6 +92,7 @@ public class ShowImageFragment extends Fragment {
         photoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                handler.removeCallbacks(hideIndicatorRunable);
                 if (actionBarNormal.getTop() < 0) {
                     showIndicator();
                 } else {
@@ -143,7 +144,6 @@ public class ShowImageFragment extends Fragment {
     }
 
     private void hideIndicator() {
-        handler.removeCallbacks(hideIndicatorRunable);
         ValueAnimator valueAnimator = new ValueAnimator();
         valueAnimator.setDuration(500);
         valueAnimator.setFloatValues(0f, -1f);
