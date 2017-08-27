@@ -29,8 +29,8 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:src="@mipmap/ic_user"
-            app:civ_border_width="2dp"
-            app:civ_border_color="@color/white"/>
+            app:civ_border_color="@color/white"
+            app:civ_border_width="2dp" />
 
         <TextView
             android:id="@+id/user_name_tv"
@@ -41,7 +41,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginTop="4dp"
             android:layout_toRightOf="@id/user_head_img"
-            android:text="用户名：正在接入微信登录"
+            android:text="微博登录"
             android:textColor="#666666"
             android:textSize="16sp" />
 

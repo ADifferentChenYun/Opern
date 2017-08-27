@@ -2,15 +2,22 @@ package com.yun.opern.ui.activitys;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.sina.weibo.sdk.WbSdk;
+import com.sina.weibo.sdk.auth.AccessTokenKeeper;
+import com.sina.weibo.sdk.auth.AuthInfo;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.sina.weibo.sdk.auth.WbConnectErrorMessage;
+import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.yun.opern.Application;
 import com.yun.opern.R;
+import com.yun.opern.common.WeiBoConstants;
 import com.yun.opern.model.event.OpernFileDeleteEvent;
 import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.utils.CacheFileUtil;
@@ -22,7 +29,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
@@ -53,6 +59,7 @@ public class MoreActivity extends BaseActivity {
     @BindView(R.id.push_switch)
     Switch pushSwitch;
 
+    private SsoHandler mSsoHandler;
 
     @Override
     protected int contentViewRes() {
@@ -62,8 +69,16 @@ public class MoreActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        AuthInfo mAuthInfo = new AuthInfo(this, WeiBoConstants.APP_KEY, WeiBoConstants.REDIRECT_URL, WeiBoConstants.SCOPE);
+        WbSdk.install(this, mAuthInfo);
         appCacheSizeTv.setText("APP缓存:" + CacheFileUtil.size());
         pushSwitch.setChecked(!JPushInterface.isPushStopped(Application.getAppContext()));
+    }
+
+    @OnClick(R.id.user_info_rl)
+    public void onUserInfoRlClicked() {
+        mSsoHandler = new SsoHandler(MoreActivity.this);
+        mSsoHandler.authorize(new SelfWbAuthListener());
     }
 
     @OnClick(R.id.my_download_rl)
@@ -105,7 +120,7 @@ public class MoreActivity extends BaseActivity {
     @OnCheckedChanged(R.id.push_switch)
     public void onPushSwitchCheckedChanged(final CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
-            if(JPushInterface.isPushStopped(Application.getAppContext())){
+            if (JPushInterface.isPushStopped(Application.getAppContext())) {
                 JPushInterface.resumePush(Application.getAppContext());
                 T.showShort("推送已打开");
             }
@@ -133,8 +148,45 @@ public class MoreActivity extends BaseActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void OnOpernFileDeleted(OpernFileDeleteEvent opernFileDeleteEvent){
+    public void OnOpernFileDeleted(OpernFileDeleteEvent opernFileDeleteEvent) {
         initView();
+    }
+
+    private class SelfWbAuthListener implements com.sina.weibo.sdk.auth.WbAuthListener {
+        @Override
+        public void onSuccess(final Oauth2AccessToken token) {
+            MoreActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Oauth2AccessToken mAccessToken = token;
+                    if (mAccessToken.isSessionValid()) {
+                        // 显示 Token
+                        //updateTokenView(false);
+                        // 保存 Token 到 SharedPreferences
+                        AccessTokenKeeper.writeAccessToken(context, mAccessToken);
+                        Toast.makeText(context, mAccessToken.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void cancel() {
+            Toast.makeText(context, "取消", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onFailure(WbConnectErrorMessage errorMessage) {
+            Toast.makeText(context, errorMessage.getErrorMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (mSsoHandler != null) {
+            mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
+        }
     }
 
     @Override

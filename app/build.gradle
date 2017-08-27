@@ -64,4 +64,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    compile 'com.sina.weibo.sdk:core:4.1.0:openDefaultRelease@aar'
 }
