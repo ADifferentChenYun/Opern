@@ -41,6 +41,9 @@ public class MyDownloadActivity extends BaseActivity {
     ActionBarNormal actionbar;
     @BindView(R.id.img_gv)
     GridView imgGv;
+    @BindView(R.id.empty_view)
+    View emptyView;
+
     private ArrayList<OpernInfo> opernInfos = new ArrayList<>();
     private GridViewAdapter adapter;
 
@@ -84,6 +87,7 @@ public class MyDownloadActivity extends BaseActivity {
 
         @Override
         public int getCount() {
+            emptyView.setVisibility(opernInfos.size() == 0 ? View.VISIBLE : View.GONE);
             return opernInfos.size();
         }
 

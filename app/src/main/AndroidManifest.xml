@@ -140,6 +140,7 @@
             android:name="JPUSH_APPKEY"
             android:value="c4436241da6745e2f8109770" />
 
+        <activity android:name=".ui.activitys.AboutUsActivity"></activity>
     </application>
 
 </manifest>

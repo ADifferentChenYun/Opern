@@ -99,6 +99,7 @@ public class MoreActivity extends BaseActivity {
 
     @OnClick(R.id.about_us_rl)
     public void onAboutUsRlClicked() {
+        startActivity(new Intent(context, AboutUsActivity.class));
     }
 
     @OnCheckedChanged(R.id.push_switch)
