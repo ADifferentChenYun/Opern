@@ -1,7 +1,9 @@
 package com.yun.opern.ui.activitys;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -11,9 +13,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.yun.opern.Application;
 import com.yun.opern.R;
 import com.yun.opern.model.OpernImgInfo;
 import com.yun.opern.model.OpernInfo;
+import com.yun.opern.model.event.OpernFileDeleteEvent;
 import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.utils.CacheFileUtil;
 import com.yun.opern.utils.FileUtil;
@@ -21,11 +25,14 @@ import com.yun.opern.utils.T;
 import com.yun.opern.views.ActionBarNormal;
 import com.yun.opern.views.SquareImageView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.jpush.android.api.JPushInterface;
 
 import static com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade;
 
@@ -105,13 +112,25 @@ public class MyDownloadActivity extends BaseActivity {
             viewHolder.deleteImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    boolean delete = FileUtil.deleteLocalOpernImgs(opernInfo);
-                    if(delete){
-                        opernInfos.remove(position);
-                        notifyDataSetChanged();
-                    }else {
-                        T.showShort("删除失败");
-                    }
+                    AlertDialog alertDialog = new AlertDialog.Builder(context)
+                            .setTitle("删除本地曲谱")
+                            .setMessage("删除后本地就找不到了哦~")
+                            .setPositiveButton("删除", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    boolean delete = FileUtil.deleteLocalOpernImgs(opernInfo);
+                                    if(delete){
+                                        opernInfos.remove(position);
+                                        notifyDataSetChanged();
+                                        EventBus.getDefault().post(new OpernFileDeleteEvent());
+                                    }else {
+                                        T.showShort("删除失败");
+                                    }
+                                }
+                            })
+                            .setCancelable(true)
+                            .create();
+                    alertDialog.show();
                 }
             });
             return convertView;

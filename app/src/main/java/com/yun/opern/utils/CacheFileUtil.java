@@ -22,12 +22,10 @@ public class CacheFileUtil {
     }
 
     public static boolean clear(){
-        File file = new File(cacheFilePath);
-        return file.delete();
+        return FileUtils.deleteAllInDir(cacheFilePath);
     }
 
-    public static long size(){
-        File file = new File(cacheFilePath);
-        return file.getTotalSpace();
+    public static String size(){
+        return FileUtils.getDirSize(cacheFilePath);
     }
 }
