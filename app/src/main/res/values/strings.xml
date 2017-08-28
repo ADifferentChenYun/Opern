@@ -10,4 +10,6 @@
         数据来源\n
         暂时所有曲谱数据来源http://www.qupu123.com
     </string>
+    <string name="login">登录</string>
+    <string name="logout">退出登录</string>
 </resources>
