@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.orhanobut.logger.Logger;
 import com.sina.weibo.sdk.WbSdk;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.AuthInfo;
@@ -24,6 +23,8 @@ import com.yun.opern.R;
 import com.yun.opern.common.WeiBoConstants;
 import com.yun.opern.common.WeiBoUserInfo;
 import com.yun.opern.common.WeiBoUserInfoKeeper;
+import com.yun.opern.model.BaseResponse;
+import com.yun.opern.model.UserLoginRequestInfo;
 import com.yun.opern.model.event.OpernFileDeleteEvent;
 import com.yun.opern.model.event.UserLoginOrLogoutEvent;
 import com.yun.opern.net.HttpCore;
@@ -36,14 +37,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.IOException;
-
 import butterknife.BindView;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -90,12 +88,12 @@ public class MoreActivity extends BaseActivity {
     protected void initView() {
         Oauth2AccessToken accessToken = AccessTokenKeeper.readAccessToken(context);
         WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
-        if(accessToken.isSessionValid() && weiBoUserInfo != null){
+        if (accessToken.isSessionValid() && weiBoUserInfo != null) {
             Glide.with(context).asBitmap().load(weiBoUserInfo.getAvatar_hd()).transition(withCrossFade()).into(userHeadImg);
-            userNameTv.setText(weiBoUserInfo.getName());
+            userNameTv.setText(weiBoUserInfo.getScreen_name());
             userInfoTv.setText(weiBoUserInfo.getDescription());
             logoutBtn.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             userHeadImg.setImageResource(R.mipmap.ic_weibo);
             userNameTv.setText(R.string.weibo_login);
             userInfoTv.setText(R.string.login_info);
@@ -109,7 +107,7 @@ public class MoreActivity extends BaseActivity {
     public void onUserInfoRlClicked() {
         Oauth2AccessToken accessToken = AccessTokenKeeper.readAccessToken(context);
         WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
-        if(!accessToken.isSessionValid() || weiBoUserInfo == null){
+        if (!accessToken.isSessionValid() || weiBoUserInfo == null) {
             mSsoHandler = new SsoHandler(MoreActivity.this);
             mSsoHandler.authorize(new SelfWbAuthListener());
         }
@@ -124,9 +122,9 @@ public class MoreActivity extends BaseActivity {
     public void onMyCollectionRlClicked() {
         Oauth2AccessToken accessToken = AccessTokenKeeper.readAccessToken(context);
         WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
-        if(accessToken.isSessionValid() && weiBoUserInfo != null){
+        if (accessToken.isSessionValid() && weiBoUserInfo != null) {
             startActivity(new Intent(context, MyCollectionActivity.class));
-        }else {
+        } else {
             AlertDialog alertDialog = new AlertDialog.Builder(context)
                     .setTitle("收藏")
                     .setMessage("登录之后才能使用收藏功能哦~")
@@ -166,7 +164,7 @@ public class MoreActivity extends BaseActivity {
     }
 
     @OnClick(R.id.logout_btn)
-    public void onLogoutBtnClicked(){
+    public void onLogoutBtnClicked() {
         AlertDialog alertDialog = new AlertDialog.Builder(context)
                 .setTitle(R.string.logout)
                 .setMessage(R.string.logout_info)
@@ -252,13 +250,14 @@ public class MoreActivity extends BaseActivity {
     /**
      * 获取微博用户信息
      */
-    public void getUserInfoFromWeiBo(){
+    public void getUserInfoFromWeiBo() {
         showProgressDialog(true);
         Oauth2AccessToken accessToken = AccessTokenKeeper.readAccessToken(context);
         HttpCore.getInstance().getApi().getWeiBoUserInfo(accessToken.getToken(), accessToken.getUid()).enqueue(new Callback<WeiBoUserInfo>() {
             @Override
             public void onResponse(Call<WeiBoUserInfo> call, Response<WeiBoUserInfo> response) {
                 WeiBoUserInfoKeeper.write(context, response.body());
+                login();
                 initView();
                 EventBus.getDefault().post(new UserLoginOrLogoutEvent(true));
                 showProgressDialog(false);
@@ -268,6 +267,25 @@ public class MoreActivity extends BaseActivity {
             public void onFailure(Call<WeiBoUserInfo> call, Throwable t) {
                 t.printStackTrace();
                 showProgressDialog(false);
+            }
+        });
+    }
+
+    public void login() {
+        UserLoginRequestInfo userLoginRequestInfo = new UserLoginRequestInfo();
+        WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
+        userLoginRequestInfo.setUserId(weiBoUserInfo.getIdstr());
+        userLoginRequestInfo.setUserName(weiBoUserInfo.getScreen_name());
+        userLoginRequestInfo.setUserGender(weiBoUserInfo.getGender());
+        HttpCore.getInstance().getApi().userLogin(userLoginRequestInfo).enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+
             }
         });
     }
