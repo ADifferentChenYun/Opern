@@ -10,13 +10,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.yun.opern.R;
+import com.yun.opern.common.WeiBoUserInfo;
+import com.yun.opern.common.WeiBoUserInfoKeeper;
 import com.yun.opern.model.BaseResponse;
 import com.yun.opern.model.OpernInfo;
+import com.yun.opern.model.event.UserLoginOrLogoutEvent;
 import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.bases.BaseActivity;
+import com.yun.opern.utils.DisplayUtil;
 import com.yun.opern.utils.T;
 import com.yun.opern.views.ActionBarNormal;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -25,6 +34,8 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade;
 
 public class MainActivity extends BaseActivity {
 
@@ -47,11 +58,17 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected int contentViewRes() {
+        EventBus.getDefault().register(this);
         return R.layout.activity_main;
     }
 
     @Override
     protected void initView() {
+        WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
+        if(weiBoUserInfo != null){
+            Glide.with(this).asBitmap().load(WeiBoUserInfoKeeper.read(context).getAvatar_hd()).transition(withCrossFade()).into(actionbar.getMoreButton());
+            actionbar.getMoreButton().setBorderWidth(DisplayUtil.px2dp(context, 2));
+        }
         actionbar.showBackButton(false);
         actionbar.showTitle(true);
         actionbar.showMoreButton(true);
@@ -141,6 +158,17 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUserLoginOrLogout(UserLoginOrLogoutEvent userLoginOrLogoutEvent){
+        if(userLoginOrLogoutEvent.isLogin()){
+            Glide.with(this).asBitmap().load(WeiBoUserInfoKeeper.read(context).getAvatar_hd()).transition(withCrossFade()).into(actionbar.getMoreButton());
+            actionbar.getMoreButton().setBorderWidth(DisplayUtil.px2dp(context, 2));
+        }else {
+            actionbar.getMoreButton().setImageResource(R.mipmap.ic_more);
+            actionbar.getMoreButton().setBorderWidth(0);
+        }
+    }
+
     public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         private ArrayList<OpernInfo> opernInfoArrayList;
 
@@ -214,4 +242,9 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

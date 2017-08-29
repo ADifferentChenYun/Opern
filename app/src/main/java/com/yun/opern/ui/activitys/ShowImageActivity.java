@@ -1,15 +1,22 @@
 package com.yun.opern.ui.activitys;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.sina.weibo.sdk.auth.AccessTokenKeeper;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.yun.opern.R;
+import com.yun.opern.common.WeiBoUserInfo;
+import com.yun.opern.common.WeiBoUserInfoKeeper;
 import com.yun.opern.model.OpernImgInfo;
 import com.yun.opern.model.OpernInfo;
 import com.yun.opern.ui.bases.BaseActivity;
@@ -22,7 +29,6 @@ import com.yun.opern.views.ActionBarNormal;
 import java.util.ArrayList;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class ShowImageActivity extends BaseActivity {
 
@@ -96,7 +102,24 @@ public class ShowImageActivity extends BaseActivity {
         collectionFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 2017/8/27 0027
+                Oauth2AccessToken accessToken = AccessTokenKeeper.readAccessToken(context);
+                WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
+                if (!accessToken.isSessionValid() || weiBoUserInfo == null) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(context)
+                            .setTitle("收藏")
+                            .setMessage("登录之后才能使用收藏功能哦~")
+                            .setPositiveButton("登录", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startActivity(new Intent(context, MoreActivity.class));
+                                }
+                            })
+                            .setCancelable(true)
+                            .create();
+                    alertDialog.show();
+                } else {
+                    // TODO: 2017/8/29 0029
+                }
             }
         });
         downloadFab.setVisibility(FileUtil.isOpernImgsExist(opernInfo) ? View.GONE : View.VISIBLE);

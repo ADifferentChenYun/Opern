@@ -3,12 +3,16 @@ package com.yun.opern.ui.activitys;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.orhanobut.logger.Logger;
 import com.sina.weibo.sdk.WbSdk;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.AuthInfo;
@@ -18,7 +22,11 @@ import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.yun.opern.Application;
 import com.yun.opern.R;
 import com.yun.opern.common.WeiBoConstants;
+import com.yun.opern.common.WeiBoUserInfo;
+import com.yun.opern.common.WeiBoUserInfoKeeper;
 import com.yun.opern.model.event.OpernFileDeleteEvent;
+import com.yun.opern.model.event.UserLoginOrLogoutEvent;
+import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.utils.CacheFileUtil;
 import com.yun.opern.utils.T;
@@ -28,11 +36,19 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
+
 import butterknife.BindView;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade;
 
 public class MoreActivity extends BaseActivity {
 
@@ -58,6 +74,8 @@ public class MoreActivity extends BaseActivity {
     RelativeLayout clearAppCacheRl;
     @BindView(R.id.push_switch)
     Switch pushSwitch;
+    @BindView(R.id.logout_btn)
+    Button logoutBtn;
 
     private SsoHandler mSsoHandler;
 
@@ -70,14 +88,31 @@ public class MoreActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        Oauth2AccessToken accessToken = AccessTokenKeeper.readAccessToken(context);
+        WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
+        if(accessToken.isSessionValid() && weiBoUserInfo != null){
+            Glide.with(context).asBitmap().load(weiBoUserInfo.getAvatar_hd()).transition(withCrossFade()).into(userHeadImg);
+            userNameTv.setText(weiBoUserInfo.getName());
+            userInfoTv.setText(weiBoUserInfo.getDescription());
+            logoutBtn.setVisibility(View.VISIBLE);
+        }else {
+            userHeadImg.setImageResource(R.mipmap.ic_weibo);
+            userNameTv.setText(R.string.weibo_login);
+            userInfoTv.setText(R.string.login_info);
+            logoutBtn.setVisibility(View.GONE);
+        }
         appCacheSizeTv.setText("APP缓存:" + CacheFileUtil.size());
         pushSwitch.setChecked(!JPushInterface.isPushStopped(Application.getAppContext()));
     }
 
     @OnClick(R.id.user_info_rl)
     public void onUserInfoRlClicked() {
-        mSsoHandler = new SsoHandler(MoreActivity.this);
-        mSsoHandler.authorize(new SelfWbAuthListener());
+        Oauth2AccessToken accessToken = AccessTokenKeeper.readAccessToken(context);
+        WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
+        if(!accessToken.isSessionValid() || weiBoUserInfo == null){
+            mSsoHandler = new SsoHandler(MoreActivity.this);
+            mSsoHandler.authorize(new SelfWbAuthListener());
+        }
     }
 
     @OnClick(R.id.my_download_rl)
@@ -87,6 +122,24 @@ public class MoreActivity extends BaseActivity {
 
     @OnClick(R.id.my_collection_rl)
     public void onMyCollectionRlClicked() {
+        Oauth2AccessToken accessToken = AccessTokenKeeper.readAccessToken(context);
+        WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
+        if(accessToken.isSessionValid() && weiBoUserInfo != null){
+            startActivity(new Intent(context, MyCollectionActivity.class));
+        }else {
+            AlertDialog alertDialog = new AlertDialog.Builder(context)
+                    .setTitle("收藏")
+                    .setMessage("登录之后才能使用收藏功能哦~")
+                    .setPositiveButton("登录", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            onUserInfoRlClicked();
+                        }
+                    })
+                    .setCancelable(true)
+                    .create();
+            alertDialog.show();
+        }
     }
 
     @OnClick(R.id.clear_app_cache_rl)
@@ -109,6 +162,25 @@ public class MoreActivity extends BaseActivity {
 
     @OnClick(R.id.tell_us_rl)
     public void onTellUsRlClicked() {
+        // TODO: 2017/8/29 0029
+    }
+
+    @OnClick(R.id.logout_btn)
+    public void onLogoutBtnClicked(){
+        AlertDialog alertDialog = new AlertDialog.Builder(context)
+                .setTitle(R.string.logout)
+                .setMessage(R.string.logout_info)
+                .setPositiveButton("退出!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        AccessTokenKeeper.clear(context);
+                        WeiBoUserInfoKeeper.clear(context);
+                        initView();
+                        EventBus.getDefault().post(new UserLoginOrLogoutEvent(false));
+                    }
+                })
+                .create();
+        alertDialog.show();
     }
 
     @OnClick(R.id.about_us_rl)
@@ -159,11 +231,8 @@ public class MoreActivity extends BaseActivity {
                 public void run() {
                     Oauth2AccessToken mAccessToken = token;
                     if (mAccessToken.isSessionValid()) {
-                        // 显示 Token
-                        //updateTokenView(false);
-                        // 保存 Token 到 SharedPreferences
                         AccessTokenKeeper.writeAccessToken(context, mAccessToken);
-                        Toast.makeText(context, mAccessToken.toString(), Toast.LENGTH_SHORT).show();
+                        getUserInfoFromWeiBo();
                     }
                 }
             });
@@ -178,6 +247,29 @@ public class MoreActivity extends BaseActivity {
         public void onFailure(WbConnectErrorMessage errorMessage) {
             Toast.makeText(context, errorMessage.getErrorMessage(), Toast.LENGTH_LONG).show();
         }
+    }
+
+    /**
+     * 获取微博用户信息
+     */
+    public void getUserInfoFromWeiBo(){
+        showProgressDialog(true);
+        Oauth2AccessToken accessToken = AccessTokenKeeper.readAccessToken(context);
+        HttpCore.getInstance().getApi().getWeiBoUserInfo(accessToken.getToken(), accessToken.getUid()).enqueue(new Callback<WeiBoUserInfo>() {
+            @Override
+            public void onResponse(Call<WeiBoUserInfo> call, Response<WeiBoUserInfo> response) {
+                WeiBoUserInfoKeeper.write(context, response.body());
+                initView();
+                EventBus.getDefault().post(new UserLoginOrLogoutEvent(true));
+                showProgressDialog(false);
+            }
+
+            @Override
+            public void onFailure(Call<WeiBoUserInfo> call, Throwable t) {
+                t.printStackTrace();
+                showProgressDialog(false);
+            }
+        });
     }
 
     @Override

@@ -310,6 +310,7 @@
 
     <Button
         android:id="@+id/logout_btn"
+        android:visibility="gone"
         android:background="@drawable/selector_log_out_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

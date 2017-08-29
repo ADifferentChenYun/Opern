@@ -13,12 +13,15 @@ import android.widget.TextView;
 
 import com.yun.opern.R;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 
 /**
  * Created by 允儿 on 2016/8/30.
  */
 public class ActionBarNormal extends FrameLayout {
-    private ImageView backImg, moreImg;
+    private ImageView backImg;
+    private CircleImageView moreImg;
     private TextView titleTv;
     private String titleStr = "this is title";
     private int titleColor;
@@ -58,7 +61,7 @@ public class ActionBarNormal extends FrameLayout {
         Typeface tf = Typeface.createFromAsset(getContext().getApplicationContext().getAssets(), "fonts/roboto-mono-regular.ttf");//根据路径得到Typeface
         View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_actionbar_normal, this, false);
         backImg = (ImageView) view.findViewById(R.id.layout_actionbar_normal_back_img);
-        moreImg = (ImageView) view.findViewById(R.id.layout_actionbar_normal_more_img);
+        moreImg = (CircleImageView) view.findViewById(R.id.layout_actionbar_normal_more_img);
         titleTv = (TextView) view.findViewById(R.id.layout_actionbar_normal_title_tv);
         titleTv.setTypeface(tf);//设置字体
         titleTv.setTextColor(titleColor);
@@ -102,7 +105,7 @@ public class ActionBarNormal extends FrameLayout {
         backImg.setImageDrawable(backButtonStyle == BackButtonStyle.StyleOne ? getResources().getDrawable(R.mipmap.ic_back) : getResources().getDrawable(R.mipmap.ic_back_two));
     }
 
-    public ImageView getMoreButton(){
+    public CircleImageView getMoreButton(){
         return moreImg;
     }
 
