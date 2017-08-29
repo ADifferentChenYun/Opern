@@ -64,13 +64,12 @@ public class MoreActivity extends BaseActivity {
     @Override
     protected int contentViewRes() {
         EventBus.getDefault().register(this);
+        WbSdk.install(this, new AuthInfo(this, WeiBoConstants.APP_KEY, WeiBoConstants.REDIRECT_URL, WeiBoConstants.SCOPE));
         return R.layout.activity_more;
     }
 
     @Override
     protected void initView() {
-        AuthInfo mAuthInfo = new AuthInfo(this, WeiBoConstants.APP_KEY, WeiBoConstants.REDIRECT_URL, WeiBoConstants.SCOPE);
-        WbSdk.install(this, mAuthInfo);
         appCacheSizeTv.setText("APP缓存:" + CacheFileUtil.size());
         pushSwitch.setChecked(!JPushInterface.isPushStopped(Application.getAppContext()));
     }

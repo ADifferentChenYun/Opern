@@ -11,4 +11,5 @@
     </string>
     <string name="login">登录</string>
     <string name="logout">退出登录</string>
+    <string name="login_info">登录后可以使用跟多功能哦~</string>
 </resources>
