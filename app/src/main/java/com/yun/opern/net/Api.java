@@ -5,6 +5,7 @@ import com.yun.opern.model.BaseResponse;
 import com.yun.opern.model.OpernInfo;
 import com.yun.opern.model.UserLoginRequestInfo;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 import okhttp3.ResponseBody;
@@ -30,4 +31,16 @@ public interface Api {
 
     @GET(value = "opern/searchOpernInfo")
     Call<BaseResponse<ArrayList<OpernInfo>>> searchOpernInfo(@Query("searchParameter") String searchParameter);
+
+    @GET(value = "collection/isCollected")
+    Call<BaseResponse> isCollected(@Query("userId") BigInteger userId, @Query("opernId") int opernId);
+
+    @GET(value = "collection/add")
+    Call<BaseResponse> addCollection(@Query("userId") BigInteger userId, @Query("opernId") int opernId);
+
+    @GET(value = "collection/remove")
+    Call<BaseResponse> removeCollection(@Query("userId") BigInteger userId, @Query("opernId") int opernId);
+
+    @GET(value = "collection/collectionOpernInfo")
+    Call<BaseResponse<ArrayList<OpernInfo>>> getCollectionOpernInfo(@Query("userId") BigInteger userId);
 }

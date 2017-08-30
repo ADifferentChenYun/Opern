@@ -128,12 +128,7 @@ public class MoreActivity extends BaseActivity {
             AlertDialog alertDialog = new AlertDialog.Builder(context)
                     .setTitle("收藏")
                     .setMessage("登录之后才能使用收藏功能哦~")
-                    .setPositiveButton("登录", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            onUserInfoRlClicked();
-                        }
-                    })
+                    .setPositiveButton("登录", (dialog, which) -> onUserInfoRlClicked())
                     .setCancelable(true)
                     .create();
             alertDialog.show();
@@ -143,13 +138,10 @@ public class MoreActivity extends BaseActivity {
     @OnClick(R.id.clear_app_cache_rl)
     public void onClearAppCacheClicked() {
         AlertDialog alertDialog = new AlertDialog.Builder(context)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        boolean clear = CacheFileUtil.clear();
-                        T.showShort(clear ? "缓存已清除" : "清除缓存失败");
-                        initView();
-                    }
+                .setPositiveButton("确定", (dialog, which) -> {
+                    boolean clear = CacheFileUtil.clear();
+                    T.showShort(clear ? "缓存已清除" : "清除缓存失败");
+                    initView();
                 })
                 .setTitle("清除缓存")
                 .setMessage("清除缓存会删除所有本地的曲谱哦~")
@@ -168,14 +160,11 @@ public class MoreActivity extends BaseActivity {
         AlertDialog alertDialog = new AlertDialog.Builder(context)
                 .setTitle(R.string.logout)
                 .setMessage(R.string.logout_info)
-                .setPositiveButton("退出!", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        AccessTokenKeeper.clear(context);
+                .setPositiveButton("退出!", (dialog, witch) -> {
+                    AccessTokenKeeper.clear(context);
                         WeiBoUserInfoKeeper.clear(context);
-                        initView();
+                    initView();
                         EventBus.getDefault().post(new UserLoginOrLogoutEvent(false));
-                    }
                 })
                 .create();
         alertDialog.show();
@@ -197,20 +186,12 @@ public class MoreActivity extends BaseActivity {
             AlertDialog alertDialog = new AlertDialog.Builder(context)
                     .setTitle("关闭推送")
                     .setMessage("关闭推送后就不会收到任何推送了哦~不过我不建议你这么做QAQ")
-                    .setPositiveButton("关闭推送", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            JPushInterface.stopPush(Application.getAppContext());
+                    .setPositiveButton("关闭推送", (dialog, witch) -> {
+                        JPushInterface.stopPush(Application.getAppContext());
                             buttonView.setChecked(!JPushInterface.isPushStopped(Application.getAppContext()));
-                        }
                     })
                     .setCancelable(true)
-                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            buttonView.setChecked(!JPushInterface.isPushStopped(Application.getAppContext()));
-                        }
-                    })
+                    .setOnCancelListener((dialog) -> buttonView.setChecked(!JPushInterface.isPushStopped(Application.getAppContext())))
                     .create();
             alertDialog.show();
         }
@@ -224,21 +205,17 @@ public class MoreActivity extends BaseActivity {
     private class SelfWbAuthListener implements com.sina.weibo.sdk.auth.WbAuthListener {
         @Override
         public void onSuccess(final Oauth2AccessToken token) {
-            MoreActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Oauth2AccessToken mAccessToken = token;
-                    if (mAccessToken.isSessionValid()) {
-                        AccessTokenKeeper.writeAccessToken(context, mAccessToken);
-                        getUserInfoFromWeiBo();
-                    }
+            MoreActivity.this.runOnUiThread(() -> {
+                Oauth2AccessToken mAccessToken = token;
+                if (mAccessToken.isSessionValid()) {
+                    AccessTokenKeeper.writeAccessToken(context, mAccessToken);
+                    getUserInfoFromWeiBo();
                 }
             });
         }
 
         @Override
         public void cancel() {
-            Toast.makeText(context, "取消", Toast.LENGTH_LONG).show();
         }
 
         @Override

@@ -11,6 +11,10 @@ public class BaseResponse<T> {
     protected String message = "";
     protected T data;
 
+    public boolean isSuccess(){
+        return code == RETURN_SUCCESS;
+    }
+
     public int getCode() {
         return code;
     }

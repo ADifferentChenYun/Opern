@@ -17,8 +17,10 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.yun.opern.R;
 import com.yun.opern.common.WeiBoUserInfo;
 import com.yun.opern.common.WeiBoUserInfoKeeper;
+import com.yun.opern.model.BaseResponse;
 import com.yun.opern.model.OpernImgInfo;
 import com.yun.opern.model.OpernInfo;
+import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.ui.fragments.ShowImageFragment;
 import com.yun.opern.utils.FileUtil;
@@ -29,6 +31,9 @@ import com.yun.opern.views.ActionBarNormal;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ShowImageActivity extends BaseActivity {
 
@@ -48,12 +53,12 @@ public class ShowImageActivity extends BaseActivity {
 
     @Override
     protected int contentViewRes() {
+        opernInfo = (OpernInfo) getIntent().getExtras().get("opernInfo");
         return R.layout.activity_show_image;
     }
 
     @Override
     protected void initView() {
-        opernInfo = (OpernInfo) getIntent().getExtras().get("opernInfo");
         actionbar.setTitle(opernInfo.getTitle());
         ArrayList<ShowImageFragment> fragments = new ArrayList<>();
         for (OpernImgInfo opernImgInfo : opernInfo.getImgs()) {
@@ -118,11 +123,75 @@ public class ShowImageActivity extends BaseActivity {
                             .create();
                     alertDialog.show();
                 } else {
-                    // TODO: 2017/8/29 0029
+                    addCollection();
                 }
             }
         });
         downloadFab.setVisibility(FileUtil.isOpernImgsExist(opernInfo) ? View.GONE : View.VISIBLE);
+        isCollected();
+    }
+
+    /**
+     * 是否收藏
+     */
+    public void isCollected(){
+        WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
+        if(weiBoUserInfo == null){
+            return;
+        }
+        HttpCore.getInstance().getApi().isCollected(weiBoUserInfo.getId(), opernInfo.getId()).enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                if(response.body().isSuccess()){
+                    T.showShort(response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    /**
+     * 收藏
+     */
+    public void addCollection(){
+        WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
+        HttpCore.getInstance().getApi().addCollection(weiBoUserInfo.getId(), opernInfo.getId()).enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                if(response.body().isSuccess()){
+                    T.showShort(response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    /**
+     * 取消收藏
+     */
+    public void removeCollect(){
+        WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
+        HttpCore.getInstance().getApi().removeCollection(weiBoUserInfo.getId(), opernInfo.getId()).enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                if(response.body().isSuccess()){
+                    T.showShort(response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {

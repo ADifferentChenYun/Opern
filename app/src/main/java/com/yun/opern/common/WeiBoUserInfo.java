@@ -3,6 +3,7 @@ package com.yun.opern.common;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -67,7 +68,7 @@ public class WeiBoUserInfo implements Serializable{
      * vclub_member : 0
      */
 
-    private long id;
+    private BigInteger id;
     private String idstr;
     @SerializedName("class")
     private int classX;
@@ -122,11 +123,11 @@ public class WeiBoUserInfo implements Serializable{
     private int story_read_state;
     private int vclub_member;
 
-    public long getId() {
+    public BigInteger getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(BigInteger id) {
         this.id = id;
     }
 

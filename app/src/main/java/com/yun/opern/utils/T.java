@@ -18,7 +18,7 @@ public class T {
      */
     public static void showShort(CharSequence message) {
         if (null == toast) {
-            toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+            toast = Toast.makeText(context, message == null ? "null object !" : message, Toast.LENGTH_SHORT);
         } else {
             toast.setText(message);
         }
