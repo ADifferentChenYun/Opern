@@ -29,6 +29,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -175,6 +176,15 @@ public class MyDownloadActivity extends BaseActivity {
                         opernImgInfo.setOpernImg(imgFile.getPath());
                         opernImgInfos.add(opernImgInfo);
                     }
+                    opernImgInfos.sort((o1, o2) -> {
+                        if(o1.getOpernIndex() > o2.getOpernIndex()){
+                            return 1;
+                        }
+                        if(o1.getOpernIndex() < o2.getOpernIndex()){
+                            return -1;
+                        }
+                        return 0;
+                    });
                 }
             } catch (Exception e) {
                 e.printStackTrace();

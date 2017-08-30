@@ -31,7 +31,10 @@ public class WeiBoUserInfoKeeper {
         if(weiBoUserInfoSoftReference != null && weiBoUserInfoSoftReference.get() != null){
             return weiBoUserInfoSoftReference.get();
         }
-        return getObject(context, WEIBO_USER_INFO, WeiBoUserInfo.class);
+        WeiBoUserInfo weiBoUserInfo = getObject(context, WEIBO_USER_INFO, WeiBoUserInfo.class);
+        weiBoUserInfoSoftReference = null;
+        weiBoUserInfoSoftReference = new SoftReference<>(weiBoUserInfo);
+        return weiBoUserInfoSoftReference.get();
     }
 
     public static void clear(Context context) {

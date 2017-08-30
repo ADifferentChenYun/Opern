@@ -5,7 +5,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,7 +23,6 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.github.chrisbanes.photoview.PhotoView;
-import com.orhanobut.logger.Logger;
 import com.yun.opern.R;
 import com.yun.opern.model.OpernImgInfo;
 import com.yun.opern.utils.T;
@@ -89,15 +87,12 @@ public class ShowImageFragment extends Fragment {
                 return false;
             }
         }).transition(withCrossFade()).into(photoView);
-        photoView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handler.removeCallbacks(hideIndicatorRunable);
-                if (actionBarNormal.getTop() < 0) {
-                    showIndicator();
-                } else {
-                    hideIndicator();
-                }
+        photoView.setOnClickListener(v -> {
+            handler.removeCallbacks(hideIndicatorRunable);
+            if (actionBarNormal.getTop() < 0) {
+                showIndicator();
+            } else {
+                hideIndicator();
             }
         });
         handler.postDelayed(hideIndicatorRunable, 2500);
@@ -110,28 +105,20 @@ public class ShowImageFragment extends Fragment {
         }
     };
 
-    private Runnable hideIndicatorRunable = new Runnable() {
-        @Override
-        public void run() {
-            hideIndicator();
-        }
-    };
+    private Runnable hideIndicatorRunable = () -> hideIndicator();
 
     private void showIndicator() {
         ValueAnimator valueAnimator = new ValueAnimator();
         valueAnimator.setDuration(500);
         valueAnimator.setFloatValues(-1f, 0f);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                FrameLayout.LayoutParams actionBarNormalLayoutParams = (FrameLayout.LayoutParams) actionBarNormal.getLayoutParams();
-                actionBarNormalLayoutParams.topMargin = (int) (((float) animation.getAnimatedValue()) * actionBarNormal.getMeasuredHeight());
-                actionBarNormal.setLayoutParams(actionBarNormalLayoutParams);
+        valueAnimator.addUpdateListener(animation -> {
+            FrameLayout.LayoutParams actionBarNormalLayoutParams = (FrameLayout.LayoutParams) actionBarNormal.getLayoutParams();
+            actionBarNormalLayoutParams.topMargin = (int) (((float) animation.getAnimatedValue()) * actionBarNormal.getMeasuredHeight());
+            actionBarNormal.setLayoutParams(actionBarNormalLayoutParams);
 
-                FrameLayout.LayoutParams fabBtnsLayoutParams = (FrameLayout.LayoutParams) fabBtns.getLayoutParams();
-                fabBtnsLayoutParams.bottomMargin = (int) ((float) animation.getAnimatedValue() * fabBtns.getMeasuredHeight());
-                fabBtns.setLayoutParams(fabBtnsLayoutParams);
-            }
+            FrameLayout.LayoutParams fabBtnsLayoutParams = (FrameLayout.LayoutParams) fabBtns.getLayoutParams();
+            fabBtnsLayoutParams.bottomMargin = (int) ((float) animation.getAnimatedValue() * fabBtns.getMeasuredHeight());
+            fabBtns.setLayoutParams(fabBtnsLayoutParams);
         });
         valueAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -147,17 +134,14 @@ public class ShowImageFragment extends Fragment {
         ValueAnimator valueAnimator = new ValueAnimator();
         valueAnimator.setDuration(500);
         valueAnimator.setFloatValues(0f, -1f);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) actionBarNormal.getLayoutParams();
-                lp.topMargin = (int) (actionBarNormal.getMeasuredHeight() * (float) animation.getAnimatedValue());
-                actionBarNormal.setLayoutParams(lp);
+        valueAnimator.addUpdateListener(animation -> {
+            FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) actionBarNormal.getLayoutParams();
+            lp.topMargin = (int) (actionBarNormal.getMeasuredHeight() * (float) animation.getAnimatedValue());
+            actionBarNormal.setLayoutParams(lp);
 
-                FrameLayout.LayoutParams fabBtnsLayoutParams = (FrameLayout.LayoutParams) fabBtns.getLayoutParams();
-                fabBtnsLayoutParams.bottomMargin = (int) (fabBtns.getMeasuredHeight() * (float) animation.getAnimatedValue());
-                fabBtns.setLayoutParams(fabBtnsLayoutParams);
-            }
+            FrameLayout.LayoutParams fabBtnsLayoutParams = (FrameLayout.LayoutParams) fabBtns.getLayoutParams();
+            fabBtnsLayoutParams.bottomMargin = (int) (fabBtns.getMeasuredHeight() * (float) animation.getAnimatedValue());
+            fabBtns.setLayoutParams(fabBtnsLayoutParams);
         });
         valueAnimator.start();
     }

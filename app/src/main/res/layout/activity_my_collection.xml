@@ -13,8 +13,20 @@
         android:layout_height="wrap_content"
         app:title="我的收藏" />
 
-    <include layout="@layout/layout_empty"
-        android:id="@+id/empty_view"
-        android:visibility="visible"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/layout_empty"
+            android:id="@+id/empty_view"
+            android:visibility="gone"/>
+
+        <GridView
+            android:id="@+id/img_gv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:numColumns="3"
+            tools:listitem="@layout/item_img_gv_layout"/>
+    </FrameLayout>
 
 </LinearLayout>

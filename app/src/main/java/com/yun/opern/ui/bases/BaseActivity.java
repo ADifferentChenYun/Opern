@@ -3,6 +3,7 @@ package com.yun.opern.ui.bases;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
@@ -53,7 +54,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             progressDialog.show();
         }else {
             if(progressDialog != null && progressDialog.isShowing()){
-                progressDialog.dismiss();
+                new Handler().postDelayed(() -> progressDialog.dismiss(),800);
             }
         }
     }

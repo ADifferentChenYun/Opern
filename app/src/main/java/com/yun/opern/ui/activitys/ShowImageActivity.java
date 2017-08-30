@@ -50,6 +50,8 @@ public class ShowImageActivity extends BaseActivity {
     private OpernInfo opernInfo;
     private ViewPagerAdapter adapter;
 
+    private boolean isCollected = false;
+
     @Override
     protected int contentViewRes() {
         opernInfo = (OpernInfo) getIntent().getExtras().get("opernInfo");
@@ -113,7 +115,12 @@ public class ShowImageActivity extends BaseActivity {
                                 .create();
                         alertDialog.show();
                     } else {
-                        addCollection();
+                        if(isCollected){
+                            removeCollect();
+                        }else {
+                            addCollection();
+                        }
+
                     }
                 }
         );
@@ -133,8 +140,11 @@ public class ShowImageActivity extends BaseActivity {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                 if (response.body().isSuccess()) {
-                    T.showShort(response.body().getMessage());
+                    isCollected = true;
+                }else {
+                    isCollected = false;
                 }
+                changeCollectIcon();
             }
 
             @Override
@@ -153,6 +163,8 @@ public class ShowImageActivity extends BaseActivity {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                 if (response.body().isSuccess()) {
+                    isCollected = true;
+                    changeCollectIcon();
                     T.showShort(response.body().getMessage());
                 }
             }
@@ -173,6 +185,8 @@ public class ShowImageActivity extends BaseActivity {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                 if (response.body().isSuccess()) {
+                    isCollected = false;
+                    changeCollectIcon();
                     T.showShort(response.body().getMessage());
                 }
             }
@@ -182,6 +196,10 @@ public class ShowImageActivity extends BaseActivity {
                 t.printStackTrace();
             }
         });
+    }
+
+    public void changeCollectIcon(){
+        collectionFab.setImageResource(isCollected ? R.mipmap.ic_collected : R.mipmap.ic_collection);
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {
