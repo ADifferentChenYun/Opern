@@ -65,19 +65,14 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initView() {
         WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
-        if(weiBoUserInfo != null){
+        if (weiBoUserInfo != null) {
             Glide.with(this).asBitmap().load(WeiBoUserInfoKeeper.read(context).getAvatar_hd()).transition(withCrossFade()).into(actionbar.getMoreButton());
             actionbar.getMoreButton().setBorderWidth(DisplayUtil.px2dp(context, 2));
         }
         actionbar.showBackButton(false);
         actionbar.showTitle(true);
         actionbar.showMoreButton(true);
-        actionbar.getMoreButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, MoreActivity.class));
-            }
-        });
+        actionbar.getMoreButton().setOnClickListener((view) -> startActivity(new Intent(MainActivity.this, MoreActivity.class)));
         linearLayoutManager = new LinearLayoutManager(this);
         opernLv.setLayoutManager(linearLayoutManager);
         opernLv.setItemAnimator(new DefaultItemAnimator());
@@ -99,26 +94,13 @@ public class MainActivity extends BaseActivity {
             }
         });
         opernSrl.setColorSchemeColors(getResources().getColor(R.color.light_blue));
-        opernSrl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                index = 0;
-                net();
-            }
+        opernSrl.setOnRefreshListener(() -> {
+            index = 0;
+            net();
         });
-        searchFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(context, SearchActivity.class));
-            }
-        });
+        searchFab.setOnClickListener(v -> startActivity(new Intent(context, SearchActivity.class)));
         searchFab.setTranslationY(searchFab.getMeasuredHeight() * 1.5f);
-        searchFab.post(new Runnable() {
-            @Override
-            public void run() {
-                searchFab.animate().translationY(0).setDuration(500).start();
-            }
-        });
+        searchFab.post(() -> searchFab.animate().translationY(0).setDuration(500).start());
     }
 
     @Override
@@ -159,11 +141,11 @@ public class MainActivity extends BaseActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onUserLoginOrLogout(UserLoginOrLogoutEvent userLoginOrLogoutEvent){
-        if(userLoginOrLogoutEvent.isLogin()){
+    public void onUserLoginOrLogout(UserLoginOrLogoutEvent userLoginOrLogoutEvent) {
+        if (userLoginOrLogoutEvent.isLogin()) {
             Glide.with(this).asBitmap().load(WeiBoUserInfoKeeper.read(context).getAvatar_hd()).transition(withCrossFade()).into(actionbar.getMoreButton());
             actionbar.getMoreButton().setBorderWidth(DisplayUtil.px2dp(context, 2));
-        }else {
+        } else {
             actionbar.getMoreButton().setImageResource(R.mipmap.ic_more);
             actionbar.getMoreButton().setBorderWidth(0);
         }
@@ -213,13 +195,10 @@ public class MainActivity extends BaseActivity {
             public ViewHolder(View itemView) {
                 super(itemView);
                 ButterKnife.bind(this, itemView);
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(MainActivity.this, ShowImageActivity.class);
-                        intent.putExtra("opernInfo",opernInfoArrayList.get(getAdapterPosition()));
-                        startActivity(intent);
-                    }
+                itemView.setOnClickListener(v -> {
+                    Intent intent = new Intent(MainActivity.this, ShowImageActivity.class);
+                    intent.putExtra("opernInfo", opernInfoArrayList.get(getAdapterPosition()));
+                    startActivity(intent);
                 });
             }
         }

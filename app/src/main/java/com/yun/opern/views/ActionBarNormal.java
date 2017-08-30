@@ -70,12 +70,7 @@ public class ActionBarNormal extends FrameLayout {
         showBackButton(showBackButton);
         showMoreButton(showMoreButton);
         setBackButtonStyle(style);
-        backImg.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((AppCompatActivity) getContext()).finish();
-            }
-        });
+        backImg.setOnClickListener(v -> ((AppCompatActivity) getContext()).finish());
         addView(view);
     }
 

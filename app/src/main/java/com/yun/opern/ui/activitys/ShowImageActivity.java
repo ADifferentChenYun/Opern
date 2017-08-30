@@ -1,6 +1,5 @@
 package com.yun.opern.ui.activitys;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -87,9 +86,7 @@ public class ShowImageActivity extends BaseActivity {
 
             }
         });
-        downloadFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        downloadFab.setOnClickListener((view) ->
                 new ImageDownloadUtil(opernInfo, new ImageDownloadUtil.CallBack() {
                     @Override
                     public void success() {
@@ -101,32 +98,25 @@ public class ShowImageActivity extends BaseActivity {
                     public void fail() {
                         T.showShort("下载失败，请重试");
                     }
-                }).start();
-            }
-        });
-        collectionFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Oauth2AccessToken accessToken = AccessTokenKeeper.readAccessToken(context);
-                WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
-                if (!accessToken.isSessionValid() || weiBoUserInfo == null) {
-                    AlertDialog alertDialog = new AlertDialog.Builder(context)
-                            .setTitle("收藏")
-                            .setMessage("登录之后才能使用收藏功能哦~")
-                            .setPositiveButton("登录", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    startActivity(new Intent(context, MoreActivity.class));
-                                }
-                            })
-                            .setCancelable(true)
-                            .create();
-                    alertDialog.show();
-                } else {
-                    addCollection();
+                }).start()
+
+        );
+        collectionFab.setOnClickListener((view) -> {
+                    Oauth2AccessToken accessToken = AccessTokenKeeper.readAccessToken(context);
+                    WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
+                    if (!accessToken.isSessionValid() || weiBoUserInfo == null) {
+                        AlertDialog alertDialog = new AlertDialog.Builder(context)
+                                .setTitle("收藏")
+                                .setMessage("登录之后才能使用收藏功能哦~")
+                                .setPositiveButton("登录", (dialog, which) -> startActivity(new Intent(context, MoreActivity.class)))
+                                .setCancelable(true)
+                                .create();
+                        alertDialog.show();
+                    } else {
+                        addCollection();
+                    }
                 }
-            }
-        });
+        );
         downloadFab.setVisibility(FileUtil.isOpernImgsExist(opernInfo) ? View.GONE : View.VISIBLE);
         isCollected();
     }
@@ -134,15 +124,15 @@ public class ShowImageActivity extends BaseActivity {
     /**
      * 是否收藏
      */
-    public void isCollected(){
+    public void isCollected() {
         WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
-        if(weiBoUserInfo == null){
+        if (weiBoUserInfo == null) {
             return;
         }
         HttpCore.getInstance().getApi().isCollected(weiBoUserInfo.getId(), opernInfo.getId()).enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                if(response.body().isSuccess()){
+                if (response.body().isSuccess()) {
                     T.showShort(response.body().getMessage());
                 }
             }
@@ -157,12 +147,12 @@ public class ShowImageActivity extends BaseActivity {
     /**
      * 收藏
      */
-    public void addCollection(){
+    public void addCollection() {
         WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
         HttpCore.getInstance().getApi().addCollection(weiBoUserInfo.getId(), opernInfo.getId()).enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                if(response.body().isSuccess()){
+                if (response.body().isSuccess()) {
                     T.showShort(response.body().getMessage());
                 }
             }
@@ -177,12 +167,12 @@ public class ShowImageActivity extends BaseActivity {
     /**
      * 取消收藏
      */
-    public void removeCollect(){
+    public void removeCollect() {
         WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
         HttpCore.getInstance().getApi().removeCollection(weiBoUserInfo.getId(), opernInfo.getId()).enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                if(response.body().isSuccess()){
+                if (response.body().isSuccess()) {
                     T.showShort(response.body().getMessage());
                 }
             }

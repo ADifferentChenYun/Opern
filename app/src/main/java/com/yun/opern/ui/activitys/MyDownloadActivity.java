@@ -56,23 +56,17 @@ public class MyDownloadActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        new ScanImgFileThread(new ScanImgFileThread.CallBack() {
-            @Override
-            public void onFinish(ArrayList<OpernInfo> opernInfoList) {
-                opernInfos.clear();
-                opernInfos.addAll(opernInfoList);
-                adapter.notifyDataSetChanged();
-            }
+        new ScanImgFileThread(opernInfoList -> {
+            opernInfos.clear();
+            opernInfos.addAll(opernInfoList);
+            adapter.notifyDataSetChanged();
         }).execute();
         adapter = new GridViewAdapter(opernInfos);
         imgGv.setAdapter(adapter);
-        imgGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(context, ShowImageActivity.class);
-                intent.putExtra("opernInfo", opernInfos.get(position));
-                startActivity(intent);
-            }
+        imgGv.setOnItemClickListener((parent, view, position, id) -> {
+            Intent intent = new Intent(context, ShowImageActivity.class);
+            intent.putExtra("opernInfo", opernInfos.get(position));
+            startActivity(intent);
         });
     }
 
@@ -113,29 +107,23 @@ public class MyDownloadActivity extends BaseActivity {
             final OpernInfo opernInfo = opernInfos.get(position);
             viewHolder.itemImgGvLayoutTv.setText(opernInfo.getTitle());
             Glide.with(MyDownloadActivity.this).asBitmap().load(opernInfo.getImgs().get(0).getOpernImg()).transition(withCrossFade()).into(viewHolder.itemImgGvLayoutImg);
-            viewHolder.deleteImg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AlertDialog alertDialog = new AlertDialog.Builder(context)
-                            .setTitle("删除本地曲谱")
-                            .setMessage("删除后本地就找不到了哦~")
-                            .setPositiveButton("删除", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    boolean delete = FileUtil.deleteLocalOpernImgs(opernInfo);
-                                    if(delete){
-                                        opernInfos.remove(position);
-                                        notifyDataSetChanged();
-                                        EventBus.getDefault().post(new OpernFileDeleteEvent());
-                                    }else {
-                                        T.showShort("删除失败");
-                                    }
-                                }
-                            })
-                            .setCancelable(true)
-                            .create();
-                    alertDialog.show();
-                }
+            viewHolder.deleteImg.setOnClickListener(v -> {
+                AlertDialog alertDialog = new AlertDialog.Builder(context)
+                        .setTitle("删除本地曲谱")
+                        .setMessage("删除后本地就找不到了哦~")
+                        .setPositiveButton("删除", (dialog, which) -> {
+                            boolean delete = FileUtil.deleteLocalOpernImgs(opernInfo);
+                            if(delete){
+                                opernInfos.remove(position);
+                                notifyDataSetChanged();
+                                EventBus.getDefault().post(new OpernFileDeleteEvent());
+                            }else {
+                                T.showShort("删除失败");
+                            }
+                        })
+                        .setCancelable(true)
+                        .create();
+                alertDialog.show();
             });
             return convertView;
         }

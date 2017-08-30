@@ -55,15 +55,12 @@ public class SearchActivity extends BaseActivity {
         opernLv.setItemAnimator(new DefaultItemAnimator());
         adapter = new Adapter(opernInfoArrayList);
         opernLv.setAdapter(adapter);
-        searchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(requesting){
-                    return;
-                }
-                searchParameter = searchInputEdt.getText().toString().trim();
-                net();
+        searchBtn.setOnClickListener(v -> {
+            if(requesting){
+                return;
             }
+            searchParameter = searchInputEdt.getText().toString().trim();
+            net();
         });
 
     }
@@ -136,13 +133,10 @@ public class SearchActivity extends BaseActivity {
             public ViewHolder(View itemView) {
                 super(itemView);
                 ButterKnife.bind(this, itemView);
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(SearchActivity.this, ShowImageActivity.class);
-                        intent.putExtra("opernInfo",opernInfoArrayList.get(getAdapterPosition()));
-                        startActivity(intent);
-                    }
+                itemView.setOnClickListener(v -> {
+                    Intent intent = new Intent(SearchActivity.this, ShowImageActivity.class);
+                    intent.putExtra("opernInfo",opernInfoArrayList.get(getAdapterPosition()));
+                    startActivity(intent);
                 });
             }
         }
