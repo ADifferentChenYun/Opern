@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.yun.opern.R;
 import com.yun.opern.common.WeiBoUserInfo;
 import com.yun.opern.common.WeiBoUserInfoKeeper;
-import com.yun.opern.model.BaseResponse;
 import com.yun.opern.model.OpernInfo;
 import com.yun.opern.model.event.UserLoginOrLogoutEvent;
 import com.yun.opern.net.HttpCore;
@@ -28,12 +28,12 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.internal.schedulers.NewThreadScheduler;
 
 import static com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade;
 
@@ -98,7 +98,7 @@ public class MainActivity extends BaseActivity {
             index = 0;
             net();
         });
-        searchFab.setOnClickListener(v -> startActivity(new Intent(context, SearchActivity.class)));
+        RxView.clicks(searchFab).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(o -> startActivity(new Intent(context, SearchActivity.class)));
         searchFab.setTranslationY(searchFab.getMeasuredHeight() * 1.5f);
         searchFab.post(() -> searchFab.animate().translationY(0).setDuration(500).start());
     }
@@ -112,31 +112,29 @@ public class MainActivity extends BaseActivity {
     private void net() {
         requesting = true;
         opernSrl.setRefreshing(true);
-        HttpCore.getInstance().getApi().getPopOpernInfo(index, numPrePage).enqueue(new Callback<BaseResponse<ArrayList<OpernInfo>>>() {
-            @Override
-            public void onResponse(Call<BaseResponse<ArrayList<OpernInfo>>> call, Response<BaseResponse<ArrayList<OpernInfo>>> response) {
-                if (index == 0) {
-                    opernInfoArrayList.clear();
-                }
-                ArrayList<OpernInfo> data = response.body().getData();
-                if (data == null || data.size() == 0) {
-                    T.showShort("没有更多数据了");
-                } else {
-                    opernInfoArrayList.addAll(data);
-                    index++;
-                }
-                adapter.notifyDataSetChanged();
-                opernSrl.setRefreshing(false);
-                requesting = false;
-            }
-
-            @Override
-            public void onFailure(Call<BaseResponse<ArrayList<OpernInfo>>> call, Throwable t) {
-                t.printStackTrace();
-                opernSrl.setRefreshing(false);
-                requesting = false;
-                T.showShort("网络异常");
-            }
+        HttpCore.getInstance().getApi()
+                .getPopOpernInfo(index, numPrePage)
+                .subscribeOn(new NewThreadScheduler())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(arrayListBaseResponse -> {
+                    if (index == 0) {
+                        opernInfoArrayList.clear();
+                    }
+                    ArrayList<OpernInfo> data = arrayListBaseResponse.getData();
+                    if (data == null || data.size() == 0) {
+                        T.showShort("没有更多数据了");
+                    } else {
+                        opernInfoArrayList.addAll(data);
+                        index++;
+                    }
+                    adapter.notifyDataSetChanged();
+                    opernSrl.setRefreshing(false);
+                    requesting = false;
+                }, throwable -> {
+                    throwable.printStackTrace();
+                    opernSrl.setRefreshing(false);
+                    requesting = false;
+                    T.showShort(throwable.getMessage());
         });
     }
 

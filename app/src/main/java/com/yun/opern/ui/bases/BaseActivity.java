@@ -54,7 +54,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             progressDialog.show();
         }else {
             if(progressDialog != null && progressDialog.isShowing()){
-                new Handler().postDelayed(() -> progressDialog.dismiss(),800);
+                new Handler().postDelayed(() -> progressDialog.dismiss(), 300);
             }
         }
     }

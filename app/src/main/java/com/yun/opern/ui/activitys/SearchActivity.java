@@ -22,6 +22,8 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.internal.schedulers.NewThreadScheduler;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -68,25 +70,23 @@ public class SearchActivity extends BaseActivity {
     public void net() {
         requesting = true;
         searchBtn.start();
-        HttpCore.getInstance().getApi().searchOpernInfo(searchParameter).enqueue(new Callback<BaseResponse<ArrayList<OpernInfo>>>() {
-            @Override
-            public void onResponse(Call<BaseResponse<ArrayList<OpernInfo>>> call, Response<BaseResponse<ArrayList<OpernInfo>>> response) {
-                opernInfoArrayList.clear();
-                ArrayList<OpernInfo> data = response.body().getData();
-                opernInfoArrayList.addAll(data);
-                adapter.notifyDataSetChanged();
-                searchBtn.end();
-                requesting = false;
-            }
-
-            @Override
-            public void onFailure(Call<BaseResponse<ArrayList<OpernInfo>>> call, Throwable t) {
-                t.printStackTrace();
-                searchBtn.end();
-                T.showShort("网络异常");
-                requesting = false;
-            }
-        });
+        HttpCore.getInstance().getApi()
+                .searchOpernInfo(searchParameter)
+                .subscribeOn(new NewThreadScheduler())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(arrayListBaseResponse -> {
+                    opernInfoArrayList.clear();
+                    ArrayList<OpernInfo> data = arrayListBaseResponse.getData();
+                    opernInfoArrayList.addAll(data);
+                    adapter.notifyDataSetChanged();
+                    searchBtn.end();
+                    requesting = false;
+                }, throwable -> {
+                    throwable.printStackTrace();
+                    searchBtn.end();
+                    T.showShort("网络异常");
+                    requesting = false;
+                });
     }
 
     public class Adapter extends RecyclerView.Adapter<SearchActivity.Adapter.ViewHolder> {

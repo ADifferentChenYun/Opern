@@ -42,6 +42,8 @@ import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.internal.schedulers.NewThreadScheduler;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -162,9 +164,9 @@ public class MoreActivity extends BaseActivity {
                 .setMessage(R.string.logout_info)
                 .setPositiveButton("退出!", (dialog, witch) -> {
                     AccessTokenKeeper.clear(context);
-                        WeiBoUserInfoKeeper.clear(context);
+                    WeiBoUserInfoKeeper.clear(context);
                     initView();
-                        EventBus.getDefault().post(new UserLoginOrLogoutEvent(false));
+                    EventBus.getDefault().post(new UserLoginOrLogoutEvent(false));
                 })
                 .create();
         alertDialog.show();
@@ -188,7 +190,7 @@ public class MoreActivity extends BaseActivity {
                     .setMessage("关闭推送后就不会收到任何推送了哦~不过我不建议你这么做QAQ")
                     .setPositiveButton("关闭推送", (dialog, witch) -> {
                         JPushInterface.stopPush(Application.getAppContext());
-                            buttonView.setChecked(!JPushInterface.isPushStopped(Application.getAppContext()));
+                        buttonView.setChecked(!JPushInterface.isPushStopped(Application.getAppContext()));
                     })
                     .setCancelable(true)
                     .setOnCancelListener((dialog) -> buttonView.setChecked(!JPushInterface.isPushStopped(Application.getAppContext())))
@@ -230,22 +232,21 @@ public class MoreActivity extends BaseActivity {
     public void getUserInfoFromWeiBo() {
         showProgressDialog(true);
         Oauth2AccessToken accessToken = AccessTokenKeeper.readAccessToken(context);
-        HttpCore.getInstance().getApi().getWeiBoUserInfo(accessToken.getToken(), accessToken.getUid()).enqueue(new Callback<WeiBoUserInfo>() {
-            @Override
-            public void onResponse(Call<WeiBoUserInfo> call, Response<WeiBoUserInfo> response) {
-                WeiBoUserInfoKeeper.write(context, response.body());
-                login();
-                initView();
-                EventBus.getDefault().post(new UserLoginOrLogoutEvent(true));
-                showProgressDialog(false);
-            }
-
-            @Override
-            public void onFailure(Call<WeiBoUserInfo> call, Throwable t) {
-                t.printStackTrace();
-                showProgressDialog(false);
-            }
-        });
+        HttpCore.getInstance().getApi()
+                .getWeiBoUserInfo(accessToken.getToken(), accessToken.getUid())
+                .subscribeOn(new NewThreadScheduler())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(weiBoUserInfo -> {
+                    WeiBoUserInfoKeeper.write(context, weiBoUserInfo);
+                    login();
+                    initView();
+                    EventBus.getDefault().post(new UserLoginOrLogoutEvent(true));
+                    showProgressDialog(false);
+                }, throwable -> {
+                    throwable.printStackTrace();
+                    T.showShort(throwable.getMessage());
+                    showProgressDialog(false);
+                });
     }
 
     public void login() {
@@ -254,17 +255,11 @@ public class MoreActivity extends BaseActivity {
         userLoginRequestInfo.setUserId(weiBoUserInfo.getIdstr());
         userLoginRequestInfo.setUserName(weiBoUserInfo.getScreen_name());
         userLoginRequestInfo.setUserGender(weiBoUserInfo.getGender());
-        HttpCore.getInstance().getApi().userLogin(userLoginRequestInfo).enqueue(new Callback<BaseResponse>() {
-            @Override
-            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-
-            }
-
-            @Override
-            public void onFailure(Call<BaseResponse> call, Throwable t) {
-
-            }
-        });
+        HttpCore.getInstance().getApi()
+                .userLogin(userLoginRequestInfo)
+                .subscribeOn(new NewThreadScheduler())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
     }
 
     @Override

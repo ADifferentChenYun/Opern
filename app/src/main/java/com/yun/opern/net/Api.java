@@ -4,12 +4,10 @@ import com.yun.opern.common.WeiBoUserInfo;
 import com.yun.opern.model.BaseResponse;
 import com.yun.opern.model.OpernInfo;
 import com.yun.opern.model.UserLoginRequestInfo;
-
 import java.math.BigInteger;
 import java.util.ArrayList;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
+import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -21,26 +19,26 @@ import retrofit2.http.Query;
 public interface Api {
 
     @GET(value = "https://api.weibo.com/2/users/show.json")
-    Call<WeiBoUserInfo> getWeiBoUserInfo(@Query("access_token") String access_token, @Query("uid") String uid);
+    Observable<WeiBoUserInfo> getWeiBoUserInfo(@Query("access_token") String access_token, @Query("uid") String uid);
 
     @POST(value = "user/login")
-    Call<BaseResponse> userLogin(@Body UserLoginRequestInfo info);
+    Observable<BaseResponse> userLogin(@Body UserLoginRequestInfo info);
 
     @GET(value = "opern/popularOpernInfo")
-    Call<BaseResponse<ArrayList<OpernInfo>>> getPopOpernInfo(@Query("index") int index, @Query("numPerPage") int numPerPage);
+    Observable<BaseResponse<ArrayList<OpernInfo>>> getPopOpernInfo(@Query("index") int index, @Query("numPerPage") int numPerPage);
 
     @GET(value = "opern/searchOpernInfo")
-    Call<BaseResponse<ArrayList<OpernInfo>>> searchOpernInfo(@Query("searchParameter") String searchParameter);
+    Observable<BaseResponse<ArrayList<OpernInfo>>> searchOpernInfo(@Query("searchParameter") String searchParameter);
 
     @GET(value = "collection/isCollected")
-    Call<BaseResponse> isCollected(@Query("userId") BigInteger userId, @Query("opernId") int opernId);
+    Observable<BaseResponse> isCollected(@Query("userId") BigInteger userId, @Query("opernId") int opernId);
 
     @GET(value = "collection/add")
-    Call<BaseResponse> addCollection(@Query("userId") BigInteger userId, @Query("opernId") int opernId);
+    Observable<BaseResponse> addCollection(@Query("userId") BigInteger userId, @Query("opernId") int opernId);
 
     @GET(value = "collection/remove")
-    Call<BaseResponse> removeCollection(@Query("userId") BigInteger userId, @Query("opernId") int opernId);
+    Observable<BaseResponse> removeCollection(@Query("userId") BigInteger userId, @Query("opernId") int opernId);
 
     @GET(value = "collection/collectionOpernInfo")
-    Call<BaseResponse<ArrayList<OpernInfo>>> getCollectionOpernInfo(@Query("userId") BigInteger userId);
+    Observable<BaseResponse<ArrayList<OpernInfo>>> getCollectionOpernInfo(@Query("userId") BigInteger userId);
 }

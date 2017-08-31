@@ -1,19 +1,16 @@
 package com.yun.opern.ui.activitys;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.yun.opern.Application;
 import com.yun.opern.R;
 import com.yun.opern.model.OpernImgInfo;
 import com.yun.opern.model.OpernInfo;
@@ -29,11 +26,9 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Comparator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.jpush.android.api.JPushInterface;
 
 import static com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade;
 
@@ -47,7 +42,6 @@ public class MyDownloadActivity extends BaseActivity {
 
     private ArrayList<OpernInfo> opernInfos = new ArrayList<>();
     private GridViewAdapter adapter;
-
 
 
     @Override
@@ -114,11 +108,11 @@ public class MyDownloadActivity extends BaseActivity {
                         .setMessage("删除后本地就找不到了哦~")
                         .setPositiveButton("删除", (dialog, which) -> {
                             boolean delete = FileUtil.deleteLocalOpernImgs(opernInfo);
-                            if(delete){
+                            if (delete) {
                                 opernInfos.remove(position);
                                 notifyDataSetChanged();
                                 EventBus.getDefault().post(new OpernFileDeleteEvent());
-                            }else {
+                            } else {
                                 T.showShort("删除失败");
                             }
                         })
@@ -177,10 +171,10 @@ public class MyDownloadActivity extends BaseActivity {
                         opernImgInfos.add(opernImgInfo);
                     }
                     opernImgInfos.sort((o1, o2) -> {
-                        if(o1.getOpernIndex() > o2.getOpernIndex()){
+                        if (o1.getOpernIndex() > o2.getOpernIndex()) {
                             return 1;
                         }
-                        if(o1.getOpernIndex() < o2.getOpernIndex()){
+                        if (o1.getOpernIndex() < o2.getOpernIndex()) {
                             return -1;
                         }
                         return 0;

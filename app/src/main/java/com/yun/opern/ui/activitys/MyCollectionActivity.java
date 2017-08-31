@@ -32,6 +32,8 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.internal.schedulers.NewThreadScheduler;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -73,19 +75,19 @@ public class MyCollectionActivity extends BaseActivity {
             return;
         }
         showProgressDialog(true);
-        HttpCore.getInstance().getApi().getCollectionOpernInfo(weiBoUserInfo.getId()).enqueue(new Callback<BaseResponse<ArrayList<OpernInfo>>>() {
-            @Override
-            public void onResponse(Call<BaseResponse<ArrayList<OpernInfo>>> call, Response<BaseResponse<ArrayList<OpernInfo>>> response) {
-                opernInfos.addAll(response.body().getData());
-                adapter.notifyDataSetChanged();
-                showProgressDialog(false);
-            }
-
-            @Override
-            public void onFailure(Call<BaseResponse<ArrayList<OpernInfo>>> call, Throwable t) {
-                showProgressDialog(false);
-            }
-        });
+        HttpCore.getInstance().getApi()
+                .getCollectionOpernInfo(weiBoUserInfo.getId())
+                .subscribeOn(new NewThreadScheduler())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(arrayListBaseResponse -> {
+                    opernInfos.addAll(arrayListBaseResponse.getData());
+                    adapter.notifyDataSetChanged();
+                    showProgressDialog(false);
+                }, throwable -> {
+                    throwable.printStackTrace();
+                    T.showShort(throwable.getMessage());
+                    showProgressDialog(false);
+                });
     }
 
     /**
@@ -94,25 +96,23 @@ public class MyCollectionActivity extends BaseActivity {
     public void removeCollect(int position) {
         showProgressDialog(true);
         WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
-        HttpCore.getInstance().getApi().removeCollection(weiBoUserInfo.getId(), opernInfos.get(position).getId()).enqueue(new CommonCallback<BaseResponse>() {
-            @Override
-            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                super.onResponse(call, response);
-                if (response.body().isSuccess()) {
-                    opernInfos.remove(position);
-                    adapter.notifyDataSetChanged();
-                } else {
-                    T.showShort(response.body().getMessage());
-                }
-                showProgressDialog(false);
-            }
-
-            @Override
-            public void onFailure(Call<BaseResponse> call, Throwable t) {
-                super.onFailure(call, t);
-                showProgressDialog(false);
-            }
-        });
+        HttpCore.getInstance().getApi()
+                .removeCollection(weiBoUserInfo.getId(), opernInfos.get(position).getId())
+                .subscribeOn(new NewThreadScheduler())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(baseResponse -> {
+                            if (baseResponse.isSuccess()) {
+                                opernInfos.remove(position);
+                                adapter.notifyDataSetChanged();
+                            } else {
+                                T.showShort(baseResponse.getMessage());
+                            }
+                            showProgressDialog(false);
+                        }, throwable -> {
+                            T.showShort(throwable.getMessage());
+                            showProgressDialog(false);
+                        }
+                );
     }
 
     public class GridViewAdapter extends BaseAdapter {

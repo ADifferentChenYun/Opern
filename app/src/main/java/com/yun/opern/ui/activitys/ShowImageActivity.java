@@ -16,7 +16,6 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.yun.opern.R;
 import com.yun.opern.common.WeiBoUserInfo;
 import com.yun.opern.common.WeiBoUserInfoKeeper;
-import com.yun.opern.model.BaseResponse;
 import com.yun.opern.model.OpernImgInfo;
 import com.yun.opern.model.OpernInfo;
 import com.yun.opern.net.HttpCore;
@@ -30,9 +29,8 @@ import com.yun.opern.views.ActionBarNormal;
 import java.util.ArrayList;
 
 import butterknife.BindView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.internal.schedulers.NewThreadScheduler;
 
 public class ShowImageActivity extends BaseActivity {
 
@@ -115,9 +113,9 @@ public class ShowImageActivity extends BaseActivity {
                                 .create();
                         alertDialog.show();
                     } else {
-                        if(isCollected){
+                        if (isCollected) {
                             removeCollect();
-                        }else {
+                        } else {
                             addCollection();
                         }
 
@@ -136,22 +134,17 @@ public class ShowImageActivity extends BaseActivity {
         if (weiBoUserInfo == null) {
             return;
         }
-        HttpCore.getInstance().getApi().isCollected(weiBoUserInfo.getId(), opernInfo.getId()).enqueue(new Callback<BaseResponse>() {
-            @Override
-            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                if (response.body().isSuccess()) {
-                    isCollected = true;
-                }else {
-                    isCollected = false;
-                }
-                changeCollectIcon();
-            }
-
-            @Override
-            public void onFailure(Call<BaseResponse> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
+        HttpCore.getInstance().getApi().isCollected(weiBoUserInfo.getId(), opernInfo.getId())
+                .subscribeOn(new NewThreadScheduler())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(baseResponse -> {
+                    if (baseResponse.isSuccess()) {
+                        isCollected = true;
+                    } else {
+                        isCollected = false;
+                    }
+                    changeCollectIcon();
+                }, throwable -> throwable.printStackTrace());
     }
 
     /**
@@ -159,21 +152,22 @@ public class ShowImageActivity extends BaseActivity {
      */
     public void addCollection() {
         WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
-        HttpCore.getInstance().getApi().addCollection(weiBoUserInfo.getId(), opernInfo.getId()).enqueue(new Callback<BaseResponse>() {
-            @Override
-            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                if (response.body().isSuccess()) {
-                    isCollected = true;
-                    changeCollectIcon();
-                    T.showShort(response.body().getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<BaseResponse> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
+        HttpCore.getInstance().getApi()
+                .addCollection(weiBoUserInfo.getId(), opernInfo.getId())
+                .subscribeOn(new NewThreadScheduler())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(baseResponse -> {
+                            if (baseResponse.isSuccess()) {
+                                isCollected = true;
+                                changeCollectIcon();
+                                T.showShort(baseResponse.getMessage());
+                            }
+                        },
+                        throwable -> {
+                            throwable.printStackTrace();
+                            T.showShort(throwable.getMessage());
+                        }
+                );
     }
 
     /**
@@ -181,24 +175,20 @@ public class ShowImageActivity extends BaseActivity {
      */
     public void removeCollect() {
         WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
-        HttpCore.getInstance().getApi().removeCollection(weiBoUserInfo.getId(), opernInfo.getId()).enqueue(new Callback<BaseResponse>() {
-            @Override
-            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                if (response.body().isSuccess()) {
-                    isCollected = false;
-                    changeCollectIcon();
-                    T.showShort(response.body().getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<BaseResponse> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
+        HttpCore.getInstance().getApi()
+                .removeCollection(weiBoUserInfo.getId(), opernInfo.getId())
+                .subscribeOn(new NewThreadScheduler())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(baseResponse -> {
+                    if (baseResponse.isSuccess()) {
+                        isCollected = false;
+                        changeCollectIcon();
+                        T.showShort(baseResponse.getMessage());
+                    }
+                }, Throwable::printStackTrace);
     }
 
-    public void changeCollectIcon(){
+    public void changeCollectIcon() {
         collectionFab.setImageResource(isCollected ? R.mipmap.ic_collected : R.mipmap.ic_collection);
     }
 

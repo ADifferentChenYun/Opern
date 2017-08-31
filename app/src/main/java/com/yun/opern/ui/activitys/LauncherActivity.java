@@ -20,7 +20,6 @@ public class LauncherActivity extends BaseActivity {
     @Override
     protected void initView() {
         new Handler().postDelayed(() -> {
-
             //检测权限
             RxPermissions reRxPermissions = new RxPermissions((Activity) context);
             reRxPermissions
@@ -37,7 +36,6 @@ public class LauncherActivity extends BaseActivity {
                                 }
                             }
                     );
-
         }, 1800);
     }
 
