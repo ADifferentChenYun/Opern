@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
+import com.tencent.bugly.Bugly;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import cn.jpush.android.api.JPushInterface;
@@ -20,7 +21,7 @@ public class Application extends android.app.Application{
     public void onCreate() {
         super.onCreate();
         applictionContext = this;
-        CrashReport.initCrashReport(getApplicationContext(), BUGLY_APP_ID, true);
+        Bugly.init(getApplicationContext(), BUGLY_APP_ID, true);
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
         Logger.addLogAdapter(new AndroidLogAdapter());
