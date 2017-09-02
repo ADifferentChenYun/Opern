@@ -47,7 +47,7 @@
             android:theme="@style/FullscreenTheme" />
         <activity android:name=".ui.activitys.MoreActivity" />
 
-        <!--bugly-->
+        <!-- bugly -->
         <activity
             android:name="com.tencent.bugly.beta.ui.BetaActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|locale"
@@ -157,7 +157,9 @@
             android:value="c4436241da6745e2f8109770" />
 
         <activity android:name=".ui.activitys.AboutUsActivity" />
-        <activity android:name=".ui.activitys.MyCollectionActivity"></activity>
+        <activity android:name=".ui.activitys.MyCollectionActivity" />
+        <activity android:name=".ui.activitys.TellUsActivity" />
+        <activity android:name=".ui.activitys.WriteFeedbackActivity"></activity>
     </application>
 
 </manifest>

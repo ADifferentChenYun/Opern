@@ -2,6 +2,7 @@ package com.yun.opern.net;
 
 import com.yun.opern.common.WeiBoUserInfo;
 import com.yun.opern.model.BaseResponse;
+import com.yun.opern.model.FeedbackInfo;
 import com.yun.opern.model.OpernInfo;
 import com.yun.opern.model.UserLoginRequestInfo;
 import java.math.BigInteger;
@@ -41,4 +42,10 @@ public interface Api {
 
     @GET(value = "collection/collectionOpernInfo")
     Observable<BaseResponse<ArrayList<OpernInfo>>> getCollectionOpernInfo(@Query("userId") BigInteger userId);
+
+    @POST(value = "feedback/commit")
+    Observable<BaseResponse> commitFeedback(@Body FeedbackInfo feedbackInfo);
+
+    @GET(value = "feedback/getFeedbackInfos")
+    Observable<BaseResponse<ArrayList<FeedbackInfo>>> getFeedbackInfos(@Query("userId") BigInteger userId);
 }

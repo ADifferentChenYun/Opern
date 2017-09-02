@@ -1,6 +1,5 @@
 package com.yun.opern.ui.activitys;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -23,7 +22,6 @@ import com.yun.opern.R;
 import com.yun.opern.common.WeiBoConstants;
 import com.yun.opern.common.WeiBoUserInfo;
 import com.yun.opern.common.WeiBoUserInfoKeeper;
-import com.yun.opern.model.BaseResponse;
 import com.yun.opern.model.UserLoginRequestInfo;
 import com.yun.opern.model.event.OpernFileDeleteEvent;
 import com.yun.opern.model.event.UserLoginOrLogoutEvent;
@@ -44,9 +42,6 @@ import cn.jpush.android.api.JPushInterface;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.internal.schedulers.NewThreadScheduler;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade;
 
@@ -117,7 +112,13 @@ public class MoreActivity extends BaseActivity {
 
     @OnClick(R.id.my_download_rl)
     public void onMyDownloadRlClicked() {
-        startActivity(new Intent(MoreActivity.this, MyDownloadActivity.class));
+        Oauth2AccessToken accessToken = AccessTokenKeeper.readAccessToken(context);
+        WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
+        if (accessToken.isSessionValid() && weiBoUserInfo != null) {
+            startActivity(new Intent(MoreActivity.this, MyDownloadActivity.class));
+        } else {
+            showDialog("告诉我们", "登录之后才能使用该功能哦~", "登录", (dialog, which) -> onUserInfoRlClicked());
+        }
     }
 
     @OnClick(R.id.my_collection_rl)
@@ -154,7 +155,7 @@ public class MoreActivity extends BaseActivity {
 
     @OnClick(R.id.tell_us_rl)
     public void onTellUsRlClicked() {
-        // TODO: 2017/8/29 0029
+        startActivity(new Intent(context, TellUsActivity.class));
     }
 
     @OnClick(R.id.logout_btn)

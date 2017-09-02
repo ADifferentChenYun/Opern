@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import com.yun.opern.views.ProgressDialog;
@@ -21,6 +22,7 @@ import butterknife.Unbinder;
 public abstract class BaseActivity extends AppCompatActivity {
     protected Context context;
     protected ProgressDialog progressDialog;
+    protected AlertDialog alertDialog;
     protected Unbinder unbinder;
 
     protected abstract int contentViewRes();
@@ -41,7 +43,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         initedView();
     }
 
-    public void showProgressDialog(boolean show, DialogInterface.OnCancelListener onCancelListener){
+    protected void showProgressDialog(boolean show, DialogInterface.OnCancelListener onCancelListener) {
         if(show){
             if(progressDialog == null){
                 progressDialog = new ProgressDialog(context);
@@ -59,8 +61,30 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public void showProgressDialog(boolean show){
+    protected void showProgressDialog(boolean show) {
         showProgressDialog(show, null);
+    }
+
+    protected void showDialog(String title, String message, String positive, DialogInterface.OnClickListener positiveListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        if (title != null) {
+            builder.setTitle(title);
+        }
+        if (message != null) {
+            builder.setMessage(message);
+        }
+        if (positive != null && positiveListener != null) {
+            builder.setPositiveButton(positive, positiveListener);
+        }
+        builder.setCancelable(false);
+        alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    protected void dismissDialog() {
+        if (alertDialog != null && alertDialog.isShowing()) {
+            alertDialog.dismiss();
+        }
     }
 
     @Override

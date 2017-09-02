@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+
+        android:layout_margin="5dp"
+        android:id="@+id/user_head_img"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@mipmap/ic_weibo"
+        app:civ_border_color="@color/white"
+        app:civ_border_width="1dp" />
+
+    <LinearLayout
+        android:padding="5dp"
+        android:layout_marginEnd="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/iao">
+
+        <TextView
+            android:id="@+id/item_feedback_rv_msg_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="这是一条很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长的反馈"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:id="@+id/item_feedback_rv_time_tv"
+            android:gravity="end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:text="2017-9-2 8:8:60" />
+    </LinearLayout>
+
+
+</LinearLayout>
