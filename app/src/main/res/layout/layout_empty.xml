@@ -10,16 +10,17 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/x150"
+            android:layout_height="@dimen/x150"
             android:layout_gravity="center"
             android:src="@mipmap/ic_empty" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/x10"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="empty"
+            android:text="没有数据了~"
             android:textColor="@color/black" />
     </LinearLayout>
 

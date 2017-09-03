@@ -4,22 +4,22 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:padding="@dimen/x24">
 
 
     <de.hdodenhof.circleimageview.CircleImageView
 
-        android:layout_margin="5dp"
+        android:layout_margin="@dimen/x15"
         android:id="@+id/user_head_img"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="@dimen/x120"
+        android:layout_height="@dimen/x120"
         android:src="@mipmap/ic_weibo"
         app:civ_border_color="@color/white"
-        app:civ_border_width="1dp" />
+        app:civ_border_width="@dimen/x3" />
 
     <LinearLayout
-        android:padding="5dp"
-        android:layout_marginEnd="50dp"
+        android:padding="@dimen/x15"
+        android:layout_marginEnd="@dimen/x150"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -34,7 +34,7 @@
             android:textSize="14sp" />
 
         <TextView
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/x30"
             android:id="@+id/item_feedback_rv_time_tv"
             android:gravity="end"
             android:layout_width="match_parent"

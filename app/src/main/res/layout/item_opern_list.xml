@@ -7,12 +7,12 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="2.5dp"
-        android:layout_marginBottom="2.5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
-        app:contentPadding="10dp"
-        app:cardCornerRadius="8dp">
+        android:layout_marginTop="@dimen/x5"
+        android:layout_marginBottom="@dimen/x5"
+        android:layout_marginRight="@dimen/x10"
+        android:layout_marginLeft="@dimen/x10"
+        app:contentPadding="@dimen/x20"
+        app:cardCornerRadius="@dimen/x15">
 
 
         <LinearLayout
@@ -33,8 +33,8 @@
                 android:id="@+id/item_opern_list_wordAuthor_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginBottom="@dimen/x6"
+                android:layout_marginTop="@dimen/x12"
                 android:text="wordAuthor 平凡之路"
                 android:textSize="14sp" />
 
@@ -42,8 +42,8 @@
                 android:id="@+id/item_opern_list_songAuthor_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginBottom="@dimen/x6"
+                android:layout_marginTop="@dimen/x6"
                 android:text="songAuthor 平凡之路"
                 android:textSize="14sp" />
 
@@ -51,7 +51,7 @@
                 android:id="@+id/item_opern_list_singer_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="@dimen/x6"
                 android:text="singer 平凡之路"
                 android:textSize="14sp" />
         </LinearLayout>

@@ -24,29 +24,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp">
+            android:paddingBottom="@dimen/x25"
+            android:paddingTop="@dimen/x25">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/user_head_img"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_alignParentLeft="true"
+                android:layout_width="@dimen/x170"
+                android:layout_height="@dimen/x170"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="@dimen/x25"
                 android:src="@mipmap/ic_weibo"
                 app:civ_border_color="@color/white"
-                app:civ_border_width="2dp" />
+                app:civ_border_width="@dimen/x6" />
 
             <TextView
                 android:id="@+id/user_name_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="4dp"
-                android:layout_toRightOf="@id/user_head_img"
+                android:layout_marginBottom="@dimen/x25"
+                android:layout_marginStart="@dimen/x40"
+                android:layout_marginTop="@dimen/x12"
+                android:layout_toEndOf="@id/user_head_img"
                 android:text="微博登录"
                 android:textColor="#666666"
                 android:textSize="16sp" />
@@ -56,10 +56,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/user_name_tv"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="50dp"
-                android:layout_toRightOf="@id/user_head_img"
+                android:layout_marginBottom="@dimen/x25"
+                android:layout_marginStart="@dimen/x40"
+                android:layout_marginEnd="@dimen/x130"
+                android:layout_toEndOf="@id/user_head_img"
                 android:text="@string/login_info"
                 android:textSize="14sp" />
 
@@ -70,7 +70,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="@dimen/x40"
             android:background="@color/white"
             android:orientation="vertical">
 
@@ -81,27 +81,28 @@
                 android:background="@drawable/selector_nor_white_bg">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/x90"
+                    android:layout_height="@dimen/x90"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
-                    android:src="@mipmap/ic_download_blue" />
+                    android:layout_marginStart="@dimen/x35"
+                    android:src="@mipmap/ic_download_blue"
+                    android:contentDescription="@string/aoubt_us" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="60dp"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="15dp"
+                    android:layout_marginStart="@dimen/x170"
+                    android:paddingBottom="@dimen/x45"
+                    android:paddingTop="@dimen/x45"
                     android:text="我的下载"
                     android:textSize="14sp" />
 
                 <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_alignParentRight="true"
+                    android:layout_width="@dimen/x50"
+                    android:layout_height="@dimen/x50"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginEnd="@dimen/x45"
                     android:src="@mipmap/ic_right" />
 
             </RelativeLayout>
@@ -109,9 +110,9 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.5px"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_height="@dimen/x1"
+                android:layout_marginLeft="@dimen/x45"
+                android:layout_marginRight="@dimen/x45"
                 android:background="@color/side_color" />
 
             <RelativeLayout
@@ -122,28 +123,28 @@
 
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/x90"
+                    android:layout_height="@dimen/x90"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginStart="@dimen/x35"
                     android:src="@mipmap/ic_collection_blue" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="60dp"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="15dp"
+                    android:layout_marginStart="@dimen/x170"
+                    android:paddingBottom="@dimen/x45"
+                    android:paddingTop="@dimen/x45"
                     android:text="我的收藏"
                     android:textSize="14sp" />
 
 
                 <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_alignParentRight="true"
+                    android:layout_width="@dimen/x50"
+                    android:layout_height="@dimen/x50"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginEnd="@dimen/x45"
                     android:src="@mipmap/ic_right" />
             </RelativeLayout>
         </LinearLayout>
@@ -152,7 +153,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="@dimen/x45"
             android:background="@color/white"
             android:orientation="vertical">
 
@@ -163,19 +164,19 @@
                 android:background="@drawable/selector_nor_white_bg">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/x90"
+                    android:layout_height="@dimen/x90"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginStart="@dimen/x35"
                     android:src="@mipmap/ic_cache" />
 
                 <TextView
                     android:id="@+id/app_cache_size_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="60dp"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="15dp"
+                    android:layout_marginStart="@dimen/x170"
+                    android:paddingBottom="@dimen/x45"
+                    android:paddingTop="@dimen/x45"
                     android:text="APP缓存:"
                     android:textSize="14sp" />
 
@@ -185,9 +186,9 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.5px"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_height="@dimen/x1"
+                android:layout_marginLeft="@dimen/x45"
+                android:layout_marginRight="@dimen/x45"
                 android:background="@color/side_color" />
 
             <RelativeLayout
@@ -197,20 +198,19 @@
 
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/x90"
+                    android:layout_height="@dimen/x90"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="@dimen/x35"
                     android:src="@mipmap/ic_push" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="60dp"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="15dp"
+                    android:layout_marginStart="@dimen/x170"
+                    android:paddingBottom="@dimen/x45"
+                    android:paddingTop="@dimen/x45"
                     android:text="推送"
                     android:textSize="14sp" />
 
@@ -219,16 +219,17 @@
                     android:id="@+id/push_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="15dp" />
+                    android:layout_marginEnd="@dimen/x45" />
+
             </RelativeLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="@dimen/x45"
             android:background="@color/white"
             android:orientation="vertical">
 
@@ -239,27 +240,27 @@
                 android:background="@drawable/selector_nor_white_bg">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/x90"
+                    android:layout_height="@dimen/x90"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginStart="@dimen/x35"
                     android:src="@mipmap/ic_tell_us" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="60dp"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="15dp"
+                    android:layout_marginStart="@dimen/x170"
+                    android:paddingBottom="@dimen/x45"
+                    android:paddingTop="@dimen/x45"
                     android:text="告诉我们"
                     android:textSize="14sp" />
 
                 <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_alignParentRight="true"
+                    android:layout_width="@dimen/x50"
+                    android:layout_height="@dimen/x50"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginEnd="@dimen/x45"
                     android:src="@mipmap/ic_right" />
 
             </RelativeLayout>
@@ -267,9 +268,9 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.5px"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_height="@dimen/x1"
+                android:layout_marginLeft="@dimen/x45"
+                android:layout_marginRight="@dimen/x45"
                 android:background="@color/side_color" />
 
             <RelativeLayout
@@ -280,28 +281,28 @@
 
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/x90"
+                    android:layout_height="@dimen/x90"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginStart="@dimen/x35"
                     android:src="@mipmap/ic_about_us" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="60dp"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="15dp"
+                    android:layout_marginStart="@dimen/x170"
+                    android:paddingBottom="@dimen/x45"
+                    android:paddingTop="@dimen/x45"
                     android:text="关于我们"
                     android:textSize="14sp" />
 
 
                 <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_alignParentRight="true"
+                    android:layout_width="@dimen/x50"
+                    android:layout_height="@dimen/x50"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginEnd="@dimen/x45"
                     android:src="@mipmap/ic_right" />
             </RelativeLayout>
 
