@@ -5,6 +5,7 @@ import android.content.Context;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.tencent.bugly.Bugly;
+import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import cn.jpush.android.api.JPushInterface;
@@ -22,6 +23,8 @@ public class Application extends android.app.Application{
         super.onCreate();
         applictionContext = this;
         Bugly.init(getApplicationContext(), BUGLY_APP_ID, true);
+        Beta.autoInit = true;
+        Beta.autoCheckUpgrade = true;
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
         Logger.addLogAdapter(new AndroidLogAdapter());

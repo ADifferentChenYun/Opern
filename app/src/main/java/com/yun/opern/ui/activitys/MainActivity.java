@@ -75,6 +75,7 @@ public class MainActivity extends BaseActivity {
         actionbar.showTitle(true);
         actionbar.showMoreButton(true);
         actionbar.getMoreButton().setOnClickListener((view) -> startActivity(new Intent(MainActivity.this, MoreActivity.class)));
+        actionbar.setOnDoubleClickListener(view -> opernLv.smoothScrollToPosition(0));
         linearLayoutManager = new LinearLayoutManager(this);
         opernLv.setLayoutManager(linearLayoutManager);
         opernLv.setItemAnimator(new DefaultItemAnimator());

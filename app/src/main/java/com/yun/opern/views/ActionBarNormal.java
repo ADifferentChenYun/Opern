@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.yun.opern.R;
 
+import java.util.function.Consumer;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -27,6 +29,13 @@ public class ActionBarNormal extends FrameLayout {
     private int titleColor;
     private BackButtonStyle style = BackButtonStyle.StyleOne;
     private boolean showTitle, showBackButton, showMoreButton;
+    private long clickTime = 0;
+    private OnDoubleClickListener doubleClickListener;
+
+    @FunctionalInterface
+    public interface OnDoubleClickListener {
+        void onDoubleClick(View view);
+    }
 
     public enum BackButtonStyle {
         StyleOne,
@@ -71,6 +80,15 @@ public class ActionBarNormal extends FrameLayout {
         showMoreButton(showMoreButton);
         setBackButtonStyle(style);
         backImg.setOnClickListener(v -> ((AppCompatActivity) getContext()).finish());
+        this.setOnClickListener(v -> {
+            if (System.currentTimeMillis() - clickTime < 200) {
+                if (doubleClickListener != null) {
+                    doubleClickListener.onDoubleClick(this);
+                }
+            } else {
+                clickTime = System.currentTimeMillis();
+            }
+        });
         addView(view);
     }
 
@@ -106,5 +124,9 @@ public class ActionBarNormal extends FrameLayout {
 
     public void setTitle(String titleStr){
         titleTv.setText(titleStr);
+    }
+
+    public void setOnDoubleClickListener(OnDoubleClickListener doubleClickListener) {
+        this.doubleClickListener = doubleClickListener;
     }
 }

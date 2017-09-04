@@ -1,9 +1,17 @@
 package com.yun.opern.ui.activitys;
 
+import android.widget.Button;
+
+import com.jakewharton.rxbinding2.view.RxView;
+import com.tencent.bugly.beta.Beta;
 import com.yun.opern.R;
 import com.yun.opern.ui.bases.BaseActivity;
 
+import butterknife.BindView;
+
 public class AboutUsActivity extends BaseActivity {
+    @BindView(R.id.check_update_btn)
+    Button checkUpdateBtn;
 
     @Override
     protected int contentViewRes() {
@@ -12,7 +20,7 @@ public class AboutUsActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-
+        RxView.clicks(checkUpdateBtn).subscribe(o -> Beta.checkUpgrade());
     }
 
 

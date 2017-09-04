@@ -31,7 +31,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
+            android:text="搜谱——简简单单搜曲谱"
             android:textSize="18sp"
             android:textColor="@color/black" />
     </LinearLayout>
