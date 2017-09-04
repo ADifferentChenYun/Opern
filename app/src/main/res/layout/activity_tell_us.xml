@@ -18,11 +18,21 @@
             android:layout_height="wrap_content"
             app:title="告诉我们" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/feedback_rv"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/item_feedback_rv" />
+            android:layout_height="match_parent">
+
+            <include
+                layout="@layout/layout_empty"
+                android:id="@+id/empty_view"
+                android:visibility="gone" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/feedback_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/item_feedback_rv" />
+        </FrameLayout>
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton

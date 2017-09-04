@@ -47,6 +47,8 @@ public class MainActivity extends BaseActivity {
     FloatingActionButton searchFab;
     @BindView(R.id.actionbar)
     ActionBarNormal actionbar;
+    @BindView(R.id.empty_view)
+    View emptyView;
 
     private ArrayList<OpernInfo> opernInfoArrayList = new ArrayList<>();
     private Adapter adapter;
@@ -174,6 +176,7 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public int getItemCount() {
+            emptyView.setVisibility(opernInfoArrayList.size() == 0 ? View.VISIBLE : View.GONE);
             return opernInfoArrayList.size();
         }
 

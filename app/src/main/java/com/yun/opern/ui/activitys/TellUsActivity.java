@@ -38,6 +38,8 @@ public class TellUsActivity extends BaseActivity {
     RecyclerView feedbackRv;
     @BindView(R.id.add_feedback_fab)
     FloatingActionButton addFeedbackFab;
+    @BindView(R.id.empty_view)
+    View emptyView;
 
     private RecyclerViewAdapter adapter;
     private ArrayList<FeedbackInfo> feedbackInfos = new ArrayList<>();
@@ -132,6 +134,7 @@ public class TellUsActivity extends BaseActivity {
 
         @Override
         public int getItemCount() {
+            emptyView.setVisibility(feedbackInfos.size() == 0 ? View.VISIBLE : View.GONE);
             return feedbackInfos.size();
         }
 
