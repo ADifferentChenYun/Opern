@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -82,6 +83,9 @@ public class TellUsActivity extends BaseActivity {
     }
 
     private void commitFeedbackInfo(String feedbackMessage) {
+        if (feedbackMessage == null || TextUtils.isEmpty(feedbackMessage)) {
+            return;
+        }
         showProgressDialog(true);
         FeedbackInfo feedbackInfo = new FeedbackInfo();
         feedbackInfo.setUserId(WeiBoUserInfoKeeper.read(context).getId());
@@ -130,6 +134,7 @@ public class TellUsActivity extends BaseActivity {
             holder.feedbackMessageTv.setText(feedbackInfos.get(position).getFeedbackMessage());
             holder.feedbackTimeTv.setText(feedbackInfos.get(position).getFeedbackDateTime());
             Glide.with(context).asBitmap().load(WeiBoUserInfoKeeper.read(context).getAvatar_hd()).transition(withCrossFade()).into(holder.userHeadImg);
+            holder.readFlgTv.setVisibility(feedbackInfos.get(position).getCommunicateFlg().equals("0") ? View.GONE : View.VISIBLE);
         }
 
         @Override
@@ -142,12 +147,14 @@ public class TellUsActivity extends BaseActivity {
             private CircleImageView userHeadImg;
             private TextView feedbackMessageTv;
             private TextView feedbackTimeTv;
+            private TextView readFlgTv;
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                userHeadImg = (CircleImageView) itemView.findViewById(R.id.user_head_img);
+                userHeadImg = (CircleImageView) itemView.findViewById(R.id.item_feedback_rv_user_head_img);
                 feedbackMessageTv = (TextView) itemView.findViewById(R.id.item_feedback_rv_msg_tv);
                 feedbackTimeTv = (TextView) itemView.findViewById(R.id.item_feedback_rv_time_tv);
+                readFlgTv = (TextView) itemView.findViewById(R.id.item_feedback_rv_read_flg_tv);
             }
         }
     }

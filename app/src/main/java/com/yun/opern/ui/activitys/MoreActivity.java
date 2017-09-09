@@ -17,6 +17,7 @@ import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WbConnectErrorMessage;
 import com.sina.weibo.sdk.auth.sso.SsoHandler;
+import com.tencent.bugly.beta.Beta;
 import com.yun.opern.Application;
 import com.yun.opern.R;
 import com.yun.opern.common.WeiBoConstants;
@@ -30,6 +31,7 @@ import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.utils.CacheFileUtil;
 import com.yun.opern.utils.T;
 import com.yun.opern.views.ActionBarNormal;
+import com.yun.opern.views.SmallRedPoint;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -71,6 +73,8 @@ public class MoreActivity extends BaseActivity {
     Switch pushSwitch;
     @BindView(R.id.logout_btn)
     Button logoutBtn;
+    @BindView(R.id.small_red_point)
+    SmallRedPoint smallRedPoint;
 
     private SsoHandler mSsoHandler;
 
@@ -98,6 +102,7 @@ public class MoreActivity extends BaseActivity {
         }
         appCacheSizeTv.setText("APP缓存:" + CacheFileUtil.size());
         pushSwitch.setChecked(!JPushInterface.isPushStopped(Application.getAppContext()));
+        smallRedPoint.setVisibility(Beta.getUpgradeInfo() == null ? View.GONE : View.VISIBLE);
     }
 
     @OnClick(R.id.user_info_rl)

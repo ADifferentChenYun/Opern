@@ -7,10 +7,12 @@
     <EditText
         android:id="@+id/layout_input_dialog_edt"
         android:layout_marginTop="@dimen/x30"
-        android:layout_marginStart="@dimen/x30"
-        android:layout_marginEnd="@dimen/x30"
+        android:layout_marginStart="@dimen/x60"
+        android:layout_marginEnd="@dimen/x60"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/black"
         android:background="@drawable/selector_input_feedback_edt" />
 
 

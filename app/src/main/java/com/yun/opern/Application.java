@@ -25,6 +25,7 @@ public class Application extends android.app.Application{
         Bugly.init(getApplicationContext(), BUGLY_APP_ID, true);
         Beta.autoInit = true;
         Beta.autoCheckUpgrade = true;
+        Beta.enableHotfix = false;
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
         Logger.addLogAdapter(new AndroidLogAdapter());

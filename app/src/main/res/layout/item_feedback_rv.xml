@@ -8,9 +8,8 @@
 
 
     <de.hdodenhof.circleimageview.CircleImageView
-
         android:layout_margin="@dimen/x15"
-        android:id="@+id/user_head_img"
+        android:id="@+id/item_feedback_rv_user_head_img"
         android:layout_width="@dimen/x120"
         android:layout_height="@dimen/x120"
         android:src="@mipmap/ic_weibo"
@@ -42,7 +41,16 @@
             android:textColor="@color/white"
             android:textSize="12sp"
             android:text="2017-9-2 8:8:60" />
-    </LinearLayout>
 
+        <TextView
+            android:layout_marginTop="@dimen/x30"
+            android:id="@+id/item_feedback_rv_read_flg_tv"
+            android:gravity="end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:text="开发者已读" />
+    </LinearLayout>
 
 </LinearLayout>
