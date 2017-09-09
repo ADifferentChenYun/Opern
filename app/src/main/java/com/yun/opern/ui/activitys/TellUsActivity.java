@@ -1,6 +1,7 @@
 package com.yun.opern.ui.activitys;
 
 import android.app.AlertDialog;
+import android.database.Cursor;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,20 +12,23 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.orhanobut.logger.Logger;
 import com.yun.opern.R;
 import com.yun.opern.common.WeiBoUserInfo;
 import com.yun.opern.common.WeiBoUserInfoKeeper;
+import com.yun.opern.db.DBCore;
+import com.yun.opern.db.DateBaseHelper;
+import com.yun.opern.db.FeedbackMessageInfo;
 import com.yun.opern.model.FeedbackInfo;
 import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.utils.T;
 import com.yun.opern.views.ActionBarNormal;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.internal.schedulers.NewThreadScheduler;
 
@@ -65,6 +69,19 @@ public class TellUsActivity extends BaseActivity {
 
     private void getFeedbackInfos() {
         showProgressDialog(true);
+        /*DBCore.getInstance().createQuery(DateBaseHelper.Tables.TBL_FEEDBACK_MESSAGE_INFO, "select * from " + DateBaseHelper.Tables.TBL_FEEDBACK_MESSAGE_INFO).map(query -> {
+            Cursor cursor = query.run();
+            ArrayList<FeedbackMessageInfo> feedbackMessageInfos = new ArrayList<>();
+            while (cursor.moveToNext()){
+                FeedbackMessageInfo feedbackMessageInfo = new FeedbackMessageInfo();
+                feedbackMessageInfo.setMessage(cursor.getString(cursor.getColumnIndex("message")));
+                feedbackMessageInfo.setDatatime(cursor.getString(cursor.getColumnIndex("datatime")));
+                feedbackMessageInfos.add(feedbackMessageInfo);
+            }
+            return feedbackMessageInfos;
+        }).subscribe(feedbackMessageInfos -> {
+            Logger.i(feedbackMessageInfos.toString());
+        });*/
         WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
         HttpCore.getInstance().getApi().getFeedbackInfos(weiBoUserInfo.getId())
                 .subscribeOn(new NewThreadScheduler())

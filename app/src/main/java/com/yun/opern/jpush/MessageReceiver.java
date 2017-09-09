@@ -1,11 +1,17 @@
 package com.yun.opern.jpush;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+
+import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
+import com.yun.opern.db.DBCore;
+import com.yun.opern.db.DateBaseHelper;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.Iterator;
@@ -17,6 +23,7 @@ import cn.jpush.android.api.JPushInterface;
  */
 public class MessageReceiver extends BroadcastReceiver {
     private static final String TAG = "JPush-MessageReceiver";
+    private static final String KEY_1 = "feedback_message_from_developer";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -26,6 +33,14 @@ public class MessageReceiver extends BroadcastReceiver {
             if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
                 //接收到自定义消息
                 Logger.i("接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
+                /*JSONObject jsonObject = new JSONObject(bundle.getString(JPushInterface.EXTRA_EXTRA));
+                String feedbackMessageFromDeveloper = jsonObject.getString(KEY_1);
+                Logger.i(feedbackMessageFromDeveloper);
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("message", feedbackMessageFromDeveloper);
+                contentValues.put("datatime", "now()");
+                long i = DBCore.getInstance().insert(DateBaseHelper.Tables.TBL_FEEDBACK_MESSAGE_INFO,contentValues);
+                Logger.i(i + "");*/
             } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
                 //接收到通知
                 int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);

@@ -91,7 +91,6 @@ public class ShowImageActivity extends BaseActivity {
                     @Override
                     public void success() {
                         downloadFab.setVisibility(View.GONE);
-                        T.showShort("下载成功");
                     }
 
                     @Override
@@ -160,7 +159,6 @@ public class ShowImageActivity extends BaseActivity {
                             if (baseResponse.isSuccess()) {
                                 isCollected = true;
                                 changeCollectIcon();
-                                T.showShort(baseResponse.getMessage());
                             }
                         },
                         throwable -> {

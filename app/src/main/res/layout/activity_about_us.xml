@@ -13,14 +13,26 @@
         android:layout_height="wrap_content"
         app:title="@string/app_name"/>
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="@dimen/x300"
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/x300"
-        android:layout_marginTop="@dimen/x30"
-        android:layout_gravity="center"
-        android:src="@mipmap/sccnnom_v20161110171_354"
-        app:civ_border_width="@dimen/x6"
-        app:civ_border_color="@color/white"/>
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/laucner_img"
+            android:layout_width="@dimen/x200"
+            android:layout_height="@dimen/x200"
+            android:src="@mipmap/ic_laucner_ion" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="搜谱——简简单单搜曲谱"
+            android:textSize="18sp"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
 
     <android.support.v7.widget.CardView
         android:layout_weight="1"
@@ -28,7 +40,6 @@
         android:layout_height="0dp"
         android:layout_marginLeft="@dimen/x15"
         android:layout_marginRight="@dimen/x15"
-        android:layout_marginTop="@dimen/x30"
         android:layout_marginBottom="@dimen/x7"
         app:contentPadding="@dimen/x30"
         app:cardCornerRadius="@dimen/x24">

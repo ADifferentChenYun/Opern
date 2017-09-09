@@ -188,7 +188,6 @@ public class MoreActivity extends BaseActivity {
         if (isChecked) {
             if (JPushInterface.isPushStopped(Application.getAppContext())) {
                 JPushInterface.resumePush(Application.getAppContext());
-                T.showShort("推送已打开");
             }
         } else {
             AlertDialog alertDialog = new AlertDialog.Builder(context)
@@ -246,6 +245,7 @@ public class MoreActivity extends BaseActivity {
                     WeiBoUserInfoKeeper.write(context, weiBoUserInfo);
                     login();
                     initView();
+                    JPushInterface.setAlias(context, (int) System.currentTimeMillis() / 1000, weiBoUserInfo.getIdstr());
                     EventBus.getDefault().post(new UserLoginOrLogoutEvent(true));
                     showProgressDialog(false);
                 }, throwable -> {
