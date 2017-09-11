@@ -34,9 +34,7 @@ import butterknife.Unbinder;
 
 import static com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class ShowImageFragment extends Fragment {
 
 
@@ -51,7 +49,8 @@ public class ShowImageFragment extends Fragment {
 
     private int retry = 3;
 
-    public ShowImageFragment(ActionBarNormal actionBarNormal, LinearLayout fabBtns) {
+
+    public void setAnimView(ActionBarNormal actionBarNormal, LinearLayout fabBtns) {
         this.actionBarNormal = actionBarNormal;
         this.fabBtns = fabBtns;
     }

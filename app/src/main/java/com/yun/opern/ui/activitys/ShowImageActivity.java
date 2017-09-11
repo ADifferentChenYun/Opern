@@ -61,7 +61,8 @@ public class ShowImageActivity extends BaseActivity {
         actionbar.setTitle(opernInfo.getTitle());
         ArrayList<ShowImageFragment> fragments = new ArrayList<>();
         for (OpernImgInfo opernImgInfo : opernInfo.getImgs()) {
-            ShowImageFragment showImageFragment = new ShowImageFragment(actionbar, fabBtns);
+            ShowImageFragment showImageFragment = new ShowImageFragment();
+            showImageFragment.setAnimView(actionbar, fabBtns);
             Bundle bundle = new Bundle();
             bundle.putSerializable("opernImgInfo", opernImgInfo);
             showImageFragment.setArguments(bundle);

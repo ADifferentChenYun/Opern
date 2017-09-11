@@ -4,6 +4,7 @@ import com.yun.opern.common.WeiBoUserInfo;
 import com.yun.opern.model.BaseResponse;
 import com.yun.opern.model.FeedbackInfo;
 import com.yun.opern.model.OpernInfo;
+import com.yun.opern.model.UpdateInfo;
 import com.yun.opern.model.UserLoginRequestInfo;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -18,6 +19,9 @@ import retrofit2.http.Query;
  * Created by Yun on 2017/8/10 0010.
  */
 public interface Api {
+
+    @GET(value = "update/checkVersion")
+    Observable<BaseResponse<UpdateInfo>> checkVersion();
 
     @GET(value = "https://api.weibo.com/2/users/show.json")
     Observable<WeiBoUserInfo> getWeiBoUserInfo(@Query("access_token") String access_token, @Query("uid") String uid);

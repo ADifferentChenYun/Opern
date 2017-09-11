@@ -1,8 +1,10 @@
 package com.yun.opern.ui.activitys;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,15 +14,18 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jakewharton.rxbinding2.view.RxView;
+import com.yun.opern.BuildConfig;
 import com.yun.opern.R;
 import com.yun.opern.common.WeiBoUserInfo;
 import com.yun.opern.common.WeiBoUserInfoKeeper;
 import com.yun.opern.model.OpernInfo;
+import com.yun.opern.model.UpdateInfo;
 import com.yun.opern.model.event.UserLoginOrLogoutEvent;
 import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.utils.DisplayUtil;
 import com.yun.opern.utils.T;
+import com.yun.opern.utils.UpdateAsync;
 import com.yun.opern.views.ActionBarNormal;
 
 import org.greenrobot.eventbus.EventBus;
@@ -35,6 +40,7 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.internal.schedulers.NewThreadScheduler;
 
+import static android.app.ProgressDialog.STYLE_HORIZONTAL;
 import static com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade;
 
 public class MainActivity extends BaseActivity {
@@ -110,6 +116,7 @@ public class MainActivity extends BaseActivity {
     protected void initedView() {
         super.initedView();
         net();
+        checkVersion();
     }
 
     private void net() {
@@ -139,6 +146,34 @@ public class MainActivity extends BaseActivity {
                     requesting = false;
                     T.showShort(throwable.getMessage());
         });
+    }
+
+    private void checkVersion() {
+        HttpCore.getInstance().getApi().checkVersion()
+                .subscribeOn(new NewThreadScheduler())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(updateInfoBaseResponse -> {
+                    UpdateInfo updateInfo = updateInfoBaseResponse.getData();
+                    if (updateInfo.getVersionCode() > BuildConfig.VERSION_CODE) {
+                        //存在更新
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context)
+                                .setTitle("更新")
+                                .setMessage(updateInfo.getUpdateMessage())
+                                .setCancelable(false)
+                                .setPositiveButton("更新", (dialog, which) -> {
+                                    UpdateAsync updateAsync = new UpdateAsync(context);
+                                    updateAsync.execute(HttpCore.baseUrl + updateInfo.getDownloadUrl());
+                                });
+                        if (updateInfo.getUpdateType().equals("0")) {
+                            builder.setCancelable(true);
+                            builder.setNegativeButton("下次更新", null);
+                        }
+                        builder.create().show();
+                    }
+                }, t -> {
+                    t.printStackTrace();
+                    T.showShort(t.getMessage());
+                });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

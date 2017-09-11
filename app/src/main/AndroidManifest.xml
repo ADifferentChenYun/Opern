@@ -161,7 +161,7 @@
         <activity android:name=".ui.activitys.AboutUsActivity" />
         <activity android:name=".ui.activitys.MyCollectionActivity" />
         <activity android:name=".ui.activitys.TellUsActivity" />
-        <activity android:name=".ui.activitys.WriteFeedbackActivity"></activity>
+        <activity android:name=".ui.activitys.WriteFeedbackActivity" />
     </application>
 
 </manifest>
