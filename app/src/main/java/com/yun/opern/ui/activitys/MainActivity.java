@@ -1,6 +1,5 @@
 package com.yun.opern.ui.activitys;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -24,6 +23,7 @@ import com.yun.opern.model.event.UserLoginOrLogoutEvent;
 import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.utils.DisplayUtil;
+import com.yun.opern.utils.SPUtil;
 import com.yun.opern.utils.T;
 import com.yun.opern.utils.UpdateAsync;
 import com.yun.opern.views.ActionBarNormal;
@@ -40,7 +40,6 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.internal.schedulers.NewThreadScheduler;
 
-import static android.app.ProgressDialog.STYLE_HORIZONTAL;
 import static com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade;
 
 public class MainActivity extends BaseActivity {
@@ -155,10 +154,29 @@ public class MainActivity extends BaseActivity {
                 .subscribe(updateInfoBaseResponse -> {
                     UpdateInfo updateInfo = updateInfoBaseResponse.getData();
                     if (updateInfo.getVersionCode() > BuildConfig.VERSION_CODE) {
+                        if (updateInfo.getUpdateType().equals("0") && updateInfo.getVersionCode() == SPUtil.getInt(SPUtil.Update_No_Longer_Reminded_Key, 0)) {
+                            return;
+                        }
                         //存在更新
+                        StringBuilder sb = new StringBuilder();
+                        sb.append("当前版本：");
+                        sb.append(BuildConfig.VERSION_NAME);
+                        sb.append("\n");
+                        sb.append("最新版本：");
+                        sb.append(updateInfo.getVersionCode());
+                        sb.append("\n");
+                        sb.append("更新类型：");
+                        sb.append(updateInfo.getUpdateType().equals("0") ? "推荐更新" : "强制更新");
+                        sb.append("\n");
+                        sb.append("更新时间：");
+                        sb.append(updateInfo.getUpdateDataTime());
+                        sb.append("\n");
+                        sb.append("更新信息：");
+                        sb.append(updateInfo.getUpdateMessage());
+                        sb.append("\n");
                         AlertDialog.Builder builder = new AlertDialog.Builder(context)
                                 .setTitle("更新")
-                                .setMessage(updateInfo.getUpdateMessage())
+                                .setMessage(sb.toString())
                                 .setCancelable(false)
                                 .setPositiveButton("更新", (dialog, which) -> {
                                     UpdateAsync updateAsync = new UpdateAsync(context);
@@ -167,6 +185,7 @@ public class MainActivity extends BaseActivity {
                         if (updateInfo.getUpdateType().equals("0")) {
                             builder.setCancelable(true);
                             builder.setNegativeButton("下次更新", null);
+                            builder.setNeutralButton("不再提醒", (dialog, which) -> SPUtil.putInt(SPUtil.Update_No_Longer_Reminded_Key, updateInfo.getVersionCode()));
                         }
                         builder.create().show();
                     }
@@ -207,7 +226,18 @@ public class MainActivity extends BaseActivity {
             viewHolder.wordAuthorTv.setText("作词：" + opernInfo.getWordAuthor());
             viewHolder.songAuthorTv.setText("作曲：" + opernInfo.getSongAuthor());
             viewHolder.singerTv.setText("演唱：" + opernInfo.getSinger());
-            viewHolder.dataOriginTv.setText(opernInfo.getDataOrigin());
+            viewHolder.dataOriginTv.setText(opernInfo.getOrigin());
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(opernInfo.getCategoryOne());
+            if (!opernInfo.getCategoryTwo().equals("")) {
+                stringBuilder.append("/");
+                stringBuilder.append(opernInfo.getCategoryTwo());
+            }
+            if (!opernInfo.getCategoryThree().equals("")) {
+                stringBuilder.append("/");
+                stringBuilder.append(opernInfo.getCategoryThree());
+            }
+            viewHolder.categoryTv.setText(stringBuilder.toString());
         }
 
         @Override
@@ -228,6 +258,8 @@ public class MainActivity extends BaseActivity {
             TextView singerTv;
             @BindView(R.id.item_opern_list_data_origin_tv)
             TextView dataOriginTv;
+            @BindView(R.id.item_opern_list_data_category_tv)
+            TextView categoryTv;
 
             public ViewHolder(View itemView) {
                 super(itemView);

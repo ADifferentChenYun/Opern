@@ -12,6 +12,9 @@ public class OpernInfo implements Serializable{
     private String format = "";
     private String uploadUserName = "";
     private String uploadDateTime = "";
+    private String categoryOne = "";
+    private String categoryTwo = "";
+    private String categoryThree = "";
     private String origin = "";
     private int views;
     private String html = "";
@@ -120,6 +123,30 @@ public class OpernInfo implements Serializable{
 
     public void setDataOrigin(String dataOrigin) {
         this.dataOrigin = dataOrigin;
+    }
+
+    public String getCategoryOne() {
+        return categoryOne;
+    }
+
+    public void setCategoryOne(String categoryOne) {
+        this.categoryOne = categoryOne;
+    }
+
+    public String getCategoryTwo() {
+        return categoryTwo;
+    }
+
+    public void setCategoryTwo(String categoryTwo) {
+        this.categoryTwo = categoryTwo;
+    }
+
+    public String getCategoryThree() {
+        return categoryThree;
+    }
+
+    public void setCategoryThree(String categoryThree) {
+        this.categoryThree = categoryThree;
     }
 
     @Override
