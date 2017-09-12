@@ -9,6 +9,10 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.yun.opern.R;
 import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.utils.CacheFileUtil;
+import com.yun.opern.utils.NetworkUtils;
+import com.yun.opern.utils.T;
+
+import static com.yun.opern.utils.NetworkUtils.NetworkType.NETWORK_WIFI;
 
 public class LauncherActivity extends BaseActivity {
 
@@ -19,6 +23,9 @@ public class LauncherActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        if (NetworkUtils.getNetworkType() != NETWORK_WIFI) {
+            T.showShort("当前处于非WIFI环境");
+        }
         new Handler().postDelayed(() -> {
             //检测权限
             RxPermissions reRxPermissions = new RxPermissions((Activity) context);

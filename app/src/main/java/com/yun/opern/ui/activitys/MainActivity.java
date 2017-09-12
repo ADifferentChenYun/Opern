@@ -1,6 +1,7 @@
 package com.yun.opern.ui.activitys;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -10,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.yun.opern.BuildConfig;
@@ -27,14 +27,11 @@ import com.yun.opern.utils.SPUtil;
 import com.yun.opern.utils.T;
 import com.yun.opern.utils.UpdateAsync;
 import com.yun.opern.views.ActionBarNormal;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -59,7 +56,6 @@ public class MainActivity extends BaseActivity {
     private Adapter adapter;
     private LinearLayoutManager linearLayoutManager;
     private int index = 0;
-    private int numPrePage = 40;
     private boolean requesting = false;
 
 
@@ -91,6 +87,7 @@ public class MainActivity extends BaseActivity {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0) {
+                    searchFab.animate().translationY(searchFab.getMeasuredHeight() * 1.5f).setDuration(800).start();
                     int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
                     int totalItemCount = opernInfoArrayList.size();
                     if (lastVisibleItem >= totalItemCount - 10) {
@@ -98,6 +95,8 @@ public class MainActivity extends BaseActivity {
                             net();
                         }
                     }
+                } else {
+                    searchFab.animate().translationY(0).setDuration(800).start();
                 }
             }
         });
@@ -107,20 +106,24 @@ public class MainActivity extends BaseActivity {
             net();
         });
         RxView.clicks(searchFab).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(o -> startActivity(new Intent(context, SearchActivity.class)));
-        searchFab.setTranslationY(searchFab.getMeasuredHeight() * 1.5f);
-        searchFab.post(() -> searchFab.animate().translationY(0).setDuration(500).start());
+
+        searchFab.post(() -> {
+            searchFab.setTranslationY(searchFab.getMeasuredHeight() * 1.5f);
+            searchFab.animate().translationY(0).setDuration(800).start();
+        });
     }
 
     @Override
     protected void initedView() {
         super.initedView();
         net();
-        checkVersion();
+        new Handler().postDelayed(() -> checkVersion(), 2000);
     }
 
     private void net() {
         requesting = true;
         opernSrl.setRefreshing(true);
+        int numPrePage = 50;
         HttpCore.getInstance().getApi()
                 .getPopOpernInfo(index, numPrePage)
                 .subscribeOn(new NewThreadScheduler())
@@ -144,7 +147,7 @@ public class MainActivity extends BaseActivity {
                     opernSrl.setRefreshing(false);
                     requesting = false;
                     T.showShort(throwable.getMessage());
-        });
+                });
     }
 
     private void checkVersion() {
@@ -163,7 +166,7 @@ public class MainActivity extends BaseActivity {
                         sb.append(BuildConfig.VERSION_NAME);
                         sb.append("\n");
                         sb.append("最新版本：");
-                        sb.append(updateInfo.getVersionCode());
+                        sb.append(updateInfo.getVersionName());
                         sb.append("\n");
                         sb.append("更新类型：");
                         sb.append(updateInfo.getUpdateType().equals("0") ? "推荐更新" : "强制更新");
