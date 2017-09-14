@@ -87,7 +87,6 @@ public class MainActivity extends BaseActivity {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0) {
-                    searchFab.animate().translationY(searchFab.getMeasuredHeight() * 1.5f).setDuration(800).start();
                     int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
                     int totalItemCount = opernInfoArrayList.size();
                     if (lastVisibleItem >= totalItemCount - 10) {
@@ -95,8 +94,6 @@ public class MainActivity extends BaseActivity {
                             net();
                         }
                     }
-                } else {
-                    searchFab.animate().translationY(0).setDuration(800).start();
                 }
             }
         });
@@ -106,24 +103,19 @@ public class MainActivity extends BaseActivity {
             net();
         });
         RxView.clicks(searchFab).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(o -> startActivity(new Intent(context, SearchActivity.class)));
-
-        searchFab.post(() -> {
-            searchFab.setTranslationY(searchFab.getMeasuredHeight() * 1.5f);
-            searchFab.animate().translationY(0).setDuration(800).start();
-        });
     }
 
     @Override
     protected void initedView() {
         super.initedView();
         net();
-        new Handler().postDelayed(() -> checkVersion(), 2000);
+        new Handler().postDelayed(() -> checkVersion(), 1000);
     }
 
     private void net() {
         requesting = true;
         opernSrl.setRefreshing(true);
-        int numPrePage = 50;
+        int numPrePage = 40;
         HttpCore.getInstance().getApi()
                 .getPopOpernInfo(index, numPrePage)
                 .subscribeOn(new NewThreadScheduler())

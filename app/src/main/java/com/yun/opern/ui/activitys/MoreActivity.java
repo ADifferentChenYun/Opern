@@ -72,7 +72,7 @@ public class MoreActivity extends BaseActivity {
     @BindView(R.id.push_switch)
     Switch pushSwitch;
     @BindView(R.id.logout_btn)
-    Button logoutBtn;
+    View logoutBtn;
     @BindView(R.id.small_red_point)
     SmallRedPoint smallRedPoint;
 

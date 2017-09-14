@@ -41,7 +41,6 @@ public class SearchActivity extends BaseActivity {
     private String searchParameter;
     private ArrayList<OpernInfo> opernInfoArrayList = new ArrayList<>();
     private Adapter adapter;
-    private LinearLayoutManager linearLayoutManager;
     private boolean requesting = false;
 
 
@@ -52,7 +51,7 @@ public class SearchActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        linearLayoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         opernLv.setLayoutManager(linearLayoutManager);
         opernLv.setItemAnimator(new DefaultItemAnimator());
         adapter = new Adapter(opernInfoArrayList);

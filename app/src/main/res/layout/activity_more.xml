@@ -57,15 +57,13 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/user_name_tv"
                 android:layout_marginBottom="@dimen/x25"
-                android:layout_marginStart="@dimen/x40"
                 android:layout_marginEnd="@dimen/x130"
+                android:layout_marginStart="@dimen/x40"
                 android:layout_toEndOf="@id/user_head_img"
                 android:text="@string/login_info"
                 android:textSize="14sp" />
 
-
         </RelativeLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -85,8 +83,7 @@
                     android:layout_height="@dimen/x90"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/x35"
-                    android:src="@mipmap/ic_download_blue"
-                    android:contentDescription="@string/aoubt_us" />
+                    android:src="@mipmap/ic_download_blue" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -95,6 +92,7 @@
                     android:paddingBottom="@dimen/x45"
                     android:paddingTop="@dimen/x45"
                     android:text="我的下载"
+                    android:textColor="@color/black"
                     android:textSize="14sp" />
 
                 <ImageView
@@ -136,6 +134,7 @@
                     android:paddingBottom="@dimen/x45"
                     android:paddingTop="@dimen/x45"
                     android:text="我的收藏"
+                    android:textColor="@color/black"
                     android:textSize="14sp" />
 
 
@@ -168,7 +167,7 @@
                     android:layout_height="@dimen/x90"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/x35"
-                    android:src="@mipmap/ic_cache" />
+                    android:src="@mipmap/ic_clean" />
 
                 <TextView
                     android:id="@+id/app_cache_size_tv"
@@ -178,6 +177,7 @@
                     android:paddingBottom="@dimen/x45"
                     android:paddingTop="@dimen/x45"
                     android:text="APP缓存:"
+                    android:textColor="@color/black"
                     android:textSize="14sp" />
 
             </RelativeLayout>
@@ -209,6 +209,7 @@
                     android:paddingBottom="@dimen/x45"
                     android:paddingTop="@dimen/x45"
                     android:text="推送"
+                    android:textColor="@color/black"
                     android:textSize="14sp" />
 
                 <Switch
@@ -249,6 +250,7 @@
                     android:paddingBottom="@dimen/x45"
                     android:paddingTop="@dimen/x45"
                     android:text="告诉我们"
+                    android:textColor="@color/black"
                     android:textSize="14sp" />
 
                 <ImageView
@@ -280,7 +282,7 @@
                     android:layout_height="@dimen/x90"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/x35"
-                    android:src="@mipmap/ic_about_us" />
+                    android:src="@mipmap/ic_about" />
 
                 <TextView
                     android:id="@+id/about_us_tv"
@@ -290,15 +292,16 @@
                     android:paddingBottom="@dimen/x45"
                     android:paddingTop="@dimen/x45"
                     android:text="关于我们"
+                    android:textColor="@color/black"
                     android:textSize="14sp" />
 
                 <com.yun.opern.views.SmallRedPoint
                     android:id="@+id/small_red_point"
-                    android:layout_centerVertical="true"
                     android:layout_width="@dimen/x25"
                     android:layout_height="@dimen/x25"
-                    android:layout_toEndOf="@+id/about_us_tv"
-                    android:layout_marginStart="@dimen/x20" />
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/x20"
+                    android:layout_toEndOf="@+id/about_us_tv" />
 
                 <ImageView
                     android:layout_width="@dimen/x50"
@@ -313,14 +316,31 @@
 
     </LinearLayout>
 
-    <Button
+
+    <LinearLayout
         android:id="@+id/logout_btn"
-        android:visibility="gone"
-        android:background="@drawable/selector_log_out_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="@string/logout"
-        android:textColor="@color/white" />
+        android:background="@drawable/selector_log_out_btn"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/x25"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="@dimen/x70"
+            android:layout_height="@dimen/x70"
+            android:src="@mipmap/ic_logout" />
+
+        <TextView
+            android:layout_marginStart="@dimen/x20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/logout"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
 
 </RelativeLayout>

@@ -2,13 +2,6 @@
     <string name="app_name">搜谱</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="aoubt_us">关于我们\n
-        我们的APP从数据获取、后台服务、APP开发以及服务器的购买、架设都是由一个人完成（也就是我），所有的付出都免费开放，希望你能喜欢，任何批评或建议都可以通过‘告诉我们’或是下方的邮件来告诉我，我们一起来完善它\n\n
-        关于版权\n
-        所有的曲谱都来自网络，无任何版权，如若涉及版权问题，请联系我们yun160308@gmail.com\n\n
-        数据来源\n
-        暂时所有曲谱数据来源http://www.qupu123.com
-    </string>
     <string name="login">登录</string>
     <string name="logout">退出登录</string>
     <string name="logout_info">退出登录后就无法使用收藏等功能了哟~</string>
