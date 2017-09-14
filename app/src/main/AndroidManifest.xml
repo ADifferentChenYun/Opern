@@ -30,6 +30,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".ui.activitys.LauncherActivity"
             android:theme="@style/FullscreenTheme">
@@ -39,15 +40,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.activitys.MainActivity"
-            android:launchMode="singleTop" />
-        <activity android:name=".ui.activitys.MyDownloadActivity" />
-        <activity android:name=".ui.activitys.SearchActivity" />
+            android:launchMode="singleTop"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+
+        <activity
+            android:name=".ui.activitys.MyDownloadActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+
+        <activity
+            android:name=".ui.activitys.SearchActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+
         <activity
             android:name=".ui.activitys.ShowImageActivity"
-            android:theme="@style/FullscreenTheme" />
-        <activity android:name=".ui.activitys.MoreActivity" />
+            android:theme="@style/FullscreenTheme"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+
+        <activity
+            android:name=".ui.activitys.MoreActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
 
         <!-- bugly -->
         <activity
@@ -158,10 +172,22 @@
             android:name="JPUSH_APPKEY"
             android:value="c4436241da6745e2f8109770" />
 
-        <activity android:name=".ui.activitys.AboutUsActivity" />
-        <activity android:name=".ui.activitys.MyCollectionActivity" />
-        <activity android:name=".ui.activitys.TellUsActivity" />
-        <activity android:name=".ui.activitys.WriteFeedbackActivity" />
+        <activity
+            android:name=".ui.activitys.AboutUsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+
+        <activity
+            android:name=".ui.activitys.MyCollectionActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+
+        <activity
+            android:name=".ui.activitys.TellUsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+
+        <activity
+            android:name=".ui.activitys.WriteFeedbackActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+
     </application>
 
 </manifest>

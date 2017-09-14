@@ -106,11 +106,15 @@ public class ShowImageFragment extends Fragment {
 
     private Runnable hideIndicatorRunable = () -> hideIndicator();
 
+    private ValueAnimator showAnimator;
     private void showIndicator() {
-        ValueAnimator valueAnimator = new ValueAnimator();
-        valueAnimator.setDuration(500);
-        valueAnimator.setFloatValues(-1f, 0f);
-        valueAnimator.addUpdateListener(animation -> {
+        showAnimator = new ValueAnimator();
+        showAnimator.setDuration(500);
+        showAnimator.setFloatValues(-1f, 0f);
+        showAnimator.addUpdateListener(animation -> {
+            if (actionBarNormal == null || fabBtns == null) {
+                return;
+            }
             FrameLayout.LayoutParams actionBarNormalLayoutParams = (FrameLayout.LayoutParams) actionBarNormal.getLayoutParams();
             actionBarNormalLayoutParams.topMargin = (int) (((float) animation.getAnimatedValue()) * actionBarNormal.getMeasuredHeight());
             actionBarNormal.setLayoutParams(actionBarNormalLayoutParams);
@@ -119,21 +123,25 @@ public class ShowImageFragment extends Fragment {
             fabBtnsLayoutParams.bottomMargin = (int) ((float) animation.getAnimatedValue() * fabBtns.getMeasuredHeight());
             fabBtns.setLayoutParams(fabBtnsLayoutParams);
         });
-        valueAnimator.addListener(new AnimatorListenerAdapter() {
+        showAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 handler.postDelayed(hideIndicatorRunable, 2500);
             }
         });
-        valueAnimator.start();
+        showAnimator.start();
     }
 
+    private ValueAnimator hideAnimator;
     private void hideIndicator() {
-        ValueAnimator valueAnimator = new ValueAnimator();
-        valueAnimator.setDuration(500);
-        valueAnimator.setFloatValues(0f, -1f);
-        valueAnimator.addUpdateListener(animation -> {
+        hideAnimator = new ValueAnimator();
+        hideAnimator.setDuration(500);
+        hideAnimator.setFloatValues(0f, -1f);
+        hideAnimator.addUpdateListener(animation -> {
+            if (actionBarNormal == null || fabBtns == null) {
+                return;
+            }
             FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) actionBarNormal.getLayoutParams();
             lp.topMargin = (int) (actionBarNormal.getMeasuredHeight() * (float) animation.getAnimatedValue());
             actionBarNormal.setLayoutParams(lp);
@@ -142,12 +150,20 @@ public class ShowImageFragment extends Fragment {
             fabBtnsLayoutParams.bottomMargin = (int) (fabBtns.getMeasuredHeight() * (float) animation.getAnimatedValue());
             fabBtns.setLayoutParams(fabBtnsLayoutParams);
         });
-        valueAnimator.start();
+        hideAnimator.start();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        if (hideAnimator != null) {
+            hideAnimator.cancel();
+            hideAnimator = null;
+        }
+        if (showAnimator != null) {
+            showAnimator.cancel();
+            showAnimator = null;
+        }
     }
 }
