@@ -117,13 +117,7 @@ public class MoreActivity extends BaseActivity {
 
     @OnClick(R.id.my_download_rl)
     public void onMyDownloadRlClicked() {
-        Oauth2AccessToken accessToken = AccessTokenKeeper.readAccessToken(context);
-        WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
-        if (accessToken.isSessionValid() && weiBoUserInfo != null) {
-            startActivity(new Intent(MoreActivity.this, MyDownloadActivity.class));
-        } else {
-            showDialog("告诉我们", "登录之后才能使用该功能哦~", "登录", (dialog, which) -> onUserInfoRlClicked());
-        }
+        startActivity(new Intent(MoreActivity.this, MyDownloadActivity.class));
     }
 
     @OnClick(R.id.my_collection_rl)
@@ -160,7 +154,13 @@ public class MoreActivity extends BaseActivity {
 
     @OnClick(R.id.tell_us_rl)
     public void onTellUsRlClicked() {
-        startActivity(new Intent(context, TellUsActivity.class));
+        Oauth2AccessToken accessToken = AccessTokenKeeper.readAccessToken(context);
+        WeiBoUserInfo weiBoUserInfo = WeiBoUserInfoKeeper.read(context);
+        if (accessToken.isSessionValid() && weiBoUserInfo != null) {
+            startActivity(new Intent(context, TellUsActivity.class));
+        } else {
+            showDialog("告诉我们", "登录之后才能使用该功能哦~", "登录", (dialog, which) -> onUserInfoRlClicked());
+        }
     }
 
     @OnClick(R.id.logout_btn)
