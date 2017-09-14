@@ -43,9 +43,6 @@ public class AboutUsActivity extends BaseActivity {
                 .subscribe(updateInfoBaseResponse -> {
                     UpdateInfo updateInfo = updateInfoBaseResponse.getData();
                     if (updateInfo.getVersionCode() > BuildConfig.VERSION_CODE) {
-                        if (updateInfo.getUpdateType().equals("0") && updateInfo.getVersionCode() == SPUtil.getInt(SPUtil.Update_No_Longer_Reminded_Key, 0)) {
-                            return;
-                        }
                         //存在更新
                         StringBuilder sb = new StringBuilder();
                         sb.append("当前版本：");
@@ -85,6 +82,5 @@ public class AboutUsActivity extends BaseActivity {
                     T.showShort(t.getMessage());
                 });
     }
-
 
 }
