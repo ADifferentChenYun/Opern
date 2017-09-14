@@ -69,7 +69,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="@dimen/x15"
-                    android:text="搜谱APP提供简单方便的在线曲谱搜索功能，以及下载、搜藏等功能"
+                    android:text="搜谱APP提供简单方便的在线曲谱搜索功能，以及下载、收藏等功能"
                     android:textSize="14sp" />
 
             </LinearLayout>

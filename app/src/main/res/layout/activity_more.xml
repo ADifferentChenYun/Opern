@@ -325,7 +325,7 @@
         android:background="@drawable/selector_log_out_btn"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="@dimen/x25"
+        android:padding="@dimen/x30"
         android:visibility="gone">
 
         <ImageView
