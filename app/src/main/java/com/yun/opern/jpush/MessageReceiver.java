@@ -11,7 +11,9 @@ import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.yun.opern.db.DBCore;
 import com.yun.opern.db.DateBaseHelper;
+import com.yun.opern.model.event.ReceiveMessageFromJPushEvent;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.Iterator;
@@ -41,6 +43,9 @@ public class MessageReceiver extends BroadcastReceiver {
                 contentValues.put("datatime", "now()");
                 long i = DBCore.getInstance().insert(DateBaseHelper.Tables.TBL_FEEDBACK_MESSAGE_INFO,contentValues);
                 Logger.i(i + "");*/
+                ReceiveMessageFromJPushEvent receiveMessageFromJPushEvent = new ReceiveMessageFromJPushEvent();
+                receiveMessageFromJPushEvent.setMessage(bundle.getString("cn.jpush.android.MESSAGE"));
+                EventBus.getDefault().post(receiveMessageFromJPushEvent);
             } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
                 //接收到通知
                 int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);

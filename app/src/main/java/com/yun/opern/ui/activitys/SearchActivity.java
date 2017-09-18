@@ -4,9 +4,13 @@ import android.content.Intent;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.yun.opern.R;
@@ -14,6 +18,7 @@ import com.yun.opern.model.BaseResponse;
 import com.yun.opern.model.OpernInfo;
 import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.bases.BaseActivity;
+import com.yun.opern.utils.KeyboardUtils;
 import com.yun.opern.utils.T;
 import com.yun.opern.views.ActionBarNormal;
 import com.yun.opern.views.SearchView;
@@ -34,9 +39,11 @@ public class SearchActivity extends BaseActivity {
     @BindView(R.id.search_input_edt)
     EditText searchInputEdt;
     @BindView(R.id.search_btn)
-    SearchView searchBtn;
+    ImageView searchBtn;
     @BindView(R.id.opern_lv)
     RecyclerView opernLv;
+    @BindView(R.id.progressbar)
+    ProgressBar progressBar;
 
     private String searchParameter;
     private ArrayList<OpernInfo> opernInfoArrayList = new ArrayList<>();
@@ -51,6 +58,12 @@ public class SearchActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        searchInputEdt.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                searchBtn.callOnClick();
+            }
+            return false;
+        });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         opernLv.setLayoutManager(linearLayoutManager);
         opernLv.setItemAnimator(new DefaultItemAnimator());
@@ -61,14 +74,19 @@ public class SearchActivity extends BaseActivity {
                 return;
             }
             searchParameter = searchInputEdt.getText().toString().trim();
+            if (searchParameter.equals("")) {
+                return;
+            }
             net();
         });
 
     }
 
     public void net() {
+        KeyboardUtils.hideSoftInput(searchInputEdt);
         requesting = true;
-        searchBtn.start();
+        opernLv.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
         HttpCore.getInstance().getApi()
                 .searchOpernInfo(searchParameter)
                 .subscribeOn(new NewThreadScheduler())
@@ -78,11 +96,13 @@ public class SearchActivity extends BaseActivity {
                     ArrayList<OpernInfo> data = arrayListBaseResponse.getData();
                     opernInfoArrayList.addAll(data);
                     adapter.notifyDataSetChanged();
-                    searchBtn.end();
+                    progressBar.setVisibility(View.GONE);
+                    opernLv.setVisibility(View.VISIBLE);
                     requesting = false;
                 }, throwable -> {
                     throwable.printStackTrace();
-                    searchBtn.end();
+                    progressBar.setVisibility(View.GONE);
+                    opernLv.setVisibility(View.VISIBLE);
                     T.showShort("网络异常");
                     requesting = false;
                 });

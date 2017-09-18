@@ -76,7 +76,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (positive != null && positiveListener != null) {
             builder.setPositiveButton(positive, positiveListener);
         }
-        builder.setCancelable(false);
+        builder.setCancelable(true);
         alertDialog = builder.create();
         alertDialog.show();
     }

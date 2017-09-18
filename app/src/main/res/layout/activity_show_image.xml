@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.yun.opern.ui.activitys.ShowImageActivity">
 
-    <android.support.v4.view.ViewPager
+    <com.yun.opern.views.ViewPagerFix
         android:id="@+id/image_vp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

@@ -25,6 +25,7 @@ import com.yun.opern.utils.FileUtil;
 import com.yun.opern.utils.ImageDownloadUtil;
 import com.yun.opern.utils.T;
 import com.yun.opern.views.ActionBarNormal;
+import com.yun.opern.views.ViewPagerFix;
 
 import java.util.ArrayList;
 
@@ -35,7 +36,7 @@ import io.reactivex.internal.schedulers.NewThreadScheduler;
 public class ShowImageActivity extends BaseActivity {
 
     @BindView(R.id.image_vp)
-    ViewPager imageVp;
+    ViewPagerFix imageVp;
     @BindView(R.id.download_fab)
     FloatingActionButton downloadFab;
     @BindView(R.id.collection_fab)

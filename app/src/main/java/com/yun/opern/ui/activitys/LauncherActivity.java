@@ -12,9 +12,12 @@ import com.yun.opern.utils.CacheFileUtil;
 import com.yun.opern.utils.NetworkUtils;
 import com.yun.opern.utils.T;
 
+import io.reactivex.disposables.Disposable;
+
 import static com.yun.opern.utils.NetworkUtils.NetworkType.NETWORK_WIFI;
 
 public class LauncherActivity extends BaseActivity {
+    private Disposable disposable;
 
     @Override
     protected int contentViewRes() {
@@ -26,10 +29,10 @@ public class LauncherActivity extends BaseActivity {
         if (NetworkUtils.getNetworkType() != NETWORK_WIFI) {
             T.showShort("当前处于非WIFI环境");
         }
+        RxPermissions reRxPermissions = new RxPermissions(LauncherActivity.this);
         new Handler().postDelayed(() -> {
             //检测权限
-            RxPermissions reRxPermissions = new RxPermissions((Activity) context);
-            reRxPermissions
+            disposable = reRxPermissions
                     .request(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     .subscribe(aBoolean -> {
                                 if (aBoolean) {
@@ -46,5 +49,11 @@ public class LauncherActivity extends BaseActivity {
         }, 1800);
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (disposable != null) {
+            disposable.dispose();
+        }
+    }
 }

@@ -6,13 +6,13 @@
     <item android:state_pressed="true">
         <shape>
             <corners android:topRightRadius="5dp" android:topLeftRadius="0dp" android:bottomRightRadius="5dp" android:bottomLeftRadius="0dp"/>
-            <solid android:color="?android:colorPrimary"/>
+            <solid android:color="@color/light_blue" />
         </shape>
     </item>
     <item>
         <shape>
             <corners android:topRightRadius="5dp" android:topLeftRadius="0dp" android:bottomRightRadius="5dp" android:bottomLeftRadius="0dp"/>
-            <solid android:color="?android:colorPrimary"/>
+            <solid android:color="@color/light_blue" />
         </shape>
     </item>
 

@@ -19,6 +19,7 @@ import com.yun.opern.common.WeiBoUserInfo;
 import com.yun.opern.common.WeiBoUserInfoKeeper;
 import com.yun.opern.model.OpernInfo;
 import com.yun.opern.model.UpdateInfo;
+import com.yun.opern.model.event.ReceiveMessageFromJPushEvent;
 import com.yun.opern.model.event.UserLoginOrLogoutEvent;
 import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.bases.BaseActivity;
@@ -109,7 +110,7 @@ public class MainActivity extends BaseActivity {
     protected void initedView() {
         super.initedView();
         net();
-        new Handler().postDelayed(() -> checkVersion(), 1000);
+        new Handler().postDelayed(this::checkVersion, 1000);
     }
 
     private void net() {
@@ -199,6 +200,12 @@ public class MainActivity extends BaseActivity {
             actionbar.getMoreButton().setImageResource(R.mipmap.ic_more);
             actionbar.getMoreButton().setBorderWidth(0);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onReceiveMessageFromJPush(ReceiveMessageFromJPushEvent receiveMessageFromJPushEvent) {
+        showDialog("开发者消息", receiveMessageFromJPushEvent.getMessage(), "嗯,知道了", (dialog, which) -> {
+        });
     }
 
     public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
