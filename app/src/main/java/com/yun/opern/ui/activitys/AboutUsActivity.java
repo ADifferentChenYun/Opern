@@ -65,7 +65,7 @@ public class AboutUsActivity extends BaseActivity {
                                 .setMessage(sb.toString())
                                 .setCancelable(false)
                                 .setPositiveButton("更新", (dialog, which) -> {
-                                    UpdateAsync updateAsync = new UpdateAsync(context);
+                                    UpdateAsync updateAsync = new UpdateAsync(context, updateInfo.getUpdateType().equals("0"));
                                     updateAsync.execute(HttpCore.baseUrl + updateInfo.getDownloadUrl());
                                 });
                         if (updateInfo.getUpdateType().equals("0")) {

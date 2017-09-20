@@ -22,6 +22,7 @@ import okhttp3.Response;
  */
 
 public class ImageDownloadUtil extends Thread {
+    private boolean cancel = false;
     private OpernInfo opernInfo;
     private CountDownLatch countDownLatch;
     private CallBack callBack;
@@ -29,6 +30,12 @@ public class ImageDownloadUtil extends Thread {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            if (cancel) {
+                return;
+            }
+            if (callBack == null) {
+                return;
+            }
             if (msg.what == 0) {
                 callBack.success();
             } else {
@@ -36,6 +43,11 @@ public class ImageDownloadUtil extends Thread {
             }
         }
     };
+
+    public void cancel() {
+        cancel = true;
+        callBack = null;
+    }
 
     public interface CallBack {
         void success();

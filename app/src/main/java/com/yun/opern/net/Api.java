@@ -2,6 +2,7 @@ package com.yun.opern.net;
 
 import com.yun.opern.common.WeiBoUserInfo;
 import com.yun.opern.model.BaseResponse;
+import com.yun.opern.model.CategoryInfo;
 import com.yun.opern.model.FeedbackInfo;
 import com.yun.opern.model.OpernInfo;
 import com.yun.opern.model.UpdateInfo;
@@ -10,6 +11,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -35,6 +37,9 @@ public interface Api {
     @GET(value = "opern/searchOpernInfo")
     Observable<BaseResponse<ArrayList<OpernInfo>>> searchOpernInfo(@Query("searchParameter") String searchParameter);
 
+    @GET(value = "opern/searchOpernInfoByCategory")
+    Observable<BaseResponse<ArrayList<OpernInfo>>> searchOpernInfoByCategory(@Query("categoryOne") String categoryOne, @Query("categoryTwo") String categoryTwo, @Query("index") int index, @Query("numPerPage") int numPerPage);
+
     @GET(value = "collection/isCollected")
     Observable<BaseResponse> isCollected(@Query("userId") BigInteger userId, @Query("opernId") int opernId);
 
@@ -52,4 +57,7 @@ public interface Api {
 
     @GET(value = "feedback/getFeedbackInfos")
     Observable<BaseResponse<ArrayList<FeedbackInfo>>> getFeedbackInfos(@Query("userId") BigInteger userId);
+
+    @GET(value = "category/categoryInfo")
+    Observable<BaseResponse<ArrayList<CategoryInfo>>> getCategoryInfo();
 }

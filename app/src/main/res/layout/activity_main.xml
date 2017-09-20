@@ -17,28 +17,86 @@
             android:layout_height="wrap_content"
             app:title="@string/app_name"/>
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <include
-                layout="@layout/layout_empty"
-                android:id="@+id/empty_view"
-                android:visibility="gone" />
-
-            <android.support.v4.widget.SwipeRefreshLayout
-                android:id="@+id/opern_srl"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="@dimen/x80"
+                android:orientation="horizontal">
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/opern_lv"
+                <LinearLayout
+                    android:id="@+id/home_index"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:listitem="@layout/item_opern_list" />
+                    android:layout_weight="1"
+                    android:background="@color/light_blue"
+                    android:orientation="horizontal"
+                    android:gravity="center">
 
-            </android.support.v4.widget.SwipeRefreshLayout>
-        </FrameLayout>
+                    <ImageView
+                        android:layout_width="@dimen/x40"
+                        android:layout_height="@dimen/x40"
+                        android:src="@mipmap/ic_home" />
+
+                    <TextView
+                        android:layout_marginStart="@dimen/x10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="首页"
+                        android:textSize="15sp"
+                        android:gravity="center"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/category_index"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/light_blue"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="@dimen/x40"
+                        android:layout_height="@dimen/x40"
+                        android:src="@mipmap/ic_category" />
+
+                    <TextView
+                        android:layout_marginStart="@dimen/x10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="分类"
+                        android:textSize="15sp"
+                        android:gravity="center"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/indicator"
+                android:layout_width="@dimen/x500"
+                android:layout_height="@dimen/x8">
+
+                <View
+                    android:layout_marginStart="@dimen/x150"
+                    android:layout_marginEnd="@dimen/x150"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_indicator_bg" />
+
+            </FrameLayout>
+        </LinearLayout>
+
+        <com.yun.opern.views.ViewPagerFix
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton

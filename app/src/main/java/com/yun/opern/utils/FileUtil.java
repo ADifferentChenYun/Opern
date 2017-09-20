@@ -1,6 +1,5 @@
 package com.yun.opern.utils;
 
-import com.yun.opern.model.OpernImgInfo;
 import com.yun.opern.model.OpernInfo;
 
 import java.io.ByteArrayOutputStream;
@@ -33,6 +32,7 @@ public class FileUtil {
 
     /**
      * 判断曲谱是否存在本地
+     *
      * @param opernInfo
      * @return
      */
@@ -43,6 +43,7 @@ public class FileUtil {
 
     /**
      * 删除本地曲谱图片
+     *
      * @param opernInfo
      * @return
      */
@@ -50,12 +51,12 @@ public class FileUtil {
         try {
             File file = new File(CacheFileUtil.cacheFilePath + "/" + opernInfo.getTitle());
             if (file.exists()) {
-                for(File childFile : file.listFiles()){
+                for (File childFile : file.listFiles()) {
                     childFile.delete();
                 }
                 return file.delete();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;

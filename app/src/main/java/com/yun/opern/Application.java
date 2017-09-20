@@ -22,11 +22,11 @@ public class Application extends android.app.Application{
     public void onCreate() {
         super.onCreate();
         applictionContext = this;
-        Bugly.init(getApplicationContext(), BUGLY_APP_ID, true);
+        Bugly.init(getApplicationContext(), BUGLY_APP_ID, BuildConfig.DEBUG);
         Beta.autoInit = true;
         Beta.autoCheckUpgrade = true;
         Beta.enableHotfix = false;
-        JPushInterface.setDebugMode(true);
+        JPushInterface.setDebugMode(BuildConfig.DEBUG);
         JPushInterface.init(this);
         Logger.addLogAdapter(new AndroidLogAdapter());
     }

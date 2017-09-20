@@ -50,6 +50,7 @@ public class ShowImageActivity extends BaseActivity {
     private ViewPagerAdapter adapter;
 
     private boolean isCollected = false;
+    private ImageDownloadUtil imageDownloadUtil;
 
     @Override
     protected int contentViewRes() {
@@ -88,19 +89,22 @@ public class ShowImageActivity extends BaseActivity {
 
             }
         });
-        downloadFab.setOnClickListener((view) ->
-                new ImageDownloadUtil(opernInfo, new ImageDownloadUtil.CallBack() {
-                    @Override
-                    public void success() {
-                        downloadFab.setVisibility(View.GONE);
-                    }
+        downloadFab.setOnClickListener((view) -> {
+                    imageDownloadUtil = new ImageDownloadUtil(opernInfo, new ImageDownloadUtil.CallBack() {
+                        @Override
+                        public void success() {
+                            if (downloadFab != null) {
+                                downloadFab.setVisibility(View.GONE);
+                            }
+                        }
 
-                    @Override
-                    public void fail() {
-                        T.showShort("下载失败，请重试");
-                    }
-                }).start()
-
+                        @Override
+                        public void fail() {
+                            T.showShort("下载失败，请重试");
+                        }
+                    });
+                    imageDownloadUtil.start();
+                }
         );
         collectionFab.setOnClickListener((view) -> {
                     Oauth2AccessToken accessToken = AccessTokenKeeper.readAccessToken(context);
@@ -145,7 +149,7 @@ public class ShowImageActivity extends BaseActivity {
                         isCollected = false;
                     }
                     changeCollectIcon();
-                }, throwable -> throwable.printStackTrace());
+                }, Throwable::printStackTrace);
     }
 
     /**
@@ -208,6 +212,14 @@ public class ShowImageActivity extends BaseActivity {
         @Override
         public int getCount() {
             return opernInfo.getImgs().size();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (imageDownloadUtil != null) {
+            imageDownloadUtil.cancel();
         }
     }
 }
