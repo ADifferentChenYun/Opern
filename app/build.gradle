@@ -15,8 +15,8 @@ android {
         applicationId "com.yun.opern"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 3
-        versionName "1.0.3"
+        versionCode 4
+        versionName "1.0.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //设置支持的SO库架构
