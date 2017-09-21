@@ -11,8 +11,8 @@
         android:id="@+id/progressbar"
         android:layout_width="@dimen/x150"
         android:layout_height="@dimen/x150"
-        android:visibility="gone"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,9 +38,9 @@
                 android:layout_weight="6"
                 android:background="@drawable/selector_cir_left_edittext_bg"
                 android:hint="曲谱名/作词/作曲/演唱者"
+                android:imeOptions="actionSearch"
                 android:singleLine="true"
-                android:textSize="17sp"
-                android:imeOptions="actionSearch" />
+                android:textSize="17sp" />
 
             <ImageView
                 android:id="@+id/search_btn"
@@ -54,11 +54,22 @@
         </LinearLayout>
 
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/opern_lv"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/item_opern_list" />
+            android:layout_height="match_parent">
+
+            <include
+                android:id="@+id/empty_view"
+                layout="@layout/layout_empty"
+                android:visibility="gone" />
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/opern_lv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/item_opern_list" />
+        </FrameLayout>
 
 
     </LinearLayout>

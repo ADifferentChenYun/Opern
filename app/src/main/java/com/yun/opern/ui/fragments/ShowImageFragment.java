@@ -107,6 +107,7 @@ public class ShowImageFragment extends Fragment {
     private Runnable hideIndicatorRunable = () -> hideIndicator();
 
     private ValueAnimator showAnimator;
+
     private void showIndicator() {
         showAnimator = new ValueAnimator();
         showAnimator.setDuration(500);
@@ -134,6 +135,7 @@ public class ShowImageFragment extends Fragment {
     }
 
     private ValueAnimator hideAnimator;
+
     private void hideIndicator() {
         hideAnimator = new ValueAnimator();
         hideAnimator.setDuration(500);
@@ -157,6 +159,9 @@ public class ShowImageFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+        }
         if (hideAnimator != null) {
             hideAnimator.cancel();
             hideAnimator = null;

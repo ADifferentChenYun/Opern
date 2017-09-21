@@ -1,27 +1,21 @@
 package com.yun.opern.ui.activitys;
 
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.yun.opern.R;
-import com.yun.opern.model.BaseResponse;
+import com.yun.opern.model.CategoryInfo;
 import com.yun.opern.model.OpernInfo;
 import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.bases.BaseActivity;
-import com.yun.opern.utils.KeyboardUtils;
 import com.yun.opern.utils.T;
 import com.yun.opern.views.ActionBarNormal;
-import com.yun.opern.views.SearchView;
 
 import java.util.ArrayList;
 
@@ -30,94 +24,123 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.internal.schedulers.NewThreadScheduler;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class SearchActivity extends BaseActivity {
+public class ShowOpernByCategoryActivity extends BaseActivity {
     @BindView(R.id.actionbar)
     ActionBarNormal actionbar;
-    @BindView(R.id.search_input_edt)
-    EditText searchInputEdt;
-    @BindView(R.id.search_btn)
-    ImageView searchBtn;
-    @BindView(R.id.opern_lv)
+    @BindView(R.id.category_opern_lv)
     RecyclerView opernLv;
-    @BindView(R.id.progressbar)
-    ProgressBar progressBar;
+    @BindView(R.id.category_opern_srl)
+    SwipeRefreshLayout opernSrl;
+    @BindView(R.id.empty_view)
+    View emptyView;
 
-    private String searchParameter;
+    private CategoryInfo categoryAll = new CategoryInfo("全部", null);
+    private CategoryInfo categoryOne;
+    private CategoryInfo categoryTwo;
+
     private ArrayList<OpernInfo> opernInfoArrayList = new ArrayList<>();
     private Adapter adapter;
+    private LinearLayoutManager linearLayoutManager;
+    private int index = 0;
     private boolean requesting = false;
-    private Disposable searchDisposable;
+    private Disposable disposable;
 
     @Override
     protected int contentViewRes() {
-        return R.layout.activity_search;
+        if (getIntent().getExtras().containsKey("categoryOne")) {
+            categoryOne = (CategoryInfo) getIntent().getExtras().get("categoryOne");
+        }
+        if (getIntent().getExtras().containsKey("categoryTwo")) {
+            categoryTwo = (CategoryInfo) getIntent().getExtras().get("categoryTwo");
+        }
+        return R.layout.activity_show_opern_by_category;
     }
 
     @Override
     protected void initView() {
-        searchInputEdt.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                searchBtn.callOnClick();
-            }
-            return false;
-        });
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        if (categoryOne == null) {
+            T.showShort("发送了一个错误");
+            finish();
+            return;
+        }
+        if (categoryTwo == null) {
+            actionbar.setTitle(categoryOne.getCategory());
+        } else {
+            actionbar.setTitle(categoryOne.getCategory() + "_" + categoryTwo.getCategory());
+        }
+        actionbar.showMoreButton(false);
+
+        linearLayoutManager = new LinearLayoutManager(context);
         opernLv.setLayoutManager(linearLayoutManager);
         opernLv.setItemAnimator(new DefaultItemAnimator());
         adapter = new Adapter(opernInfoArrayList);
         opernLv.setAdapter(adapter);
-        searchBtn.setOnClickListener(v -> {
-            if(requesting){
-                return;
+        opernLv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                    int totalItemCount = opernInfoArrayList.size();
+                    if (lastVisibleItem >= totalItemCount - 10) {
+                        if (!requesting) {
+                            getOpernInfoByCategory();
+                        }
+                    }
+                }
             }
-            searchParameter = searchInputEdt.getText().toString().trim();
-            if (searchParameter.equals("")) {
-                return;
-            }
-            net();
         });
-
+        opernSrl.setColorSchemeColors(getResources().getColor(R.color.light_blue));
+        opernSrl.setOnRefreshListener(() -> {
+            index = 0;
+            getOpernInfoByCategory();
+        });
+        getOpernInfoByCategory();
     }
 
-    public void net() {
-        KeyboardUtils.hideSoftInput(searchInputEdt);
+
+    private void getOpernInfoByCategory() {
         requesting = true;
-        opernLv.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
-        searchDisposable = HttpCore.getInstance().getApi()
-                .searchOpernInfo(searchParameter)
+        opernSrl.setRefreshing(true);
+        int numPrePage = 40;
+        String categoryOneStr = categoryOne.getCategory();
+        String categoryTwoStr = categoryTwo == null ? null : categoryTwo.getCategory();
+        disposable = HttpCore.getInstance().getApi().searchOpernInfoByCategory(categoryOneStr, categoryTwoStr, index, numPrePage)
                 .subscribeOn(new NewThreadScheduler())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(arrayListBaseResponse -> {
-                    opernInfoArrayList.clear();
+                    if (index == 0) {
+                        opernInfoArrayList.clear();
+                    }
                     ArrayList<OpernInfo> data = arrayListBaseResponse.getData();
-                    opernInfoArrayList.addAll(data);
+                    if (data == null || data.size() == 0) {
+                        T.showShort("没有更多数据了");
+                    } else {
+                        opernInfoArrayList.addAll(data);
+                        index++;
+                    }
                     adapter.notifyDataSetChanged();
-                    progressBar.setVisibility(View.GONE);
-                    opernLv.setVisibility(View.VISIBLE);
+                    opernSrl.setRefreshing(false);
                     requesting = false;
                 }, throwable -> {
                     throwable.printStackTrace();
-                    progressBar.setVisibility(View.GONE);
-                    opernLv.setVisibility(View.VISIBLE);
-                    T.showShort("网络异常");
+                    opernSrl.setRefreshing(false);
                     requesting = false;
+                    T.showShort(throwable.getMessage());
                 });
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (searchDisposable != null) {
-            searchDisposable.dispose();
+        if (disposable != null) {
+            disposable.dispose();
         }
     }
 
-    public class Adapter extends RecyclerView.Adapter<SearchActivity.Adapter.ViewHolder> {
+    public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
+
         private ArrayList<OpernInfo> opernInfoArrayList;
 
 
@@ -126,12 +149,12 @@ public class SearchActivity extends BaseActivity {
         }
 
         @Override
-        public SearchActivity.Adapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ViewHolder(getLayoutInflater().inflate(R.layout.item_opern_list, parent, false));
+        public Adapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new Adapter.ViewHolder(getLayoutInflater().inflate(R.layout.item_opern_list, parent, false));
         }
 
         @Override
-        public void onBindViewHolder(SearchActivity.Adapter.ViewHolder viewHolder, int position) {
+        public void onBindViewHolder(Adapter.ViewHolder viewHolder, int position) {
             OpernInfo opernInfo = opernInfoArrayList.get(position);
             viewHolder.titleTv.setText(opernInfo.getTitle());
             viewHolder.wordAuthorTv.setText("作词：" + opernInfo.getWordAuthor());
@@ -148,10 +171,12 @@ public class SearchActivity extends BaseActivity {
                 stringBuilder.append("/");
                 stringBuilder.append(opernInfo.getCategoryThree());
             }
+            viewHolder.categoryTv.setText(stringBuilder.toString());
         }
 
         @Override
         public int getItemCount() {
+            emptyView.setVisibility(opernInfoArrayList.size() == 0 ? View.VISIBLE : View.GONE);
             return opernInfoArrayList.size();
         }
 
@@ -174,8 +199,8 @@ public class SearchActivity extends BaseActivity {
                 super(itemView);
                 ButterKnife.bind(this, itemView);
                 itemView.setOnClickListener(v -> {
-                    Intent intent = new Intent(SearchActivity.this, ShowImageActivity.class);
-                    intent.putExtra("opernInfo",opernInfoArrayList.get(getAdapterPosition()));
+                    Intent intent = new Intent(context, ShowImageActivity.class);
+                    intent.putExtra("opernInfo", opernInfoArrayList.get(getAdapterPosition()));
                     startActivity(intent);
                 });
             }

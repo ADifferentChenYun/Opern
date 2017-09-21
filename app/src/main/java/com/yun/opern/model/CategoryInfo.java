@@ -1,8 +1,9 @@
 package com.yun.opern.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class CategoryInfo {
+public class CategoryInfo implements Serializable {
     private String category;
     private ArrayList<CategoryInfo> categoryInfos;
 
