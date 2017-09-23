@@ -28,28 +28,40 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="@dimen/x30">
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/search_input_edt"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="6"
-                android:background="@drawable/selector_cir_left_edittext_bg"
-                android:hint="曲谱名/作词/作曲/演唱者"
-                android:imeOptions="actionSearch"
-                android:singleLine="true"
-                android:textSize="17sp" />
+                android:orientation="horizontal"
+                android:padding="@dimen/x30">
 
-            <ImageView
-                android:id="@+id/search_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/selector_cir_right_img_bg"
-                android:padding="@dimen/x20"
-                android:src="@mipmap/ic_search" />
+                <EditText
+                    android:id="@+id/search_input_edt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:background="@drawable/selector_cir_left_edittext_bg"
+                    android:hint="曲谱名/作词/作曲/演唱者"
+                    android:imeOptions="actionSearch"
+                    android:singleLine="true"
+                    android:textSize="17sp" />
+
+                <ImageView
+                    android:id="@+id/search_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_cir_right_img_bg"
+                    android:padding="@dimen/x20"
+                    android:src="@mipmap/ic_search" />
+
+            </LinearLayout>
+
+            <com.fynn.fluidlayout.FluidLayout
+                android:id="@+id/search_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 

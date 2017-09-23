@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.fynn.fluidlayout.FluidLayout;
 import com.yun.opern.R;
 import com.yun.opern.model.BaseResponse;
 import com.yun.opern.model.OpernInfo;
@@ -45,6 +48,8 @@ public class SearchActivity extends BaseActivity {
     RecyclerView opernLv;
     @BindView(R.id.progressbar)
     ProgressBar progressBar;
+    @BindView(R.id.search_history)
+    FluidLayout searchHistory;
 
     private String searchParameter;
     private ArrayList<OpernInfo> opernInfoArrayList = new ArrayList<>();
@@ -64,6 +69,22 @@ public class SearchActivity extends BaseActivity {
                 searchBtn.callOnClick();
             }
             return false;
+        });
+        searchInputEdt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         opernLv.setLayoutManager(linearLayoutManager);
