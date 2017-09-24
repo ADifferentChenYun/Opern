@@ -1,16 +1,12 @@
 package com.yun.opern.jpush;
 
 import android.content.BroadcastReceiver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
-import com.yun.opern.db.DBCore;
-import com.yun.opern.db.DateBaseHelper;
 import com.yun.opern.model.event.ReceiveMessageFromJPushEvent;
 
 import org.greenrobot.eventbus.EventBus;

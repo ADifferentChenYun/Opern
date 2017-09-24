@@ -1,32 +1,31 @@
 package com.yun.opern.db;
 
-import com.squareup.sqlbrite2.BriteDatabase;
-import com.squareup.sqlbrite2.SqlBrite;
-import com.yun.opern.Application;
+import android.content.Context;
 
-import io.reactivex.schedulers.Schedulers;
+import org.greenrobot.greendao.database.Database;
 
 /**
  * Created by Yun on 2017/9/9 0009.
  */
 
 public class DBCore {
-    private static BriteDatabase briteDatabase;
+    private boolean ENCRYPTED = false;
+    private static DaoSession daoSession;
 
-    private DBCore() {
-        DateBaseHelper dateBaseHelper = new DateBaseHelper(Application.getAppContext());
-        SqlBrite sqlBrite = new SqlBrite.Builder().build();
-        briteDatabase = sqlBrite.wrapDatabaseHelper(dateBaseHelper, Schedulers.io());
+    private DBCore(Context context) {
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, ENCRYPTED ? "notes-db-encrypted" : "notes-db");
+        Database db = ENCRYPTED ? helper.getEncryptedWritableDb("super-secret") : helper.getWritableDb();
+        daoSession = new DaoMaster(db).newSession();
     }
 
-    public static BriteDatabase getInstance() {
-        if (briteDatabase == null) {
+    public static DaoSession getInstance(Context context) {
+        if (daoSession == null) {
             synchronized (DBCore.class) {
-                if (briteDatabase == null) {
-                    new DBCore();
+                if (daoSession == null) {
+                    new DBCore(context);
                 }
             }
         }
-        return briteDatabase;
+        return daoSession;
     }
 }

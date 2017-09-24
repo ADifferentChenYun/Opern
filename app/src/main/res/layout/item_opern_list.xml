@@ -67,7 +67,7 @@
                 android:id="@+id/item_opern_list_data_category_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="category" />
+                android:text="" />
 
             <TextView
                 android:id="@+id/item_opern_list_data_origin_tv"

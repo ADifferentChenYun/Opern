@@ -1,12 +1,13 @@
 package com.yun.opern.ui.activitys;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -16,26 +17,29 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.fynn.fluidlayout.FluidLayout;
+import com.yun.opern.Application;
 import com.yun.opern.R;
-import com.yun.opern.model.BaseResponse;
+import com.yun.opern.db.DBCore;
+import com.yun.opern.db.SearchHistory;
+import com.yun.opern.db.SearchHistoryDao;
 import com.yun.opern.model.OpernInfo;
 import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.bases.BaseActivity;
+import com.yun.opern.utils.DisplayUtil;
 import com.yun.opern.utils.KeyboardUtils;
 import com.yun.opern.utils.T;
 import com.yun.opern.views.ActionBarNormal;
-import com.yun.opern.views.SearchView;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.internal.schedulers.NewThreadScheduler;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class SearchActivity extends BaseActivity {
     @BindView(R.id.actionbar)
@@ -49,13 +53,16 @@ public class SearchActivity extends BaseActivity {
     @BindView(R.id.progressbar)
     ProgressBar progressBar;
     @BindView(R.id.search_history)
-    FluidLayout searchHistory;
+    FluidLayout searchHistoryView;
 
     private String searchParameter;
     private ArrayList<OpernInfo> opernInfoArrayList = new ArrayList<>();
     private Adapter adapter;
     private boolean requesting = false;
     private Disposable searchDisposable;
+
+    private String[] searchHistoryBackGroundColor = new String[]{"#f8f2ec", "#f9eaeb", "#f2f2f2", "#f2f6e9",};
+    private String[] searchHistoryStockColor = new String[]{"#f7cfac", "#f9b8bd", "#d4d4d4", "#cfdcb5"};
 
     @Override
     protected int contentViewRes() {
@@ -83,7 +90,9 @@ public class SearchActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (s.length() == 0) {
+                    searchHistoryView.setVisibility(View.VISIBLE);
+                }
             }
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -101,10 +110,46 @@ public class SearchActivity extends BaseActivity {
             }
             net();
         });
+        initSearchHistoryView();
+    }
 
+    private void initSearchHistoryView() {
+        searchHistoryView.removeAllViews();
+        int max = 3;
+        int min = 0;
+        Random random = new Random();
+        for (SearchHistory item : getSerchHistory()) {
+            int i = random.nextInt(max) % (max - min + 1) + min;
+            View view = getLayoutInflater().inflate(R.layout.item_search_history_layout, searchHistoryView, false);
+            GradientDrawable gradientDrawable = new GradientDrawable();
+            gradientDrawable.setStroke(DisplayUtil.dp2px(context, 1), Color.parseColor(searchHistoryStockColor[i]));
+            gradientDrawable.setColor(Color.parseColor(searchHistoryBackGroundColor[i]));
+            gradientDrawable.setCornerRadius(DisplayUtil.dp2px(context, 4));
+            view.setBackground(gradientDrawable);
+            ((TextView) view.findViewById(R.id.search_history_tv)).setText(item.getSearchParameter());
+            view.setOnClickListener(v -> {
+                searchParameter = item.getSearchParameter();
+                searchInputEdt.setText(item.getSearchParameter());
+                searchInputEdt.setSelection(searchInputEdt.getText().length());
+                net();
+            });
+            searchHistoryView.addView(view);
+        }
+    }
+
+    private List<SearchHistory> getSerchHistory() {
+        return DBCore.getInstance(Application.getAppContext()).getSearchHistoryDao().queryBuilder().orderDesc(SearchHistoryDao.Properties.Date).limit(15).build().list();
+    }
+
+    private void addSearchStr2History(String searchStr) {
+        SearchHistory searchHistory = new SearchHistory(searchStr, new Date());
+        DBCore.getInstance(Application.getAppContext()).getSearchHistoryDao().insertOrReplace(searchHistory);
     }
 
     public void net() {
+        searchHistoryView.setVisibility(View.GONE);
+        initSearchHistoryView();
+        addSearchStr2History(searchParameter);
         KeyboardUtils.hideSoftInput(searchInputEdt);
         requesting = true;
         opernLv.setVisibility(View.GONE);
