@@ -6,5 +6,5 @@
     <string name="logout">退出登录</string>
     <string name="logout_info">退出登录后就无法使用收藏等功能了哟~</string>
     <string name="weibo_login">微博登录</string>
-    <string name="login_info">登录后可以使用跟多功能哦~</string>
+    <string name="login_info">登录后可以使用更多功能哦~</string>
 </resources>

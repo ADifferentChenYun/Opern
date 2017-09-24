@@ -10,13 +10,13 @@
 
     <TextView
         android:id="@+id/search_history_tv"
-        android:paddingStart="@dimen/x25"
-        android:paddingEnd="@dimen/x25"
+        android:paddingStart="@dimen/x30"
+        android:paddingEnd="@dimen/x30"
         android:paddingTop="@dimen/x15"
         android:paddingBottom="@dimen/x15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="15sp"
         android:textColor="@color/black"
         android:text="search_item" />
 

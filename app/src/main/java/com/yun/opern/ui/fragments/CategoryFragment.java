@@ -1,6 +1,8 @@
 package com.yun.opern.ui.fragments;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,12 +15,15 @@ import android.widget.TextView;
 
 import com.fynn.fluidlayout.FluidLayout;
 import com.yun.opern.R;
+import com.yun.opern.db.SearchHistory;
 import com.yun.opern.model.CategoryInfo;
 import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.activitys.ShowOpernByCategoryActivity;
+import com.yun.opern.utils.DisplayUtil;
 import com.yun.opern.utils.T;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -79,7 +84,8 @@ public class CategoryFragment extends Fragment {
 
     public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         private ArrayList<CategoryInfo> categoryInfos;
-
+        private String[] searchHistoryBackGroundColor = new String[]{"#f8f2ec", "#f9eaeb", "#f2f2f2", "#f2f6e9",};
+        private String[] searchHistoryStockColor = new String[]{"#f7cfac", "#f9b8bd", "#d4d4d4", "#cfdcb5"};
 
         public Adapter(ArrayList<CategoryInfo> categoryInfos) {
             this.categoryInfos = categoryInfos;
@@ -95,9 +101,18 @@ public class CategoryFragment extends Fragment {
             CategoryInfo categoryInfo = categoryInfos.get(position);
             viewHolder.categoryOneTv.setText(categoryInfo.getCategory());
             viewHolder.categoryTwoFluidLayout.removeAllViews();
+            int max = 3;
+            int min = 0;
+            Random random = new Random();
             for (CategoryInfo categoryTwo : categoryInfo.getCategoryInfos()) {
-                View view = getActivity().getLayoutInflater().inflate(R.layout.item_category_two_layout, null);
-                ((TextView) view.findViewById(R.id.category_two_tv)).setText(categoryTwo.getCategory());
+                int i = random.nextInt(max) % (max - min + 1) + min;
+                View view = getActivity().getLayoutInflater().inflate(R.layout.item_search_history_layout, viewHolder.categoryTwoFluidLayout, false);
+                GradientDrawable gradientDrawable = new GradientDrawable();
+                gradientDrawable.setStroke(DisplayUtil.dp2px(getActivity(), 1), Color.parseColor(searchHistoryStockColor[i]));
+                gradientDrawable.setColor(Color.parseColor(searchHistoryBackGroundColor[i]));
+                gradientDrawable.setCornerRadius(DisplayUtil.dp2px(getActivity(), 4));
+                view.setBackground(gradientDrawable);
+                ((TextView) view.findViewById(R.id.search_history_tv)).setText(categoryTwo.getCategory());
                 view.setOnClickListener(v -> {
                     Intent intent = new Intent(getActivity(), ShowOpernByCategoryActivity.class);
                     intent.putExtra("categoryOne", categoryInfo);

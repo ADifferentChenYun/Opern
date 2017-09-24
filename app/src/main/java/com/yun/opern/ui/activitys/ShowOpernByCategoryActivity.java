@@ -67,7 +67,7 @@ public class ShowOpernByCategoryActivity extends BaseActivity {
         if (categoryTwo == null) {
             actionbar.setTitle(categoryOne.getCategory());
         } else {
-            actionbar.setTitle(categoryOne.getCategory() + "_" + categoryTwo.getCategory());
+            actionbar.setTitle(categoryOne.getCategory() + "-" + categoryTwo.getCategory());
         }
         actionbar.showMoreButton(false);
 
