@@ -5,9 +5,18 @@ public class UpdateInfo {
     private String versionName;
     private String fileName;
     private String downloadUrl;
+    private String downloadOSSUrl;
     private String updateMessage;
     private String updateType;  //0 推荐更新 1 强制更新
     private String updateDataTime;
+
+    public String getDownloadOSSUrl() {
+        return downloadOSSUrl;
+    }
+
+    public void setDownloadOSSUrl(String downloadOSSUrl) {
+        this.downloadOSSUrl = downloadOSSUrl;
+    }
 
     public String getUpdateType() {
         return updateType;

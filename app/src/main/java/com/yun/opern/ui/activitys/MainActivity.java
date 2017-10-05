@@ -185,7 +185,21 @@ public class MainActivity extends BaseActivity {
                                 .setCancelable(false)
                                 .setPositiveButton("更新", (dialog, which) -> {
                                     UpdateAsync updateAsync = new UpdateAsync(context, updateInfo.getUpdateType().equals("0"));
-                                    updateAsync.execute(HttpCore.baseUrl + updateInfo.getDownloadUrl());
+                                    String url = "";
+                                    if (updateInfo.getDownloadOSSUrl() != null && !updateInfo.getDownloadOSSUrl().equals("")) {
+                                        if (updateInfo.getDownloadOSSUrl().startsWith("http")) {
+                                            url = updateInfo.getDownloadOSSUrl();
+                                        } else {
+                                            url = HttpCore.baseUrl + updateInfo.getDownloadOSSUrl();
+                                        }
+                                    } else if (updateInfo.getDownloadUrl() != null && !updateInfo.getDownloadUrl().equals("")) {
+                                        if (updateInfo.getDownloadUrl().startsWith("http")) {
+                                            url = updateInfo.getDownloadUrl();
+                                        } else {
+                                            url = HttpCore.baseUrl + updateInfo.getDownloadUrl();
+                                        }
+                                    }
+                                    updateAsync.execute(url);
                                 });
                         if (updateInfo.getUpdateType().equals("0")) {
                             builder.setCancelable(true);
