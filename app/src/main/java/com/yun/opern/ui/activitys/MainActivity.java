@@ -93,7 +93,7 @@ public class MainActivity extends BaseActivity {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) indicator.getLayoutParams();
+                FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) indicator.getLayoutParams();
                 lp.width = ScreenUtils.getScreenWidth() / 2;
                 lp.leftMargin = (int) (ScreenUtils.getScreenWidth() / 2 * position + ScreenUtils.getScreenWidth() / 2 * positionOffset);
                 indicator.setLayoutParams(lp);

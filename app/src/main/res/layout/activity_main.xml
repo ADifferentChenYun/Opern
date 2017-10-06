@@ -17,14 +17,14 @@
             android:layout_height="wrap_content"
             app:title="@string/app_name"/>
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/x80"
+                android:layout_height="@dimen/x90"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -73,11 +73,13 @@
                         android:textSize="15sp"
                         android:gravity="center"
                         android:textColor="@color/white" />
+
                 </LinearLayout>
 
             </LinearLayout>
 
             <FrameLayout
+                android:layout_gravity="bottom"
                 android:id="@+id/indicator"
                 android:layout_width="@dimen/x500"
                 android:layout_height="@dimen/x8">
@@ -90,7 +92,8 @@
                     android:background="@drawable/selector_indicator_bg" />
 
             </FrameLayout>
-        </LinearLayout>
+
+        </FrameLayout>
 
         <com.yun.opern.views.ViewPagerFix
             android:id="@+id/view_pager"

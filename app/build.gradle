@@ -78,6 +78,7 @@ dependencies {
     compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
     compile 'org.greenrobot:greendao:3.2.2'
     compile 'com.fynn.fluidlayout:fluidlayout:1.0'
+    compile 'com.youth.banner:banner:1.4.10'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }

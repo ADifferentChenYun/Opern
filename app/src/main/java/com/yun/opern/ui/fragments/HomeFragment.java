@@ -1,6 +1,7 @@
 package com.yun.opern.ui.fragments;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,8 +13,14 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.Transformer;
+import com.youth.banner.loader.ImageLoader;
 import com.yun.opern.R;
 import com.yun.opern.model.OpernInfo;
 import com.yun.opern.net.HttpCore;
@@ -79,6 +86,7 @@ public class HomeFragment extends Fragment {
             index = 0;
             net();
         });
+
         net();
     }
 
@@ -92,6 +100,8 @@ public class HomeFragment extends Fragment {
                 .subscribeOn(new NewThreadScheduler())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(arrayListBaseResponse -> {
+                    View headerView = LayoutInflater.from(getContext()).inflate(R.layout.header_home_rv, null);
+                    adapter.addHeaderView(headerView);
                     if (index == 0) {
                         opernInfoArrayList.clear();
                     }
@@ -113,9 +123,45 @@ public class HomeFragment extends Fragment {
                 });
     }
 
+    public class BannerImageLoader extends ImageLoader {
 
-    public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
+        @Override
+        public void displayImage(Context context, Object path, ImageView imageView) {
+            Glide.with(context).load(path).into(imageView);
+        }
+
+        @Override
+        public ImageView createImageView(Context context) {
+            ImageView imageView = new ImageView(context);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            return imageView;
+        }
+    }
+
+
+    public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+        private static final int TYPE_HEADER = 0;
+        private static final int TYPE_NORMAL = 1;
         private ArrayList<OpernInfo> opernInfoArrayList;
+        private View headerView;
+
+        public void addHeaderView(View headerView) {
+            this.headerView = headerView;
+            notifyItemInserted(0);
+        }
+
+        public View getHeaderView() {
+            return headerView;
+        }
+
+        public int getRealPosition(RecyclerView.ViewHolder holder) {
+            int position = holder.getLayoutPosition();
+            return headerView == null ? position : position - 1;
+        }
+
+        public int getRealPosition(int position) {
+            return headerView == null ? position : position - 1;
+        }
 
 
         public Adapter(ArrayList<OpernInfo> opernInfoArrayList) {
@@ -123,35 +169,73 @@ public class HomeFragment extends Fragment {
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public int getItemViewType(int position) {
+            if (headerView == null) return TYPE_NORMAL;
+            if (position == 0) return TYPE_HEADER;
+            return TYPE_NORMAL;
+        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            if (viewType == TYPE_HEADER) {
+                return new HeaderViewViewHolder(headerView);
+            }
             return new ViewHolder(getActivity().getLayoutInflater().inflate(R.layout.item_opern_list, parent, false));
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder viewHolder, int position) {
-            OpernInfo opernInfo = opernInfoArrayList.get(position);
-            viewHolder.titleTv.setText(opernInfo.getTitle());
-            viewHolder.wordAuthorTv.setText("作词：" + opernInfo.getWordAuthor());
-            viewHolder.songAuthorTv.setText("作曲：" + opernInfo.getSongAuthor());
-            viewHolder.singerTv.setText("演唱：" + opernInfo.getSinger());
-            viewHolder.dataOriginTv.setText(opernInfo.getOrigin());
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(opernInfo.getCategoryOne());
-            if (!opernInfo.getCategoryTwo().equals("")) {
-                stringBuilder.append("/");
-                stringBuilder.append(opernInfo.getCategoryTwo());
+        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+            if (getItemViewType(position) == TYPE_HEADER) {
+                HeaderViewViewHolder holder = (HeaderViewViewHolder) viewHolder;
+                //设置banner样式
+                holder.banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
+                //设置图片加载器
+                holder.banner.setImageLoader(new BannerImageLoader());
+                //设置图片集合
+                ArrayList<String> images = new ArrayList<>();
+                images.add("http://img2.3lian.com/2014/f4/102/d/91.jpg");
+                images.add("http://img1.3lian.com/2015/a1/40/d/195.jpg");
+                images.add("http://tupian.enterdesk.com/2015/xu/08/06/2/5.jpg");
+                images.add("http://img1.3lian.com/2015/a1/37/d/7.jpg");
+                holder.banner.setImages(images);
+                //设置banner动画效果
+                holder.banner.setBannerAnimation(Transformer.Default);
+                //设置标题集合（当banner样式有显示title时）
+                //banner.setBannerTitles(titles);
+                //设置自动轮播，默认为true
+                holder.banner.isAutoPlay(true);
+                //设置轮播时间
+                holder.banner.setDelayTime(4000);
+                //设置指示器位置（当banner模式中有指示器时）
+                holder.banner.setIndicatorGravity(BannerConfig.CENTER);
+                //banner设置方法全部调用完毕时最后调用
+                holder.banner.start();
+            } else {
+                ViewHolder holder = (ViewHolder) viewHolder;
+                OpernInfo opernInfo = opernInfoArrayList.get(getRealPosition(position));
+                holder.titleTv.setText(opernInfo.getTitle());
+                holder.wordAuthorTv.setText("作词：" + opernInfo.getWordAuthor());
+                holder.songAuthorTv.setText("作曲：" + opernInfo.getSongAuthor());
+                holder.singerTv.setText("演唱：" + opernInfo.getSinger());
+                holder.dataOriginTv.setText(opernInfo.getOrigin());
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(opernInfo.getCategoryOne());
+                if (!opernInfo.getCategoryTwo().equals("")) {
+                    stringBuilder.append("/");
+                    stringBuilder.append(opernInfo.getCategoryTwo());
+                }
+                if (!opernInfo.getCategoryThree().equals("")) {
+                    stringBuilder.append("/");
+                    stringBuilder.append(opernInfo.getCategoryThree());
+                }
+                holder.categoryTv.setText(stringBuilder.toString());
             }
-            if (!opernInfo.getCategoryThree().equals("")) {
-                stringBuilder.append("/");
-                stringBuilder.append(opernInfo.getCategoryThree());
-            }
-            viewHolder.categoryTv.setText(stringBuilder.toString());
         }
 
         @Override
         public int getItemCount() {
             emptyView.setVisibility(opernInfoArrayList.size() == 0 ? View.VISIBLE : View.GONE);
-            return opernInfoArrayList.size();
+            return headerView == null ? opernInfoArrayList.size() : opernInfoArrayList.size() + 1;
         }
 
 
@@ -174,9 +258,19 @@ public class HomeFragment extends Fragment {
                 ButterKnife.bind(this, itemView);
                 itemView.setOnClickListener(v -> {
                     Intent intent = new Intent(getActivity(), ShowImageActivity.class);
-                    intent.putExtra("opernInfo", opernInfoArrayList.get(getAdapterPosition()));
+                    intent.putExtra("opernInfo", opernInfoArrayList.get(getRealPosition(this)));
                     startActivity(intent);
                 });
+            }
+        }
+
+        class HeaderViewViewHolder extends RecyclerView.ViewHolder {
+            @BindView(R.id.banner)
+            Banner banner;
+
+            public HeaderViewViewHolder(View itemView) {
+                super(itemView);
+                ButterKnife.bind(this, itemView);
             }
         }
     }
