@@ -9,6 +9,7 @@ public class OpernImgInfo implements Serializable{
     private int opernIndex;
     private String opernTitle;
     private String opernImg;
+    private String opernOSSImg;
 
     public String getId() {
         return id;
@@ -48,5 +49,13 @@ public class OpernImgInfo implements Serializable{
 
     public void setOpernImg(String opernImg) {
         this.opernImg = opernImg;
+    }
+
+    public String getOpernOSSImg() {
+        return opernOSSImg;
+    }
+
+    public void setOpernOSSImg(String opernOSSImg) {
+        this.opernOSSImg = opernOSSImg;
     }
 }
