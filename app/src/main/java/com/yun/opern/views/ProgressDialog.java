@@ -50,7 +50,7 @@ public class ProgressDialog extends AlertDialog {
             Window win = getWindow();
             WindowManager.LayoutParams lp = win.getAttributes();
             Logger.i(view.getWidth() + "");
-            lp.width = DisplayUtil.dp2px(getContext(), 300);
+            lp.width = DisplayUtil.dp2px(getContext(), 200);
             win.setAttributes(lp);
         });
         super.onCreate(savedInstanceState);
