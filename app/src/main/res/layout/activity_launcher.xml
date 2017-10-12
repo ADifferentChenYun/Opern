@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context="com.yun.opern.ui.activitys.LauncherActivity">
 
     <ImageView
@@ -15,7 +16,8 @@
         android:src="@mipmap/sccnnom_v20161110171_354"/>
 
     <LinearLayout
-        android:background="@color/white"
+        android:id="@+id/bottom_bar"
+        android:alpha="0"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

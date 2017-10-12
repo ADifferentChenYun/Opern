@@ -60,4 +60,10 @@ public interface Api {
 
     @GET(value = "category/categoryInfo")
     Observable<BaseResponse<ArrayList<CategoryInfo>>> getCategoryInfo();
+
+    @GET(value = "opern/latestUpdateTime")
+    Observable<BaseResponse<String>> latestUpdateTime();
+
+    @GET(value = "opern/latestUpdateOpernInfo")
+    Observable<BaseResponse<ArrayList<OpernInfo>>> latestUpdateOpernInfo();
 }

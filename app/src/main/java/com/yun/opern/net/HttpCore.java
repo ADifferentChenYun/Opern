@@ -18,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class HttpCore {
     public static final String baseUrl = "http://106.14.183.240:80/opern/";
     //public static final String baseUrl = "http://192.168.0.102:8080/opern/";
-    //public static final String baseUrl = "http://192.168.31.179:8080/opern/";
+    //public static final String baseUrl = "http://192.168.0.155:8080/opern/";
     private static HttpCore httpCore;
     private OkHttpClient okHttpClient;
     private Retrofit retrofit;

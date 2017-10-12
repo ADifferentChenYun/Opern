@@ -66,7 +66,7 @@ public class ShowImageFragment extends Fragment {
     }
 
     private void initView() {
-        Glide.with(this).asBitmap().load(opernImgInfo.getOpernOSSImg().equals("") ? opernImgInfo.getOpernImg() : opernImgInfo.getOpernOSSImg()).listener(new RequestListener<Bitmap>() {
+        Glide.with(this).asBitmap().load(opernImgInfo.getOpernOSSImg() == null || opernImgInfo.getOpernOSSImg().equals("") ? opernImgInfo.getOpernImg() : opernImgInfo.getOpernOSSImg()).listener(new RequestListener<Bitmap>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                 if (retry > 0) {

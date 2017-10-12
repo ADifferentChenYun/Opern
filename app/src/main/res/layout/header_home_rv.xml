@@ -27,6 +27,7 @@
         android:orientation="horizontal">
 
         <android.support.v7.widget.CardView
+            android:id="@+id/lastUpdateCardView"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -52,6 +53,7 @@
                     android:textSize="13sp" />
 
                 <TextView
+                    android:id="@+id/lastUpdateTimeTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2017-10-06"

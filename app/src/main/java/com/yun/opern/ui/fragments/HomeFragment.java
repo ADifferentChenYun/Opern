@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -24,6 +26,7 @@ import com.youth.banner.loader.ImageLoader;
 import com.yun.opern.R;
 import com.yun.opern.model.OpernInfo;
 import com.yun.opern.net.HttpCore;
+import com.yun.opern.ui.activitys.LastUpdateOpernInfoActivity;
 import com.yun.opern.ui.activitys.MainActivity;
 import com.yun.opern.ui.activitys.ShowImageActivity;
 import com.yun.opern.utils.T;
@@ -65,6 +68,8 @@ public class HomeFragment extends Fragment {
         opernLv.setLayoutManager(linearLayoutManager);
         opernLv.setItemAnimator(new DefaultItemAnimator());
         adapter = new Adapter(opernInfoArrayList);
+        View headerView = LayoutInflater.from(getContext()).inflate(R.layout.header_home_rv, null);
+        adapter.addHeaderView(headerView);
         opernLv.setAdapter(adapter);
         opernLv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -86,7 +91,6 @@ public class HomeFragment extends Fragment {
             index = 0;
             net();
         });
-
         net();
     }
 
@@ -100,8 +104,6 @@ public class HomeFragment extends Fragment {
                 .subscribeOn(new NewThreadScheduler())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(arrayListBaseResponse -> {
-                    View headerView = LayoutInflater.from(getContext()).inflate(R.layout.header_home_rv, null);
-                    adapter.addHeaderView(headerView);
                     if (index == 0) {
                         opernInfoArrayList.clear();
                     }
@@ -120,7 +122,17 @@ public class HomeFragment extends Fragment {
                     opernSrl.setRefreshing(false);
                     requesting = false;
                     T.showShort(throwable.getMessage());
-                });
+                    lastUpdateTime();
+                }, this::lastUpdateTime);
+    }
+
+    private void lastUpdateTime() {
+        HttpCore.getInstance().getApi()
+                .latestUpdateTime()
+                .subscribeOn(new NewThreadScheduler())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(stringBaseResponse -> adapter.getHeaderViewViewHolder().lastUpdateTimeTv.setText(stringBaseResponse.getData()),
+                        throwable -> adapter.getHeaderViewViewHolder().lastUpdateTimeTv.setText("0000-00-00 00:00:00.0"));
     }
 
     public class BannerImageLoader extends ImageLoader {
@@ -144,6 +156,11 @@ public class HomeFragment extends Fragment {
         private static final int TYPE_NORMAL = 1;
         private ArrayList<OpernInfo> opernInfoArrayList;
         private View headerView;
+        private HeaderViewViewHolder headerViewViewHolder;
+
+        public HeaderViewViewHolder getHeaderViewViewHolder() {
+            return headerViewViewHolder;
+        }
 
         public void addHeaderView(View headerView) {
             this.headerView = headerView;
@@ -178,7 +195,7 @@ public class HomeFragment extends Fragment {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if (viewType == TYPE_HEADER) {
-                return new HeaderViewViewHolder(headerView);
+                return headerViewViewHolder = new HeaderViewViewHolder(headerView);
             }
             return new ViewHolder(getActivity().getLayoutInflater().inflate(R.layout.item_opern_list, parent, false));
         }
@@ -193,9 +210,8 @@ public class HomeFragment extends Fragment {
                 holder.banner.setImageLoader(new BannerImageLoader());
                 //设置图片集合
                 ArrayList<String> images = new ArrayList<>();
-                images.add("http://img2.3lian.com/2014/f4/102/d/91.jpg");
-                images.add("http://img1.3lian.com/2015/a1/40/d/195.jpg");
                 images.add("http://tupian.enterdesk.com/2015/xu/08/06/2/5.jpg");
+                images.add("http://img1.3lian.com/2015/a1/40/d/195.jpg");
                 images.add("http://img1.3lian.com/2015/a1/37/d/7.jpg");
                 holder.banner.setImages(images);
                 //设置banner动画效果
@@ -267,10 +283,15 @@ public class HomeFragment extends Fragment {
         class HeaderViewViewHolder extends RecyclerView.ViewHolder {
             @BindView(R.id.banner)
             Banner banner;
+            @BindView(R.id.lastUpdateCardView)
+            CardView lastUpdateCardView;
+            @BindView(R.id.lastUpdateTimeTv)
+            TextView lastUpdateTimeTv;
 
             public HeaderViewViewHolder(View itemView) {
                 super(itemView);
                 ButterKnife.bind(this, itemView);
+                RxView.clicks(lastUpdateCardView).subscribe(o -> startActivity(new Intent(getContext(), LastUpdateOpernInfoActivity.class)));
             }
         }
     }
