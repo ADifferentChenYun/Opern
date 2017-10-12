@@ -4,6 +4,7 @@ import com.yun.opern.common.WeiBoUserInfo;
 import com.yun.opern.model.BaseResponse;
 import com.yun.opern.model.CategoryInfo;
 import com.yun.opern.model.FeedbackInfo;
+import com.yun.opern.model.NetEaseCloudMusicChartInfo;
 import com.yun.opern.model.OpernInfo;
 import com.yun.opern.model.UpdateInfo;
 import com.yun.opern.model.UserLoginRequestInfo;
@@ -66,4 +67,7 @@ public interface Api {
 
     @GET(value = "opern/latestUpdateOpernInfo")
     Observable<BaseResponse<ArrayList<OpernInfo>>> latestUpdateOpernInfo();
+
+    @GET(value = "netEaseCloudMusic/musicChart")
+    Observable<BaseResponse<ArrayList<NetEaseCloudMusicChartInfo>>> musicChart();
 }

@@ -28,6 +28,7 @@ import com.yun.opern.model.OpernInfo;
 import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.activitys.LastUpdateOpernInfoActivity;
 import com.yun.opern.ui.activitys.MainActivity;
+import com.yun.opern.ui.activitys.MusicChartActivity;
 import com.yun.opern.ui.activitys.ShowImageActivity;
 import com.yun.opern.utils.T;
 
@@ -287,11 +288,14 @@ public class HomeFragment extends Fragment {
             CardView lastUpdateCardView;
             @BindView(R.id.lastUpdateTimeTv)
             TextView lastUpdateTimeTv;
+            @BindView(R.id.musicChart_cardview)
+            CardView musicChartCardView;
 
             public HeaderViewViewHolder(View itemView) {
                 super(itemView);
                 ButterKnife.bind(this, itemView);
                 RxView.clicks(lastUpdateCardView).subscribe(o -> startActivity(new Intent(getContext(), LastUpdateOpernInfoActivity.class)));
+                RxView.clicks(musicChartCardView).subscribe(o -> startActivity(new Intent(getContext(), MusicChartActivity.class)));
             }
         }
     }

@@ -178,7 +178,9 @@
             android:name=".ui.activitys.WriteFeedbackActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity android:name=".ui.activitys.ShowOpernByCategoryActivity" />
-        <activity android:name=".ui.activitys.LastUpdateOpernInfoActivity"></activity>
+        <activity android:name=".ui.activitys.LastUpdateOpernInfoActivity" />
+        <activity android:name=".ui.activitys.MusicChartActivity" />
+        <activity android:name=".ui.activitys.MusicChartDetailActivity"></activity>
     </application>
 
 </manifest>

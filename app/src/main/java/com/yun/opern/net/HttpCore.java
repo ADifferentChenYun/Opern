@@ -26,9 +26,9 @@ public class HttpCore {
 
     private HttpCore() {
         okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(20, TimeUnit.SECONDS)
-                .readTimeout(20, TimeUnit.SECONDS)
-                .writeTimeout(20, TimeUnit.SECONDS)
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
+                .writeTimeout(15, TimeUnit.SECONDS)
                 .addNetworkInterceptor(new HeaderInterceptor())
                 .build();
         retrofit = new Retrofit.Builder()
