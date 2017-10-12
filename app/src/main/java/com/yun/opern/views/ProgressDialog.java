@@ -5,19 +5,25 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
+import com.wang.avi.AVLoadingIndicatorView;
 import com.yun.opern.R;
+import com.yun.opern.utils.DisplayUtil;
 
 
 /**
  * Created by 允儿 on 2016/8/29.
  */
 public class ProgressDialog extends AlertDialog {
-    private ProgressBar mProgress;
+    private AVLoadingIndicatorView mProgress;
     private TextView mMessageView;
-
+    private View view;
+    private View decorView;
 
 
     public ProgressDialog(Context context) {
@@ -35,13 +41,38 @@ public class ProgressDialog extends AlertDialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        View view = inflater.inflate(R.layout.layout_progress_dialog, null);
-        mProgress = (ProgressBar) view.findViewById(R.id.layout_progress_dialog_progress);
+        view = inflater.inflate(R.layout.layout_progress_dialog, null);
+        mProgress = (AVLoadingIndicatorView) view.findViewById(R.id.layout_progress_dialog_progress);
         mMessageView = (TextView) view.findViewById(R.id.layout_progress_dialog_message);
         setView(view);
+        decorView = getWindow().getDecorView();
+        view.post(() -> {
+            Window win = getWindow();
+            WindowManager.LayoutParams lp = win.getAttributes();
+            Logger.i(view.getWidth() + "");
+            lp.width = DisplayUtil.dp2px(getContext(), 300);
+            win.setAttributes(lp);
+        });
         super.onCreate(savedInstanceState);
-
     }
 
+    @Override
+    public void show() {
+        super.show();
+        //view.setAlpha(0f);
+        //view.animate().alpha(1f).setDuration(1000).start();
+        mProgress.smoothToShow();
+    }
 
+    @Override
+    public void dismiss() {
+        super.dismiss();
+        mProgress.smoothToHide();
+    }
+
+    @Override
+    public void cancel() {
+        super.cancel();
+        mProgress.smoothToHide();
+    }
 }

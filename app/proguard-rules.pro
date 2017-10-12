@@ -63,3 +63,7 @@
 -keep class com.youth.banner.** {
     *;
  }
+
+ #-------------------avloadingview--------------------------------------------------------
+ -keep class com.wang.avi.** { *; }
+ -keep class com.wang.avi.indicators.** { *; }

@@ -1,33 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_width="@dimen/x300"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
     <LinearLayout
         android:id="@+id/body"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:baselineAligned="false"
         android:orientation="vertical"
         android:paddingBottom="10dip"
         android:paddingEnd="8dip"
         android:paddingStart="8dip"
-        android:paddingTop="10dip">
+        android:paddingTop="10dip"
+        android:gravity="center"
+        android:layout_gravity="center">
 
-        <ProgressBar
-            android:layout_gravity="center_horizontal"
+
+        <com.wang.avi.AVLoadingIndicatorView
             android:id="@+id/layout_progress_dialog_progress"
-            style="?android:attr/progressBarStyle"
+            android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:max="10000" />
+            app:indicatorName="BallPulseIndicator"
+            app:indicatorColor="#000000" />
 
         <TextView
             android:layout_marginTop="10dip"
             android:gravity="center"
             android:id="@+id/layout_progress_dialog_message"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="Loading"/>
