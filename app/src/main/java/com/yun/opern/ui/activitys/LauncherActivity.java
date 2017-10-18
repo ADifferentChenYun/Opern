@@ -11,6 +11,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.yun.opern.R;
 import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.utils.CacheFileUtil;
+import com.yun.opern.utils.L;
 import com.yun.opern.utils.NetworkUtils;
 import com.yun.opern.utils.T;
 
@@ -25,6 +26,8 @@ public class LauncherActivity extends BaseActivity {
     LinearLayout bottomBar;
 
     private Disposable disposable;
+    private Handler handler;
+    private Runnable checkPermissionRunnable;
 
     @Override
     protected int contentViewRes() {
@@ -36,9 +39,10 @@ public class LauncherActivity extends BaseActivity {
         if (NetworkUtils.getNetworkType() != NETWORK_WIFI) {
             T.showShort("当前处于非WIFI环境");
         }
-        RxPermissions reRxPermissions = new RxPermissions(LauncherActivity.this);
-        new Handler().postDelayed(() -> {
+        handler = new Handler();
+        checkPermissionRunnable = () -> {
             //检测权限
+            RxPermissions reRxPermissions = new RxPermissions(LauncherActivity.this);
             disposable = reRxPermissions
                     .request(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     .subscribe(aBoolean -> {
@@ -53,13 +57,17 @@ public class LauncherActivity extends BaseActivity {
                                 }
                             }
                     );
-        }, 1800);
+        };
+        handler.postDelayed(checkPermissionRunnable, 1800);
         bottomBar.animate().alpha(1f).setDuration(1500).start();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (handler != null) {
+            handler.removeCallbacks(checkPermissionRunnable);
+        }
         if (disposable != null) {
             disposable.dispose();
         }
