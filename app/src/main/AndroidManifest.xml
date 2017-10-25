@@ -180,7 +180,7 @@
         <activity android:name=".ui.activitys.ShowOpernByCategoryActivity" />
         <activity android:name=".ui.activitys.LastUpdateOpernInfoActivity" />
         <activity android:name=".ui.activitys.MusicChartActivity" />
-        <activity android:name=".ui.activitys.MusicChartDetailActivity"></activity>
+        <activity android:name=".ui.activitys.MusicChartDetailActivity" />
     </application>
 
 </manifest>

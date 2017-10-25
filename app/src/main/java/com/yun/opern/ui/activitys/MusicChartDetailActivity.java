@@ -1,8 +1,11 @@
 package com.yun.opern.ui.activitys;
 
 import android.media.MediaPlayer;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -55,8 +58,10 @@ public class MusicChartDetailActivity extends BaseActivity {
         return R.layout.activity_music_chart_detail;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void initView() {
+        actionBarNormal.setOnDoubleClickListener(view -> musicChartDetailLv.smoothScrollToPosition(0));
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnErrorListener((mp, what, extra) -> {
             ErrorMessageUtil.showErrorByToast("播放错误");
@@ -66,6 +71,9 @@ public class MusicChartDetailActivity extends BaseActivity {
         musicChartDetailLv.setAdapter(adapter);
         initListViewHeaderView();
         musicChartDetailLv.setOnItemClickListener((parent, view, position, id) -> {
+            if (position < musicChartDetailLv.getHeaderViewsCount()) {
+                return;
+            }
             try {
                 mediaPlayer.setDataSource(netEaseCloudMusicChartMusicInfoList.get(getRealPosition(position)).getPlayUrl());
                 mediaPlayer.prepare();
@@ -74,6 +82,21 @@ public class MusicChartDetailActivity extends BaseActivity {
                 e.printStackTrace();
             }
 
+        });
+        musicChartDetailLv.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (firstVisibleItem == 0) {
+                    actionBarNormal.setTitle("榜单");
+                } else {
+                    actionBarNormal.setTitle(netEaseCloudMusicChartInfo.getName());
+                }
+            }
         });
         net();
     }

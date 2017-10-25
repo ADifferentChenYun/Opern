@@ -12,7 +12,7 @@ import java.util.concurrent.TimeoutException;
 public class ErrorMessageUtil {
 
     public static void showErrorByToast(String errorMsg) {
-        T.showShort("errorMsg...QAQ");
+        T.showShort(errorMsg + "...QAQ");
     }
 
     public static void showErrorByToast(Throwable t) {

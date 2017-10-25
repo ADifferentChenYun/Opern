@@ -13,13 +13,14 @@
         android:layout_width="@dimen/x70"
         android:layout_height="wrap_content"
         android:text="1"
+        android:singleLine="true"
         android:textColor="@color/black" />
 
     <ImageView
         android:layout_marginStart="@dimen/x20"
         android:id="@+id/music_chart_music_img"
-        android:layout_width="@dimen/x110"
-        android:layout_height="@dimen/x110"
+        android:layout_width="@dimen/x130"
+        android:layout_height="@dimen/x130"
         android:scaleType="centerCrop" />
 
 
@@ -29,6 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="name"
+        android:singleLine="true"
         android:textColor="@color/black" />
 
     <RelativeLayout
@@ -42,6 +44,7 @@
             android:layout_marginStart="@dimen/x20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             android:text="info" />
 
         <LinearLayout
@@ -58,6 +61,7 @@
                 android:layout_height="wrap_content"
                 android:text="songer"
                 android:maxLength="12"
+                android:singleLine="true"
                 android:textColor="@color/black" />
 
             <TextView
@@ -65,6 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="30:50"
+                android:singleLine="true"
                 android:textColor="@color/black" />
         </LinearLayout>
 
