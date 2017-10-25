@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/x80"
+    android:paddingBottom="@dimen/x80"
+    android:paddingStart="@dimen/x80"
+    android:background="@color/light_blue">
+
+    <ImageView
+        android:id="@+id/music_chart_img"
+        android:layout_width="@dimen/x320"
+        android:layout_height="@dimen/x250"
+        android:scaleType="centerCrop" />
+
+    <LinearLayout
+        android:layout_marginStart="@dimen/x20"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/music_chart_name_tv"
+            android:gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="chart_name"
+            android:textColor="@color/white"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/music_chart_update_time_tv"
+            android:gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="update_time"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+</LinearLayout>

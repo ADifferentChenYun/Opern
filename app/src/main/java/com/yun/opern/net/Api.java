@@ -5,6 +5,7 @@ import com.yun.opern.model.BaseResponse;
 import com.yun.opern.model.CategoryInfo;
 import com.yun.opern.model.FeedbackInfo;
 import com.yun.opern.model.NetEaseCloudMusicChartInfo;
+import com.yun.opern.model.NetEaseCloudMusicChartMusicInfo;
 import com.yun.opern.model.OpernInfo;
 import com.yun.opern.model.UpdateInfo;
 import com.yun.opern.model.UserLoginRequestInfo;
@@ -70,4 +71,8 @@ public interface Api {
 
     @GET(value = "netEaseCloudMusic/musicChart")
     Observable<BaseResponse<ArrayList<NetEaseCloudMusicChartInfo>>> musicChart();
+
+    @GET(value = "netEaseCloudMusic/musicChartMusic")
+    Observable<BaseResponse<ArrayList<NetEaseCloudMusicChartMusicInfo>>> musicChartMusic(@Query("chartId") int chartId);
+
 }

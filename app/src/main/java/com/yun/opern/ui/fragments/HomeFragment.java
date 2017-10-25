@@ -95,7 +95,6 @@ public class HomeFragment extends Fragment {
         net();
     }
 
-
     private void net() {
         requesting = true;
         opernSrl.setRefreshing(true);
@@ -122,7 +121,7 @@ public class HomeFragment extends Fragment {
                     throwable.printStackTrace();
                     opernSrl.setRefreshing(false);
                     requesting = false;
-                    T.showShort(throwable.getMessage());
+                    T.showShort(throwable.getClass().getName());
                     lastUpdateTime();
                 }, this::lastUpdateTime);
     }

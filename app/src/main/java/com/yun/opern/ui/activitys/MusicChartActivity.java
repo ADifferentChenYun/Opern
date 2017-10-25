@@ -1,5 +1,6 @@
 package com.yun.opern.ui.activitys;
 
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -57,6 +58,11 @@ public class MusicChartActivity extends BaseActivity {
                     showProgressDialog(false);
                     T.showShort(throwable.getMessage());
                 });
+        musicChartLv.setOnItemClickListener((parent, view, position, id) -> {
+            Intent intent = new Intent(context, MusicChartDetailActivity.class);
+            intent.putExtra("netEaseCloudMusicChartInfo", data.get(position));
+            startActivity(intent);
+        });
     }
 
     public class Adapter extends BaseAdapter {

@@ -1,6 +1,8 @@
 package com.yun.opern.model;
 
-public class NetEaseCloudMusicChartInfo {
+import java.io.Serializable;
+
+public class NetEaseCloudMusicChartInfo implements Serializable {
     private int id;
     private String img = "";
     private String href = "";
