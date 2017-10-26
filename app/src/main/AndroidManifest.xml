@@ -160,6 +160,9 @@
         <meta-data
             android:name="JPUSH_CHANNEL"
             android:value="default_chanel" />
+        <meta-data
+            android:name="BUGLY_APP_CHANNEL"
+            android:value="${BUGLY_APP_CHANNEL_VALUE}" />
         <!-- </>值来自开发者平台取得的AppKey -->
         <meta-data
             android:name="JPUSH_APPKEY"

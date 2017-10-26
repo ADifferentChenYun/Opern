@@ -19,6 +19,7 @@ android {
         versionCode 5
         versionName "1.0.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [BUGLY_APP_CHANNEL_VALUE: "default_channel"]
         ndk {
             //设置支持的SO库架构
             abiFilters 'armeabi' // 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
@@ -30,12 +31,31 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.signing
             proguardFile 'C:/WorkSpace/Opern/app/proguard-rules.pro'
+            android.applicationVariants.all {
+                variant ->
+                    variant.outputs.all {
+                        outputFileName = "opern-${variant.name}-${variant.versionName}.apk"
+                    }
+            }
         }
         debug {
             signingConfig signingConfigs.signing
         }
     }
+    flavorDimensions "tier"
     productFlavors {
+        mine {
+            dimension "tier"
+        }
+        kuan {
+            dimension "tier"
+        }
+        xiaomi {
+            dimension "tier"
+        }
+    }
+    productFlavors.all {
+        flavor -> flavor.manifestPlaceholders = [BUGLY_APP_CHANNEL_VALUE: name]
     }
 
     compileOptions {
