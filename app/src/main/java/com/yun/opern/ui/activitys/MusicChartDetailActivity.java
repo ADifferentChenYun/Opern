@@ -58,7 +58,7 @@ public class MusicChartDetailActivity extends BaseActivity {
         return R.layout.activity_music_chart_detail;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+
     @Override
     protected void initView() {
         actionBarNormal.setOnDoubleClickListener(view -> musicChartDetailLv.smoothScrollToPosition(0));

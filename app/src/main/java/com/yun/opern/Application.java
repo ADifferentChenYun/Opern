@@ -6,7 +6,7 @@ import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
-import com.tencent.bugly.crashreport.CrashReport;
+import com.yun.opern.ui.activitys.MainActivity;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -22,10 +22,12 @@ public class Application extends android.app.Application{
     public void onCreate() {
         super.onCreate();
         applictionContext = this;
+        Beta.autoInit = true;  //自动初始化
+        Beta.initDelay = 500;  //延迟0.5s初始化，避免影响启动速度
+        Beta.autoCheckUpgrade = true;  //自动检查更新开关
+        Beta.enableHotfix = false;  //关闭热更新能力
+        Beta.canShowUpgradeActs.add(MainActivity.class);  //更新提示只能在首页显示,不限制手动调用检测更新
         Bugly.init(getApplicationContext(), BUGLY_APP_ID, BuildConfig.DEBUG);
-        Beta.autoInit = true;
-        Beta.autoCheckUpgrade = true;
-        Beta.enableHotfix = false;
         JPushInterface.setDebugMode(BuildConfig.DEBUG);
         JPushInterface.init(this);
         Logger.addLogAdapter(new AndroidLogAdapter());

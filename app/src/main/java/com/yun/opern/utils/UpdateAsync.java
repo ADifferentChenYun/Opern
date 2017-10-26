@@ -26,8 +26,8 @@ import static android.app.ProgressDialog.STYLE_HORIZONTAL;
 
 /**
  * Created by Yun on 2017/9/11 0011.
+ * @deprecated 采用bugly更新策咯
  */
-
 public class UpdateAsync extends AsyncTask<String, Integer, File> {
     private String rootPath = Environment.getExternalStorageDirectory().getPath();
     private ProgressDialog progressDialog;
