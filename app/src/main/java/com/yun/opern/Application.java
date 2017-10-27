@@ -1,10 +1,12 @@
 package com.yun.opern;
 
 import android.content.Context;
+import android.os.Build;
 
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.tencent.bugly.Bugly;
+import com.tencent.bugly.BuglyStrategy;
 import com.tencent.bugly.beta.Beta;
 import com.yun.opern.ui.activitys.MainActivity;
 
@@ -27,7 +29,9 @@ public class Application extends android.app.Application{
         Beta.autoCheckUpgrade = true;  //自动检查更新开关
         Beta.enableHotfix = false;  //关闭热更新能力
         Beta.canShowUpgradeActs.add(MainActivity.class);  //更新提示只能在首页显示,不限制手动调用检测更新
-        Bugly.init(getApplicationContext(), BUGLY_APP_ID, BuildConfig.DEBUG);
+        BuglyStrategy buglyStrategy = new BuglyStrategy();
+        buglyStrategy.setAppChannel(BuildConfig.FLAVOR);  //设置渠道
+        Bugly.init(getApplicationContext(), BUGLY_APP_ID, BuildConfig.DEBUG, buglyStrategy);
         JPushInterface.setDebugMode(BuildConfig.DEBUG);
         JPushInterface.init(this);
         Logger.addLogAdapter(new AndroidLogAdapter());
