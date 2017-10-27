@@ -27,10 +27,12 @@ android {
     }
     buildTypes {
         release {
+            debuggable false
+            shrinkResources false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.signing
-            proguardFile 'C:/WorkSpace/Opern/app/proguard-rules.pro'
+            resValue "string", "app_name", "搜谱"
             android.applicationVariants.all {
                 variant ->
                     variant.outputs.all {
@@ -39,9 +41,16 @@ android {
             }
         }
         debug {
+            debuggable true
+            shrinkResources false
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.signing
+            applicationIdSuffix '.debug'
+            resValue "string", "app_name", "搜谱debug"
         }
     }
+
     flavorDimensions "tier"
     productFlavors {
         mine {
@@ -54,6 +63,7 @@ android {
             dimension "tier"
         }
     }
+
     productFlavors.all {
         flavor -> flavor.manifestPlaceholders = [BUGLY_APP_CHANNEL_VALUE: name]
     }
@@ -62,6 +72,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+}
+
+greendao {
+    schemaVersion 1
+    daoPackage 'com.yun.opern.db'
+    targetGenDir 'src/main/java'
 }
 
 dependencies {

@@ -41,7 +41,7 @@
 }
 
 # for DexGuard only
--keepresourcexmlelements manifest/application/meta-data@value=GlideModule
+#-keepresourcexmlelements manifest/application/meta-data@value=GlideModule
 
 #--------------------event-------------------------------------------------------------
 -keepattributes *Annotation*
@@ -56,8 +56,26 @@
 }
 
 #--------------------retrofit------------------------------------------------------------
+# Platform calls Class.forName on types which do not exist on Android to determine platform.
+-dontnote retrofit2.Platform
+# Platform used when running on Java 8 VMs. Will not be used at runtime.
+-dontwarn retrofit2.Platform$Java8
+# Retain generic type information for use by reflection by converters and adapters.
+-keepattributes Signature
+# Retain declared checked exceptions for use by a Proxy instance.
+-keepattributes Exceptions
+
 -dontwarn okio.**
+
+-dontwarn okhttp3.**
 -dontwarn javax.annotation.**
+# A resource is loaded with a relative path so the package of this class must be preserved.
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+
+#----------------------Gson---还未完善-----------------------------------------------------------
+-keep class com.google.gson.stream.** { *; }
+-keepattributes EnclosingMethod
+#-keep class org.xz_sale.entity.**{*;}
 
 #--------------------banner--------------------------------------------------------------
 -keep class com.youth.banner.** {
@@ -67,3 +85,25 @@
  #-------------------avloadingview--------------------------------------------------------
  -keep class com.wang.avi.** { *; }
  -keep class com.wang.avi.indicators.** { *; }
+
+ #-------------------jpush----------------------------------------------------------------
+ -dontoptimize
+ -dontpreverify
+
+ -dontwarn cn.jpush.**
+ -keep class cn.jpush.** { *; }
+ -keep class * extends cn.jpush.android.helpers.JPushMessageReceiver { *; }
+
+ -dontwarn cn.jiguang.**
+ -keep class cn.jiguang.** { *; }
+
+ #------------------greenDao----------------------------------------------------------
+ -keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
+ public static java.lang.String TABLENAME;
+ }
+ -keep class **$Properties
+
+ # If you do not use SQLCipher:
+ -dontwarn org.greenrobot.greendao.database.**
+ # If you do not use Rx:
+ -dontwarn rx.**

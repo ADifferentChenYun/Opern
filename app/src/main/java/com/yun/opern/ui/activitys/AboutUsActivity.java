@@ -22,7 +22,7 @@ public class AboutUsActivity extends BaseActivity {
     @Override
     protected void initView() {
         Beta.checkUpgrade(true, false);
-        checkUpdateBtn.setText(String.valueOf("当前版本 " + BuildConfig.VERSION_NAME + " 检测更新"));
+        checkUpdateBtn.setText(String.valueOf("当前版本 " + BuildConfig.BUILD_TYPE + BuildConfig.VERSION_NAME + " 检测更新"));
         RxView.clicks(checkUpdateBtn).subscribe(o -> Beta.checkUpgrade(true, false));
     }
 }
