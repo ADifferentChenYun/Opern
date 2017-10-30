@@ -77,6 +77,9 @@ public class WebViewActivity extends BaseActivity {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
             super.onProgressChanged(view, newProgress);
+            if (mProgressBar == null) {
+                return;
+            }
             mProgressBar.setProgress(newProgress);
             if (newProgress != 100) {
                 mProgressBar.setVisibility(View.VISIBLE);
@@ -94,6 +97,16 @@ public class WebViewActivity extends BaseActivity {
             return true;
         } else {
             return super.onKeyDown(keyCode, event);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mWebView != null) {
+            mWebView.setWebViewClient(null);
+            mWebView.setWebChromeClient(null);
+            mWebView = null;
         }
     }
 }
