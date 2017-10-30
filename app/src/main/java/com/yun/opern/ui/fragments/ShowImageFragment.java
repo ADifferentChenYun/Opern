@@ -25,7 +25,7 @@ import com.bumptech.glide.request.target.Target;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.yun.opern.R;
 import com.yun.opern.model.OpernImgInfo;
-import com.yun.opern.utils.T;
+import com.yun.opern.utils.ErrorMessageUtil;
 import com.yun.opern.views.ActionBarNormal;
 
 import butterknife.BindView;
@@ -66,14 +66,14 @@ public class ShowImageFragment extends Fragment {
     }
 
     private void initView() {
-        Glide.with(this).asBitmap().load(opernImgInfo.getOpernOSSImg() == null || opernImgInfo.getOpernOSSImg().equals("") ? opernImgInfo.getOpernImg() : opernImgInfo.getOpernOSSImg()).listener(new RequestListener<Bitmap>() {
+        Glide.with(this).asBitmap().load(opernImgInfo.getOpernImg()).listener(new RequestListener<Bitmap>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                 if (retry > 0) {
                     initView();
-                    T.showShort("加载图片失败，正在重新加载");
+                    ErrorMessageUtil.showErrorByToast("加载图片失败，正在重新加载");
                 } else {
-                    T.showShort("加载图片失败，请重试");
+                    ErrorMessageUtil.showErrorByToast("加载图片失败，请重试");
                     getActivity().finish();
                 }
                 retry--;

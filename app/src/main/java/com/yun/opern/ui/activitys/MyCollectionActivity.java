@@ -15,7 +15,7 @@ import com.yun.opern.common.WeiBoUserInfoKeeper;
 import com.yun.opern.model.OpernInfo;
 import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.bases.BaseActivity;
-import com.yun.opern.utils.T;
+import com.yun.opern.utils.ErrorMessageUtil;
 import com.yun.opern.views.ActionBarNormal;
 import com.yun.opern.views.SquareImageView;
 
@@ -73,7 +73,7 @@ public class MyCollectionActivity extends BaseActivity {
                     showProgressDialog(false);
                 }, throwable -> {
                     throwable.printStackTrace();
-                    T.showShort(throwable.getMessage());
+                    ErrorMessageUtil.showErrorByToast(throwable);
                     showProgressDialog(false);
                 });
     }
@@ -93,11 +93,11 @@ public class MyCollectionActivity extends BaseActivity {
                                 opernInfos.remove(position);
                                 adapter.notifyDataSetChanged();
                             } else {
-                                T.showShort(baseResponse.getMessage());
+                                ErrorMessageUtil.showErrorByToast(baseResponse.getMessage());
                             }
                             showProgressDialog(false);
                         }, throwable -> {
-                            T.showShort(throwable.getMessage());
+                    ErrorMessageUtil.showErrorByToast(throwable);
                             showProgressDialog(false);
                         }
                 );

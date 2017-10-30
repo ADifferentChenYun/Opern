@@ -16,7 +16,7 @@ public class CacheFileUtil {
         if(!file.exists()){
             boolean ok = file.mkdir();
             if(!ok){
-                T.showShort("创建缓存目录失败");
+                ErrorMessageUtil.showErrorByToast("创建缓存目录失败");
             }
         }
     }

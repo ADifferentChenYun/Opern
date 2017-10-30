@@ -3,7 +3,6 @@ package com.yun.opern.ui.activitys;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
@@ -29,7 +28,7 @@ import com.yun.opern.model.event.UserLoginOrLogoutEvent;
 import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.utils.CacheFileUtil;
-import com.yun.opern.utils.T;
+import com.yun.opern.utils.ErrorMessageUtil;
 import com.yun.opern.views.ActionBarNormal;
 import com.yun.opern.views.SmallRedPoint;
 
@@ -142,7 +141,7 @@ public class MoreActivity extends BaseActivity {
         AlertDialog alertDialog = new AlertDialog.Builder(context)
                 .setPositiveButton("确定", (dialog, which) -> {
                     boolean clear = CacheFileUtil.clear();
-                    T.showShort(clear ? "缓存已清除" : "清除缓存失败");
+                    ErrorMessageUtil.showErrorByToast(clear ? "缓存已清除" : "清除缓存失败");
                     initView();
                 })
                 .setTitle("清除缓存")
@@ -250,7 +249,7 @@ public class MoreActivity extends BaseActivity {
                     showProgressDialog(false);
                 }, throwable -> {
                     throwable.printStackTrace();
-                    T.showShort(throwable.getMessage());
+                    ErrorMessageUtil.showErrorByToast(throwable);
                     showProgressDialog(false);
                 });
     }

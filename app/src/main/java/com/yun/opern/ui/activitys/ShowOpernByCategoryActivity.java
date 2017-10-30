@@ -14,7 +14,7 @@ import com.yun.opern.model.CategoryInfo;
 import com.yun.opern.model.OpernInfo;
 import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.bases.BaseActivity;
-import com.yun.opern.utils.T;
+import com.yun.opern.utils.ErrorMessageUtil;
 import com.yun.opern.views.ActionBarNormal;
 
 import java.util.ArrayList;
@@ -60,7 +60,7 @@ public class ShowOpernByCategoryActivity extends BaseActivity {
     @Override
     protected void initView() {
         if (categoryOne == null) {
-            T.showShort("发送了一个错误");
+            ErrorMessageUtil.showErrorByToast("发生了一个错误");
             finish();
             return;
         }
@@ -115,7 +115,7 @@ public class ShowOpernByCategoryActivity extends BaseActivity {
                     }
                     ArrayList<OpernInfo> data = arrayListBaseResponse.getData();
                     if (data == null || data.size() == 0) {
-                        T.showShort("没有更多数据了");
+                        ErrorMessageUtil.showErrorByToast("没有更多数据了");
                     } else {
                         opernInfoArrayList.addAll(data);
                         index++;
@@ -127,7 +127,7 @@ public class ShowOpernByCategoryActivity extends BaseActivity {
                     throwable.printStackTrace();
                     opernSrl.setRefreshing(false);
                     requesting = false;
-                    T.showShort(throwable.getMessage());
+                    ErrorMessageUtil.showErrorByToast(throwable);
                 });
     }
 

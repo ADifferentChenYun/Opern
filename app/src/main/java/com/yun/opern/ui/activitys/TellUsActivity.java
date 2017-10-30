@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -18,7 +17,7 @@ import com.yun.opern.common.WeiBoUserInfoKeeper;
 import com.yun.opern.model.FeedbackInfo;
 import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.bases.BaseActivity;
-import com.yun.opern.utils.T;
+import com.yun.opern.utils.ErrorMessageUtil;
 import com.yun.opern.views.ActionBarNormal;
 
 import java.util.ArrayList;
@@ -90,7 +89,7 @@ public class TellUsActivity extends BaseActivity {
                     showProgressDialog(false);
                 }, throwable -> {
                     throwable.printStackTrace();
-                    T.showShort(throwable.getMessage());
+                    ErrorMessageUtil.showErrorByToast(throwable);
                     showProgressDialog(false);
                 });
     }
@@ -111,7 +110,7 @@ public class TellUsActivity extends BaseActivity {
                     showProgressDialog(false);
                 }, throwable -> {
                     throwable.printStackTrace();
-                    T.showShort(throwable.getMessage());
+                    ErrorMessageUtil.showErrorByToast(throwable);
                     showProgressDialog(false);
                 });
     }

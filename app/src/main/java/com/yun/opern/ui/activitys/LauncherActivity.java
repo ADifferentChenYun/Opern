@@ -2,21 +2,17 @@ package com.yun.opern.ui.activitys;
 
 import android.Manifest;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.content.ContextCompat;
 import android.widget.LinearLayout;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.yun.opern.R;
 import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.utils.CacheFileUtil;
-import com.yun.opern.utils.L;
+import com.yun.opern.utils.ErrorMessageUtil;
 import com.yun.opern.utils.NetworkUtils;
-import com.yun.opern.utils.T;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 
 import static com.yun.opern.utils.NetworkUtils.NetworkType.NETWORK_WIFI;
@@ -37,7 +33,7 @@ public class LauncherActivity extends BaseActivity {
     @Override
     protected void initView() {
         if (NetworkUtils.getNetworkType() != NETWORK_WIFI) {
-            T.showShort("当前处于非WIFI环境");
+            ErrorMessageUtil.showErrorByToast("当前处于非WIFI环境");
         }
         handler = new Handler();
         checkPermissionRunnable = () -> {

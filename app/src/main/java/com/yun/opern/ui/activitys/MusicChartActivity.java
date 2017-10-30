@@ -13,7 +13,7 @@ import com.yun.opern.R;
 import com.yun.opern.model.NetEaseCloudMusicChartInfo;
 import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.bases.BaseActivity;
-import com.yun.opern.utils.T;
+import com.yun.opern.utils.ErrorMessageUtil;
 import com.yun.opern.views.ActionBarNormal;
 
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public class MusicChartActivity extends BaseActivity {
                     showProgressDialog(false);
                 }, throwable -> {
                     showProgressDialog(false);
-                    T.showShort(throwable.getMessage());
+                    ErrorMessageUtil.showErrorByToast(throwable);
                 });
         musicChartLv.setOnItemClickListener((parent, view, position, id) -> {
             Intent intent = new Intent(context, MusicChartDetailActivity.class);

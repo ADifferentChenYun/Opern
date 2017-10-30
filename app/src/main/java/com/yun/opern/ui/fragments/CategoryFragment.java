@@ -15,12 +15,11 @@ import android.widget.TextView;
 
 import com.fynn.fluidlayout.FluidLayout;
 import com.yun.opern.R;
-import com.yun.opern.db.SearchHistory;
 import com.yun.opern.model.CategoryInfo;
 import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.activitys.ShowOpernByCategoryActivity;
 import com.yun.opern.utils.DisplayUtil;
-import com.yun.opern.utils.T;
+import com.yun.opern.utils.ErrorMessageUtil;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -75,7 +74,7 @@ public class CategoryFragment extends Fragment {
                     categorySrl.setRefreshing(false);
                     categorySrl.setEnabled(categoryInfos.size() == 0);
                 }, t -> {
-                    T.showShort(t.getMessage());
+                    ErrorMessageUtil.showErrorByToast(t.getMessage());
                     categorySrl.setRefreshing(false);
                     categorySrl.setEnabled(categoryInfos.size() == 0);
                 });

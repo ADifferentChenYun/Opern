@@ -12,7 +12,7 @@ import com.yun.opern.R;
 import com.yun.opern.model.OpernInfo;
 import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.bases.BaseActivity;
-import com.yun.opern.utils.T;
+import com.yun.opern.utils.ErrorMessageUtil;
 import com.yun.opern.views.ActionBarNormal;
 
 import java.util.ArrayList;
@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.internal.schedulers.NewThreadScheduler;
 
 public class LastUpdateOpernInfoActivity extends BaseActivity {
@@ -34,6 +35,7 @@ public class LastUpdateOpernInfoActivity extends BaseActivity {
 
     private ArrayList<OpernInfo> opernInfoArrayList = new ArrayList<>();
     private Adapter adapter;
+    private Disposable disposable;
 
     @Override
     protected int contentViewRes() {
@@ -51,8 +53,7 @@ public class LastUpdateOpernInfoActivity extends BaseActivity {
     }
 
     private void net() {
-        showProgressDialog(true);
-        HttpCore.getInstance().getApi()
+        disposable = HttpCore.getInstance().getApi()
                 .latestUpdateOpernInfo()
                 .subscribeOn(new NewThreadScheduler())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -62,9 +63,12 @@ public class LastUpdateOpernInfoActivity extends BaseActivity {
                     adapter.notifyDataSetChanged();
                     showProgressDialog(false);
                 }, throwable -> {
-                    T.showShort(throwable.getMessage());
+                    ErrorMessageUtil.showErrorByToast(throwable);
                     showProgressDialog(false);
                 });
+        showProgressDialog(true, dialog -> {
+            disposable.dispose();
+        });
     }
 
     public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
@@ -134,4 +138,12 @@ public class LastUpdateOpernInfoActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
+        }
+    }
 }

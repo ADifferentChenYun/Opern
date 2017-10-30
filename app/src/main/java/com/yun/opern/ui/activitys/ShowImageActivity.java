@@ -21,9 +21,9 @@ import com.yun.opern.model.OpernInfo;
 import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.ui.fragments.ShowImageFragment;
+import com.yun.opern.utils.ErrorMessageUtil;
 import com.yun.opern.utils.FileUtil;
 import com.yun.opern.utils.ImageDownloadUtil;
-import com.yun.opern.utils.T;
 import com.yun.opern.views.ActionBarNormal;
 import com.yun.opern.views.ViewPagerFix;
 
@@ -100,7 +100,7 @@ public class ShowImageActivity extends BaseActivity {
 
                         @Override
                         public void fail() {
-                            T.showShort("下载失败，请重试");
+                            ErrorMessageUtil.showErrorByToast("下载失败，请重试");
                         }
                     });
                     imageDownloadUtil.start();
@@ -169,7 +169,7 @@ public class ShowImageActivity extends BaseActivity {
                         },
                         throwable -> {
                             throwable.printStackTrace();
-                            T.showShort(throwable.getMessage());
+                            ErrorMessageUtil.showErrorByToast(throwable);
                         }
                 );
     }
@@ -187,7 +187,7 @@ public class ShowImageActivity extends BaseActivity {
                     if (baseResponse.isSuccess()) {
                         isCollected = false;
                         changeCollectIcon();
-                        T.showShort(baseResponse.getMessage());
+                        ErrorMessageUtil.showErrorByToast(baseResponse.getMessage());
                     }
                 }, Throwable::printStackTrace);
     }

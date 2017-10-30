@@ -184,6 +184,7 @@
         <activity android:name=".ui.activitys.LastUpdateOpernInfoActivity" />
         <activity android:name=".ui.activitys.MusicChartActivity" />
         <activity android:name=".ui.activitys.MusicChartDetailActivity" />
+        <activity android:name=".ui.activitys.WebViewActivity" />
     </application>
 
 </manifest>

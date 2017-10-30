@@ -17,8 +17,8 @@ import com.yun.opern.model.OpernInfo;
 import com.yun.opern.model.event.OpernFileDeleteEvent;
 import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.utils.CacheFileUtil;
+import com.yun.opern.utils.ErrorMessageUtil;
 import com.yun.opern.utils.FileUtil;
-import com.yun.opern.utils.T;
 import com.yun.opern.views.ActionBarNormal;
 import com.yun.opern.views.SquareImageView;
 
@@ -26,9 +26,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -116,7 +114,7 @@ public class MyDownloadActivity extends BaseActivity {
                                 notifyDataSetChanged();
                                 EventBus.getDefault().post(new OpernFileDeleteEvent());
                             } else {
-                                T.showShort("删除失败");
+                                ErrorMessageUtil.showErrorByToast("删除失败");
                             }
                         })
                         .setCancelable(true)

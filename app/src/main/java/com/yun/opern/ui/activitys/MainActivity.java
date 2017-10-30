@@ -21,8 +21,8 @@ import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.ui.fragments.CategoryFragment;
 import com.yun.opern.ui.fragments.HomeFragment;
 import com.yun.opern.utils.DisplayUtil;
+import com.yun.opern.utils.ErrorMessageUtil;
 import com.yun.opern.utils.ScreenUtils;
-import com.yun.opern.utils.T;
 import com.yun.opern.views.ActionBarNormal;
 import com.yun.opern.views.ViewPagerFix;
 
@@ -166,7 +166,7 @@ public class MainActivity extends BaseActivity {
             finish(); //结束当前activity
             System.exit(0); //系统退出
         } else {
-            T.showShort("再次点击退出应用");
+            ErrorMessageUtil.showErrorByToast("再次点击退出应用");
             currentTime = System.currentTimeMillis() / 1000;
         }
     }

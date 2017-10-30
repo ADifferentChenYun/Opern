@@ -10,7 +10,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +29,8 @@ import com.yun.opern.ui.activitys.LastUpdateOpernInfoActivity;
 import com.yun.opern.ui.activitys.MainActivity;
 import com.yun.opern.ui.activitys.MusicChartActivity;
 import com.yun.opern.ui.activitys.ShowImageActivity;
-import com.yun.opern.utils.T;
+import com.yun.opern.ui.activitys.WebViewActivity;
+import com.yun.opern.utils.ErrorMessageUtil;
 
 import java.util.ArrayList;
 
@@ -109,7 +109,7 @@ public class HomeFragment extends Fragment {
                     }
                     ArrayList<OpernInfo> data = arrayListBaseResponse.getData();
                     if (data == null || data.size() == 0) {
-                        T.showShort("没有更多数据了");
+                        ErrorMessageUtil.showErrorByToast("没有更多数据了");
                     } else {
                         opernInfoArrayList.addAll(data);
                         index++;
@@ -121,7 +121,7 @@ public class HomeFragment extends Fragment {
                     throwable.printStackTrace();
                     opernSrl.setRefreshing(false);
                     requesting = false;
-                    T.showShort(throwable.getClass().getName());
+                    ErrorMessageUtil.showErrorByToast(throwable);
                     lastUpdateTime();
                 }, this::lastUpdateTime);
     }
@@ -210,9 +210,9 @@ public class HomeFragment extends Fragment {
                 holder.banner.setImageLoader(new BannerImageLoader());
                 //设置图片集合
                 ArrayList<String> images = new ArrayList<>();
-                images.add("http://tupian.enterdesk.com/2015/xu/08/06/2/5.jpg");
-                images.add("http://img1.3lian.com/2015/a1/40/d/195.jpg");
-                images.add("http://img1.3lian.com/2015/a1/37/d/7.jpg");
+                images.add("http://www.qupu123.com/Public/Mobile/Images/android/1.gif");
+                images.add("http://www.5nd.com/2015css/images/logo.png");
+                images.add("http://www.zhaogepu.com/Public/images/logo.png");
                 holder.banner.setImages(images);
                 //设置banner动画效果
                 holder.banner.setBannerAnimation(Transformer.Default);
@@ -226,6 +226,21 @@ public class HomeFragment extends Fragment {
                 holder.banner.setIndicatorGravity(BannerConfig.CENTER);
                 //banner设置方法全部调用完毕时最后调用
                 holder.banner.start();
+                holder.banner.setOnBannerListener(position1 -> {
+                    Intent intent = new Intent(getContext(), WebViewActivity.class);
+                    switch (position1) {
+                        case 0:
+                            intent.putExtra("url", "http://m.qupu123.com/");
+                            break;
+                        case 1:
+                            intent.putExtra("url", "http://www.5nd.com/");
+                            break;
+                        case 2:
+                            intent.putExtra("url", "http://m.zhaogepu.com/");
+                            break;
+                    }
+                    startActivity(intent);
+                });
             } else {
                 ViewHolder holder = (ViewHolder) viewHolder;
                 OpernInfo opernInfo = opernInfoArrayList.get(getRealPosition(position));

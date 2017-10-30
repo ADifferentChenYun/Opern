@@ -1,15 +1,12 @@
 package com.yun.opern.ui.activitys;
 
 import android.media.MediaPlayer;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.MediaController;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -19,9 +16,6 @@ import com.yun.opern.model.NetEaseCloudMusicChartMusicInfo;
 import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.utils.ErrorMessageUtil;
-import com.yun.opern.utils.L;
-import com.yun.opern.utils.T;
-import com.yun.opern.utils.TimeUtils;
 import com.yun.opern.views.ActionBarNormal;
 
 import java.io.IOException;

@@ -26,8 +26,8 @@ import com.yun.opern.model.OpernInfo;
 import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.utils.DisplayUtil;
+import com.yun.opern.utils.ErrorMessageUtil;
 import com.yun.opern.utils.KeyboardUtils;
-import com.yun.opern.utils.T;
 import com.yun.opern.views.ActionBarNormal;
 
 import java.util.ArrayList;
@@ -101,7 +101,7 @@ public class SearchActivity extends BaseActivity {
         adapter = new Adapter(opernInfoArrayList);
         opernLv.setAdapter(adapter);
         searchBtn.setOnClickListener(v -> {
-            if(requesting){
+            if (requesting) {
                 return;
             }
             searchParameter = searchInputEdt.getText().toString().trim();
@@ -170,7 +170,7 @@ public class SearchActivity extends BaseActivity {
                     throwable.printStackTrace();
                     progressBar.setVisibility(View.GONE);
                     opernLv.setVisibility(View.VISIBLE);
-                    T.showShort("网络异常");
+                    ErrorMessageUtil.showErrorByToast(throwable);
                     requesting = false;
                 });
     }
@@ -241,7 +241,7 @@ public class SearchActivity extends BaseActivity {
                 ButterKnife.bind(this, itemView);
                 itemView.setOnClickListener(v -> {
                     Intent intent = new Intent(SearchActivity.this, ShowImageActivity.class);
-                    intent.putExtra("opernInfo",opernInfoArrayList.get(getAdapterPosition()));
+                    intent.putExtra("opernInfo", opernInfoArrayList.get(getAdapterPosition()));
                     startActivity(intent);
                 });
             }
