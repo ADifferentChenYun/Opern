@@ -31,7 +31,9 @@ public class Application extends android.app.Application{
         Beta.canShowUpgradeActs.add(MainActivity.class);  //更新提示只能在首页显示,不限制手动调用检测更新
         BuglyStrategy buglyStrategy = new BuglyStrategy();
         buglyStrategy.setAppChannel(BuildConfig.FLAVOR);  //设置渠道
-        Bugly.init(getApplicationContext(), BUGLY_APP_ID, BuildConfig.DEBUG, buglyStrategy);
+        if (!BuildConfig.DEBUG) {
+            Bugly.init(getApplicationContext(), BUGLY_APP_ID, BuildConfig.DEBUG, buglyStrategy);
+        }
         JPushInterface.setDebugMode(BuildConfig.DEBUG);
         JPushInterface.init(this);
         Logger.addLogAdapter(new AndroidLogAdapter());

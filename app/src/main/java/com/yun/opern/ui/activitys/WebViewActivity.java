@@ -71,7 +71,9 @@ public class WebViewActivity extends BaseActivity {
         @Override
         public void onReceivedTitle(WebView view, String title) {
             super.onReceivedTitle(view, title);
-            actionBar.setTitle(title);
+            if (actionBar != null) {
+                actionBar.setTitle(title);
+            }
         }
 
         @Override

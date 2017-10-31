@@ -16,9 +16,9 @@ import com.yun.opern.model.NetEaseCloudMusicChartMusicInfo;
 import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.utils.ErrorMessageUtil;
+import com.yun.opern.utils.T;
 import com.yun.opern.views.ActionBarNormal;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class MusicChartDetailActivity extends BaseActivity {
     private Adapter adapter;
     private View headerView;
 
-    private MediaPlayer mediaPlayer;
+    //private MediaPlayer mediaPlayer;
 
     @Override
     protected int contentViewRes() {
@@ -56,11 +56,11 @@ public class MusicChartDetailActivity extends BaseActivity {
     @Override
     protected void initView() {
         actionBarNormal.setOnDoubleClickListener(view -> musicChartDetailLv.smoothScrollToPosition(0));
-        mediaPlayer = new MediaPlayer();
+        /*mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnErrorListener((mp, what, extra) -> {
             ErrorMessageUtil.showErrorByToast("播放错误");
             return false;
-        });
+        });*/
         adapter = new Adapter(netEaseCloudMusicChartMusicInfoList);
         musicChartDetailLv.setAdapter(adapter);
         initListViewHeaderView();
@@ -68,13 +68,14 @@ public class MusicChartDetailActivity extends BaseActivity {
             if (position < musicChartDetailLv.getHeaderViewsCount()) {
                 return;
             }
-            try {
+            T.showShort("关联曲谱,音乐播放功能近期上线......");
+            /*try {
                 mediaPlayer.setDataSource(netEaseCloudMusicChartMusicInfoList.get(getRealPosition(position)).getPlayUrl());
                 mediaPlayer.prepare();
                 mediaPlayer.start();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
-            }
+            }*/
 
         });
         musicChartDetailLv.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -200,11 +201,11 @@ public class MusicChartDetailActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        try {
+        /*try {
             mediaPlayer.stop();
             mediaPlayer = null;
         } catch (Exception e) {
 
-        }
+        }*/
     }
 }
