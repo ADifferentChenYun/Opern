@@ -312,6 +312,39 @@
                     android:src="@mipmap/ic_right" />
             </RelativeLayout>
 
+            <RelativeLayout
+                android:id="@+id/donate_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_nor_white_bg">
+
+                <ImageView
+                    android:layout_width="@dimen/x90"
+                    android:layout_height="@dimen/x90"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/x35"
+                    android:src="@mipmap/alipay" />
+
+                <TextView
+                    android:id="@+id/donate_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/x170"
+                    android:paddingBottom="@dimen/x45"
+                    android:paddingTop="@dimen/x45"
+                    android:text="捐助"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="@dimen/x50"
+                    android:layout_height="@dimen/x50"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/x45"
+                    android:src="@mipmap/ic_right" />
+            </RelativeLayout>
+
         </LinearLayout>
 
     </LinearLayout>

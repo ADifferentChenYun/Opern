@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context="com.yun.opern.ui.activitys.DonateActivity">
+
+    <com.yun.opern.views.ActionBarNormal
+        android:id="@+id/actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="嘿嘿嘿..." />
+
+    <com.yun.opern.views.SquareImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/alipayqrcode" />
+
+    <TextView
+        android:padding="@dimen/x30"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:text="有心的话,扫上面这个码,可以向我进行捐助,金额多少随意" />
+
+</LinearLayout>

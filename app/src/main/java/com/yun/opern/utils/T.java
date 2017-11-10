@@ -13,8 +13,8 @@ import com.yun.opern.R;
 
 /**
  * Toast统一管理类
+ * @author Yun
  */
-
 public class T {
     private static Toast toast;
 
@@ -34,7 +34,6 @@ public class T {
         toast.setText(message);
         toast.show();
     }
-
 
     public static void hideToast() {
         if (null != toast) {

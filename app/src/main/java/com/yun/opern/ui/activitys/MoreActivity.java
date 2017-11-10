@@ -74,6 +74,8 @@ public class MoreActivity extends BaseActivity {
     View logoutBtn;
     @BindView(R.id.small_red_point)
     SmallRedPoint smallRedPoint;
+    @BindView(R.id.donate_rl)
+    RelativeLayout donateRl;
 
     private SsoHandler mSsoHandler;
 
@@ -180,6 +182,11 @@ public class MoreActivity extends BaseActivity {
     @OnClick(R.id.about_us_rl)
     public void onAboutUsRlClicked() {
         startActivity(new Intent(context, AboutUsActivity.class));
+    }
+
+    @OnClick(R.id.donate_rl)
+    public void OnDonateRlClicked() {
+        startActivity(new Intent(context, DonateActivity.class));
     }
 
     @OnCheckedChanged(R.id.push_switch)

@@ -185,6 +185,7 @@
         <activity android:name=".ui.activitys.MusicChartActivity" />
         <activity android:name=".ui.activitys.MusicChartDetailActivity" />
         <activity android:name=".ui.activitys.WebViewActivity" />
+        <activity android:name=".ui.activitys.DonateActivity"></activity>
     </application>
 
 </manifest>
