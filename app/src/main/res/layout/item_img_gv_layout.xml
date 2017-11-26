@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="@dimen/x10">
 
     <com.yun.opern.views.SquareImageView
         android:id="@+id/item_img_gv_layout_img"
@@ -12,12 +13,15 @@
         android:singleLine="true"
         android:id="@+id/item_img_gv_layout_tv"
         android:layout_gravity="center|bottom"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="this is title"
+        android:textStyle="bold"
         android:textColor="@color/black"/>
 
     <ImageView
+        android:visibility="gone"
         android:id="@+id/item_img_gv_delete_img"
         android:layout_margin="@dimen/x15"
         android:layout_gravity="end"

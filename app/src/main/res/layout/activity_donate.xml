@@ -14,18 +14,11 @@
         android:layout_height="wrap_content"
         app:title="嘿嘿嘿..." />
 
-    <com.yun.opern.views.SquareImageView
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/alipayqrcode" />
+        android:layout_height="match_parent"
+        android:scaleType="centerInside"
+        android:src="@drawable/alipay" />
 
-    <TextView
-        android:padding="@dimen/x30"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        android:gravity="center"
-        android:text="有心的话,扫上面这个码,可以向我进行捐助,金额多少随意" />
 
 </LinearLayout>

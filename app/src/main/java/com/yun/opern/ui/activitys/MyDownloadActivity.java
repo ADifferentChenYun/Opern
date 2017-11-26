@@ -19,6 +19,7 @@ import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.utils.CacheFileUtil;
 import com.yun.opern.utils.ErrorMessageUtil;
 import com.yun.opern.utils.FileUtil;
+import com.yun.opern.utils.T;
 import com.yun.opern.views.ActionBarNormal;
 import com.yun.opern.views.SquareImageView;
 
@@ -52,6 +53,7 @@ public class MyDownloadActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        T.showShort("长按可删除文件");
         new ScanImgFileThread(opernInfoList -> {
             opernInfos.clear();
             opernInfos.addAll(opernInfoList);
@@ -63,6 +65,26 @@ public class MyDownloadActivity extends BaseActivity {
             Intent intent = new Intent(context, ShowImageActivity.class);
             intent.putExtra("opernInfo", opernInfos.get(position));
             startActivity(intent);
+        });
+        imgGv.setOnItemLongClickListener((parent, view, position, id) -> {
+            AlertDialog alertDialog = new AlertDialog.Builder(context)
+                    .setTitle("删除本地曲谱")
+                    .setMessage("删除后本地就找不到了哦~")
+                    .setPositiveButton("删除", (dialog, which) -> {
+                        OpernInfo opernInfo = opernInfos.get(position);
+                        boolean delete = FileUtil.deleteLocalOpernImgs(opernInfo);
+                        if (delete) {
+                            opernInfos.remove(position);
+                            adapter.notifyDataSetChanged();
+                            EventBus.getDefault().post(new OpernFileDeleteEvent());
+                        } else {
+                            ErrorMessageUtil.showErrorByToast("删除失败");
+                        }
+                    })
+                    .setCancelable(true)
+                    .create();
+            alertDialog.show();
+            return true;
         });
     }
 
@@ -103,24 +125,9 @@ public class MyDownloadActivity extends BaseActivity {
             final OpernInfo opernInfo = opernInfos.get(position);
             viewHolder.itemImgGvLayoutTv.setText(opernInfo.getTitle());
             Glide.with(MyDownloadActivity.this).asBitmap().load(opernInfo.getImgs().get(0).getOpernImg()).transition(withCrossFade()).into(viewHolder.itemImgGvLayoutImg);
-            viewHolder.deleteImg.setOnClickListener(v -> {
-                AlertDialog alertDialog = new AlertDialog.Builder(context)
-                        .setTitle("删除本地曲谱")
-                        .setMessage("删除后本地就找不到了哦~")
-                        .setPositiveButton("删除", (dialog, which) -> {
-                            boolean delete = FileUtil.deleteLocalOpernImgs(opernInfo);
-                            if (delete) {
-                                opernInfos.remove(position);
-                                notifyDataSetChanged();
-                                EventBus.getDefault().post(new OpernFileDeleteEvent());
-                            } else {
-                                ErrorMessageUtil.showErrorByToast("删除失败");
-                            }
-                        })
-                        .setCancelable(true)
-                        .create();
-                alertDialog.show();
-            });
+            /*viewHolder.deleteImg.setOnClickListener(v -> {
+
+            });*/
             return convertView;
         }
 

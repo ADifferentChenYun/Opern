@@ -52,6 +52,14 @@ public class ShowImageActivity extends BaseActivity {
     private boolean isCollected = false;
     private ImageDownloadUtil imageDownloadUtil;
 
+    public ActionBarNormal getActionbar() {
+        return actionbar;
+    }
+
+    public LinearLayout getFabBtns() {
+        return fabBtns;
+    }
+
     @Override
     protected int contentViewRes() {
         opernInfo = (OpernInfo) getIntent().getExtras().get("opernInfo");

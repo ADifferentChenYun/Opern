@@ -25,6 +25,7 @@ import com.bumptech.glide.request.target.Target;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.yun.opern.R;
 import com.yun.opern.model.OpernImgInfo;
+import com.yun.opern.ui.activitys.ShowImageActivity;
 import com.yun.opern.utils.ErrorMessageUtil;
 import com.yun.opern.views.ActionBarNormal;
 
@@ -53,6 +54,12 @@ public class ShowImageFragment extends Fragment {
     public void setAnimView(ActionBarNormal actionBarNormal, LinearLayout fabBtns) {
         this.actionBarNormal = actionBarNormal;
         this.fabBtns = fabBtns;
+        if (this.actionBarNormal == null) {
+            this.actionBarNormal = ((ShowImageActivity) getActivity()).getActionbar();
+        }
+        if (this.fabBtns == null) {
+            this.fabBtns = ((ShowImageActivity) getActivity()).getFabBtns();
+        }
     }
 
     @Override

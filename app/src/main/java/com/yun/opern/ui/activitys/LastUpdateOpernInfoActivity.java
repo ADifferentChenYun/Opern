@@ -67,7 +67,9 @@ public class LastUpdateOpernInfoActivity extends BaseActivity {
                     showProgressDialog(false);
                 });
         showProgressDialog(true, dialog -> {
-            disposable.dispose();
+            if (disposable != null) {
+                disposable.dispose();
+            }
         });
     }
 

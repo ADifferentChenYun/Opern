@@ -16,6 +16,7 @@ import com.yun.opern.model.OpernInfo;
 import com.yun.opern.net.HttpCore;
 import com.yun.opern.ui.bases.BaseActivity;
 import com.yun.opern.utils.ErrorMessageUtil;
+import com.yun.opern.utils.T;
 import com.yun.opern.views.ActionBarNormal;
 import com.yun.opern.views.SquareImageView;
 
@@ -47,12 +48,17 @@ public class MyCollectionActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        T.showShort("长按可取消收藏");
         adapter = new GridViewAdapter(opernInfos);
         imgGv.setAdapter(adapter);
         imgGv.setOnItemClickListener((parent, view, position, id) -> {
             Intent intent = new Intent(context, ShowImageActivity.class);
             intent.putExtra("opernInfo", opernInfos.get(position));
             startActivity(intent);
+        });
+        imgGv.setOnItemLongClickListener((parent, view, position, id) -> {
+            removeCollect(position);
+            return true;
         });
         getCollectedOpernInfo();
     }
@@ -139,7 +145,7 @@ public class MyCollectionActivity extends BaseActivity {
             final OpernInfo opernInfo = opernInfos.get(position);
             viewHolder.itemImgGvLayoutTv.setText(opernInfo.getTitle());
             Glide.with(context).asBitmap().load(opernInfo.getImgs().get(0).getOpernImg()).transition(withCrossFade()).into(viewHolder.itemImgGvLayoutImg);
-            viewHolder.deleteImg.setOnClickListener((view) -> removeCollect(position));
+            //viewHolder.deleteImg.setOnClickListener((view) -> removeCollect(position));
             return convertView;
         }
 
