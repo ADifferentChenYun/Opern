@@ -124,10 +124,11 @@ public class MyDownloadActivity extends BaseActivity {
             }
             final OpernInfo opernInfo = opernInfos.get(position);
             viewHolder.itemImgGvLayoutTv.setText(opernInfo.getTitle());
-            Glide.with(MyDownloadActivity.this).asBitmap().load(opernInfo.getImgs().get(0).getOpernImg()).transition(withCrossFade()).into(viewHolder.itemImgGvLayoutImg);
-            /*viewHolder.deleteImg.setOnClickListener(v -> {
-
-            });*/
+            try {
+                Glide.with(MyDownloadActivity.this).asBitmap().load(opernInfo.getImgs().get(0).getOpernImg()).transition(withCrossFade()).into(viewHolder.itemImgGvLayoutImg);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return convertView;
         }
 
